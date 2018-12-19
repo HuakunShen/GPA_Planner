@@ -20,7 +20,11 @@
         </activity>
         <activity android:name=".signup_activity" />
         <activity android:name=".year_activity" />
-        <activity android:name=".semester_activity"></activity>
+        <activity android:name=".semester_activity" />
+        <activity android:name=".course_activity" />
+        <activity android:name=".event_activity" />
+        <activity android:name=".add_event" />
+        <activity android:name=".add_course"></activity>
     </application>
 
 </manifest>

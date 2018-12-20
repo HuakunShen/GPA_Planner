@@ -1,13 +1,15 @@
-package project.gpa_calculator;
+package project.gpa_calculator.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class semester_activity extends AppCompatActivity {
+import project.gpa_calculator.R;
+
+public class course_activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_semester);
+        setContentView(R.layout.activity_course);
     }
 }

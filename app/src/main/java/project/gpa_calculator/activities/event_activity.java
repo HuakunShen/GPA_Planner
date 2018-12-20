@@ -1,13 +1,15 @@
-package project.gpa_calculator;
+package project.gpa_calculator.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class add_event extends AppCompatActivity {
+import project.gpa_calculator.R;
+
+public class event_activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_event);
+        setContentView(R.layout.activity_event);
     }
 }

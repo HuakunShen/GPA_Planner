@@ -11,7 +11,6 @@ public class Course implements Serializable, Iterable<Event> {
     private String termCode;
     private double target;
     private String course_name;
-    //    private WeightMap map;
     private List<Event> event_list;
 
     Course(String department, String courseNumber, String termCode, String name, double target, double credit) {

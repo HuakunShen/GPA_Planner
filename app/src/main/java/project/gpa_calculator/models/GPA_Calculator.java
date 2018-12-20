@@ -4,10 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GPA_Calculator {
-    //    private Object gpa_object;
-//    public static final int MODE_COURSE = 0;
-//    public static final int MODE_SEMESTER = 1;
-//    public static final int MODE_YEAR = 2;
     private static Map<String, Double> letter_gpa_map = new HashMap<String, Double>() {
         {
             put("A+", 4.0d);
@@ -24,33 +20,48 @@ public class GPA_Calculator {
             put("D-", 1.0d);
             put("F", 0.0d);
         }
-
     };
 
-    //    public GPA_Calculator(Course course) {
-//        gpa_object =
-//    }
-    public static double calculate_gpa_on_object(Object gpa_object) {
+    /**
+     * -1 should be returned if any event (event, course, semester year) in the gpa_object is not
+     * done
+     * @param gpa_object
+     * @return gpa of the given object
+     */
+    public static double calculate_gpa(Object gpa_object) {
         if (gpa_object instanceof Course) {
-            return calculate_course_gpa();
+            return calculate_course_gpa((Course) gpa_object);
         } else if (gpa_object instanceof Semester) {
-            return calculate_semester_gpa();
+            return calculate_semester_gpa((Semester) gpa_object);
         } else if (gpa_object instanceof Year) {
-            return calculate_year_gpa();
+            return calculate_year_gpa((Year) gpa_object);
         } else {
             return -1d;
         }
     }
 
-    private static double calculate_year_gpa() {
+    private static double calculate_year_gpa(Year year) {
         return 0;
     }
 
-    private static double calculate_semester_gpa() {
+    private static double calculate_semester_gpa(Semester semester) {
         return 0;
     }
 
-    private static double calculate_course_gpa() {
+    private static double calculate_course_gpa(Course course) {
+        double gpa_sum = 0;
+        double weight_sum = 0;
+        for (Event event: course) {
+            if (event.isDone()) {
+                double percentage = event.getEvent_score();
+                double gpa = calculate_gpa(calculate_letter_grade(percentage));
+                double weight = event.getEvent_weight();
+                gpa_sum += gpa * weight;
+                weight_sum += weight;
+            } else {
+                return -1d;
+            }
+        }
         return 0;
     }
 
@@ -84,7 +95,7 @@ public class GPA_Calculator {
         }
     }
 
-    public static Double calculate_gpa(String letter_grade) {
+    public static double calculate_gpa(String letter_grade) {
         Double gpa = letter_gpa_map.get(letter_grade);
         return gpa != null ? gpa : -1d;
     }

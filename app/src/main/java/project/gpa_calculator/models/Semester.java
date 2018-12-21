@@ -30,7 +30,7 @@ public class Semester implements Serializable, Iterable<Course> {
 
 
 
-    boolean addCourse(Course course) {
+    public boolean addCourse(Course course) {
         if (!courseExists(course.getDepartment() + course.getCourseNumber() + course.getTermCode())) {
             course_list.add(course);
             return true;
@@ -38,7 +38,7 @@ public class Semester implements Serializable, Iterable<Course> {
         return false;
     }
 
-    boolean removeCourse(String course_name) {
+    public boolean removeCourse(String course_name) {
         for (Course course : course_list) {
             if (course_name.equals(course.getDepartment() + course.getCourseNumber() + course.getTermCode())) {
                 course_list.remove(course);

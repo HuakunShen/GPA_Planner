@@ -47,6 +47,7 @@ public class Event {
 
     public void setEvent_score(double event_score) {
         this.event_score = event_score;
+        setDone(true);
     }
 
 

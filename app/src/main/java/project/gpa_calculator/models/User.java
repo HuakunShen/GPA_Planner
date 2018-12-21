@@ -34,6 +34,8 @@ public class User {
         return this.password.equals(password);
     }
 
+
+    //TODO this does not change password, it's still the old password
     public boolean setPassword(String old_password, String new_password) {
         if (this.password.equals(old_password)) {
             this.password = new_password;

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+//TODO should check if all event add up to 100, warn user otherwise, also handle bonus
 public class Course implements Serializable, Iterable<Event> {
     private String department;
     private String courseNumber;
@@ -12,8 +13,9 @@ public class Course implements Serializable, Iterable<Event> {
     private double target;
     private String course_name;
     private List<Event> event_list;
+    private double credit;
 
-    Course(String department, String courseNumber, String termCode, String name, double target, double credit) {
+    public Course(String termCode, String name, double target, double credit) {
         this.department = department;
         this.courseNumber = courseNumber;
         this.termCode = termCode;
@@ -31,7 +33,7 @@ public class Course implements Serializable, Iterable<Event> {
         this.credit = credit;
     }
 
-    private double credit;
+
 
     @Override
     public String toString() {
@@ -42,7 +44,7 @@ public class Course implements Serializable, Iterable<Event> {
 
 
 
-    boolean addEvent(Event event) {
+    public boolean addEvent(Event event) {
         for (Event e : event_list) {
             if (e.getEvent_name().equals(event.getEvent_name()))
                 return false;
@@ -88,7 +90,7 @@ public class Course implements Serializable, Iterable<Event> {
      *
      * @return a score user get so far (event if not all the events in the course have been completed
      */
-    Double[] scoreSoFar() {
+    public Double[] scoreSoFar() {
         double score_sum = 0d;
         double weight_sum = 0d;
         double total_weight = 0d;
@@ -110,16 +112,16 @@ public class Course implements Serializable, Iterable<Event> {
      * Based on event completed so far and their weight, calculate how much in average the user needs to score for the
      * rest of the event in order to reach the target score
      *
-     * @return a average score needed in order to reach target score
+     * @return a average score needed in order to reach target score in percent
      */
-    double scoreNeededForTarget() {
+    public double scoreNeededForTarget() {
         Double[] data_so_far = scoreSoFar();
         double score_so_far = data_so_far[0];
         double score_difference = this.target - score_so_far;
         double weight_sum = data_so_far[1];
         double total_weight = data_so_far[2];
         double weight_difference = total_weight - weight_sum;
-        return score_difference / weight_difference;
+        return score_difference / weight_difference*200;
     }
 
     @Override

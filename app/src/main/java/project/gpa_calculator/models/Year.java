@@ -28,7 +28,7 @@ public class Year implements Serializable, Iterable<Semester> {
         this.year_name = year_name;
     }
 
-    boolean addSemester(Semester semester) {
+    public boolean addSemester(Semester semester) {
         if (!semesterExists(semester.getSemester_name())) {
             semester_list.add(semester);
             return true;

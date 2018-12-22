@@ -4,6 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GPA_Calculator {
+    private static double base_credit_weight = 0.5;
+
+    public static double getBase_credit_weight() {
+        return base_credit_weight;
+    }
+
+    public static void setBase_credit_weight(double base_credit_weight) {
+        GPA_Calculator.base_credit_weight = base_credit_weight;
+    }
+
+
     private static Map<String, Double> letter_gpa_map = new HashMap<String, Double>() {
         {
             put("A+", 4.0d);
@@ -49,8 +60,11 @@ public class GPA_Calculator {
     }
 
     private static double calculate_course_gpa(Course course) {
-        double gpa_sum = 0;
-        double weight_sum = 0;
+
+
+
+        double gpa_sum = 0d;
+        double weight_sum = 0d;
         for (Event event: course) {
             if (event.isDone()) {
                 double percentage = event.getEvent_score();

@@ -31,7 +31,7 @@ public class Semester implements Serializable, Iterable<Course> {
 
 
     public boolean addCourse(Course course) {
-        if (!courseExists(course.getDepartment() + course.getCourseNumber() + course.getTermCode())) {
+        if (!courseExists(course.getCourse_code())) {
             course_list.add(course);
             return true;
         }
@@ -40,7 +40,7 @@ public class Semester implements Serializable, Iterable<Course> {
 
     public boolean removeCourse(String course_name) {
         for (Course course : course_list) {
-            if (course_name.equals(course.getDepartment() + course.getCourseNumber() + course.getTermCode())) {
+            if (courseExists(course.getCourse_code())) {
                 course_list.remove(course);
                 return true;
             }
@@ -51,7 +51,7 @@ public class Semester implements Serializable, Iterable<Course> {
     List<String> getCourseList() {
         List<String> temp_list = new ArrayList<>();
         for (Course course: this.course_list) {
-            temp_list.add(course.getDepartment() + course.getCourseNumber() + course.getTermCode());
+            temp_list.add(course.getCourse_code());
         }
         return temp_list;
     }
@@ -64,18 +64,28 @@ public class Semester implements Serializable, Iterable<Course> {
                 "}\n";
     }
 
-    boolean courseExists(String course_name) {
+    boolean courseExists(String course_code) {
         for (Course course : course_list) {
-            if (course_name.equals(course.getDepartment() + course.getCourseNumber() + course.getTermCode()))
+            if (course_code.equals(course.getCourse_code()))
                 return true;
         }
         return false;
+    }
+
+    public boolean isDone() {
+        for (Course course : this.course_list) {
+            if (!course.isDone())
+                return false;
+        }
+        return true;
     }
 
     @Override
     public Iterator<Course> iterator() {
         return new CourseIterator();
     }
+
+
 
     private class CourseIterator implements Iterator<Course> {
         private int next_index;

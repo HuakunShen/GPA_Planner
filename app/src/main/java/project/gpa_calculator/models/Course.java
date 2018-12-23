@@ -124,10 +124,20 @@ public class Course implements Serializable, Iterable<Event> {
         return score_difference / weight_difference*100;
     }
 
+    public boolean isDone() {
+        for (Event event: this.event_list) {
+            if (!event.isDone())
+                return false;
+        }
+        return true;
+    }
+
     @Override
     public Iterator<Event> iterator() {
         return new EventIterator();
     }
+
+
 
     private class EventIterator implements Iterator<Event> {
         private int next_index;

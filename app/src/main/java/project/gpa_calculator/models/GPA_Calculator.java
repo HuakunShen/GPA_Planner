@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GPA_Calculator {
+
     private static Map<String, Double> letter_gpa_map = new HashMap<String, Double>() {
         {
             put("A+", 4.0d);
@@ -25,44 +26,63 @@ public class GPA_Calculator {
     /**
      * -1 should be returned if any event (event, course, semester year) in the gpa_object is not
      * done
+     *
      * @param gpa_object
      * @return gpa of the given object
      */
-    public static double calculate_gpa(Object gpa_object) {
+    public static double get_gpa(Object gpa_object) {
         if (gpa_object instanceof Course) {
-            return calculate_course_gpa((Course) gpa_object);
+            return calculate_gpa((Course) gpa_object);
         } else if (gpa_object instanceof Semester) {
-            return calculate_semester_gpa((Semester) gpa_object);
+            return calculate_gpa((Semester) gpa_object);
         } else if (gpa_object instanceof Year) {
-            return calculate_year_gpa((Year) gpa_object);
+            return calculate_gpa((Year) gpa_object);
         } else {
             return -1d;
         }
     }
 
-    private static double calculate_year_gpa(Year year) {
-        return 0;
+    private static double calculate_gpa(Year year) {
+        double gpa_sum = 0d;
+        double weight_sum = 0d;
+        for (Semester semester : year) {
+            for (Course course : semester) {
+                if (!course.isDone()) {
+                    return -1d;
+                } else {
+                    gpa_sum += calculate_gpa(course) * course.getCredit();
+                    weight_sum += course.getCredit();
+                }
+            }
+        }
+        return gpa_sum / weight_sum;
     }
 
-    private static double calculate_semester_gpa(Semester semester) {
-        return 0;
+    private static double calculate_gpa(Semester semester) {
+        double gpa_sum = 0d;
+        double weight_sum = 0d;
+        for (Course course : semester) {
+            if (!course.isDone()) {
+                return -1d;
+            } else {
+                gpa_sum += calculate_gpa(course) * course.getCredit();
+                weight_sum += course.getCredit();
+            }
+        }
+
+        return gpa_sum / weight_sum;
     }
 
-    private static double calculate_course_gpa(Course course) {
-        double gpa_sum = 0;
-        double weight_sum = 0;
-        for (Event event: course) {
+    private static double calculate_gpa(Course course) {
+        double percentage_sum = 0d;
+        for (Event event : course) {
             if (event.isDone()) {
-                double percentage = event.getEvent_score();
-                double gpa = calculate_gpa(calculate_letter_grade(percentage));
-                double weight = event.getEvent_weight();
-                gpa_sum += gpa * weight;
-                weight_sum += weight;
+                percentage_sum += event.getEvent_score() * event.getEvent_weight() / 100d;
             } else {
                 return -1d;
             }
         }
-        return 0;
+        return calculate_gpa(calculate_letter_grade(percentage_sum));
     }
 
     public static String calculate_letter_grade(double percentage) {
@@ -99,4 +119,5 @@ public class GPA_Calculator {
         Double gpa = letter_gpa_map.get(letter_grade);
         return gpa != null ? gpa : -1d;
     }
+
 }

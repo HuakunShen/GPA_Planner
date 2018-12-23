@@ -31,9 +31,6 @@ public class GPA_CalculatorTest {
     public void tearDown() throws Exception {
     }
 
-    @Test
-    public void get_gpa() {
-    }
 
     @Test
     public void calculate_letter_grade() {
@@ -54,8 +51,17 @@ public class GPA_CalculatorTest {
     }
 
     private void testYear() {
-//        setup
-//        assertEquals(3.03, GPA_Calculator.calculate_gpa(year2018), 0.1);
+        setupAnotherCourse2();
+        assertEquals(3.45, GPA_Calculator.calculate_gpa(year2018), 0.1);
+    }
+
+    private void setupAnotherCourse2() {
+        Course course = new Course("MAT235", "Calculus II", 80d, 1.0d);
+        Event event = new Event("Final", 100d);
+        event.setEvent_score(80d);
+        course.addEvent(event);
+        assertEquals(3.7, GPA_Calculator.calculate_gpa(course), 0.0);
+        year2018.addCourse(course);
     }
 
     private void testSemester() {

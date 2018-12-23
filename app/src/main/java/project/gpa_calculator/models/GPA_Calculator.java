@@ -23,26 +23,27 @@ public class GPA_Calculator {
         }
     };
 
-    /**
-     * -1 should be returned if any event (event, course, semester year) in the gpa_object is not
-     * done
-     *
-     * @param gpa_object
-     * @return gpa of the given object
-     */
-    public static double get_gpa(Object gpa_object) {
-        if (gpa_object instanceof Course) {
-            return calculate_gpa((Course) gpa_object);
-        } else if (gpa_object instanceof Semester) {
-            return calculate_gpa((Semester) gpa_object);
-        } else if (gpa_object instanceof Year) {
-            return calculate_gpa((Year) gpa_object);
-        } else {
-            return -1d;
-        }
-    }
 
-    private static double calculate_gpa(Year year) {
+//    /**
+//     * -1 should be returned if any event (event, course, semester year) in the gpa_object is not
+//     * done
+//     *
+//     * @param gpa_object
+//     * @return gpa of the given object
+//     */
+//    public static double get_gpa(Object gpa_object) {
+//        if (gpa_object instanceof Course) {
+//            return calculate_gpa((Course) gpa_object);
+//        } else if (gpa_object instanceof Semester) {
+//            return calculate_gpa((Semester) gpa_object);
+//        } else if (gpa_object instanceof Year) {
+//            return calculate_gpa((Year) gpa_object);
+//        } else {
+//            return -1d;
+//        }
+//    }
+
+    public static double calculate_gpa(Year year) {
         double gpa_sum = 0d;
         double weight_sum = 0d;
         for (Semester semester : year) {
@@ -55,10 +56,14 @@ public class GPA_Calculator {
                 }
             }
         }
+        for (Course course : year.getYear_course_list()) {
+            gpa_sum += calculate_gpa(course) * course.getCredit();
+            weight_sum += course.getCredit();
+        }
         return gpa_sum / weight_sum;
     }
 
-    private static double calculate_gpa(Semester semester) {
+    public static double calculate_gpa(Semester semester) {
         double gpa_sum = 0d;
         double weight_sum = 0d;
         for (Course course : semester) {
@@ -69,11 +74,10 @@ public class GPA_Calculator {
                 weight_sum += course.getCredit();
             }
         }
-
         return gpa_sum / weight_sum;
     }
 
-    private static double calculate_gpa(Course course) {
+    public static double calculate_gpa(Course course) {
         double percentage_sum = 0d;
         for (Event event : course) {
             if (event.isDone()) {
@@ -83,6 +87,11 @@ public class GPA_Calculator {
             }
         }
         return calculate_gpa(calculate_letter_grade(percentage_sum));
+    }
+
+    public static double calculate_gpa(String letter_grade) {
+        Double gpa = letter_gpa_map.get(letter_grade);
+        return gpa != null ? gpa : -1d;
     }
 
     public static String calculate_letter_grade(double percentage) {
@@ -113,11 +122,6 @@ public class GPA_Calculator {
         } else {
             return "F";
         }
-    }
-
-    public static double calculate_gpa(String letter_grade) {
-        Double gpa = letter_gpa_map.get(letter_grade);
-        return gpa != null ? gpa : -1d;
     }
 
 }

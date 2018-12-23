@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import project.gpa_calculator.R;
 
-public class event_activity extends AppCompatActivity {
+public class EventActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

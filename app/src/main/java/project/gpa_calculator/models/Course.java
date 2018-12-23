@@ -7,12 +7,28 @@ import java.util.List;
 
 //TODO should check if all event add up to 100, warn user otherwise, also handle bonus
 public class Course implements Serializable, Iterable<Event> {
-    private String department;
-    private String courseNumber;
-    private String termCode;
+
+
     private double target;
     private String course_code;
     private String course_name;
+
+    public String getCourse_code() {
+        return course_code;
+    }
+
+    public void setCourse_code(String course_code) {
+        this.course_code = course_code;
+    }
+
+    public String getCourse_name() {
+        return course_name;
+    }
+
+    public void setCourse_name(String course_name) {
+        this.course_name = course_name;
+    }
+
     private List<Event> event_list;
     private double credit;
 
@@ -37,7 +53,7 @@ public class Course implements Serializable, Iterable<Event> {
     @Override
     public String toString() {
         return "\n\t\tCourse{" +
-                "course='" + department + courseNumber + termCode + '\'' +
+                "course='" + course_code + '\'' +
                 '}';
     }
 
@@ -52,29 +68,6 @@ public class Course implements Serializable, Iterable<Event> {
         return true;
     }
 
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public String getCourseNumber() {
-        return courseNumber;
-    }
-
-    public void setCourseNumber(String courseNumber) {
-        this.courseNumber = courseNumber;
-    }
-
-    public String getTermCode() {
-        return termCode;
-    }
-
-    public void setTermCode(String termCode) {
-        this.termCode = termCode;
-    }
 
     public double getTarget() {
         return target;
@@ -93,18 +86,17 @@ public class Course implements Serializable, Iterable<Event> {
         double score_sum = 0d;
         double weight_sum = 0d;
         double total_weight = 0d;
-        Iterator<Event> itr = iterator();
-
         for (Event event: event_list){
             if (event.isDone()) {
                 weight_sum += event.getEvent_weight();
-                score_sum += event.getEvent_score() * event.getEvent_weight();
+                score_sum += event.getEvent_score();
             }
             total_weight += event.getEvent_weight();
         }
 
-        score_sum /= weight_sum;
-        return new Double[]{score_sum, weight_sum, total_weight};
+        score_sum *= weight_sum / 100;
+        Double[] result = new Double[]{score_sum, weight_sum, total_weight};
+        return result;
     }
 
     /**
@@ -120,10 +112,12 @@ public class Course implements Serializable, Iterable<Event> {
         double weight_sum = data_so_far[1];
         double total_weight = data_so_far[2];
         double weight_difference = total_weight - weight_sum;
-        return score_difference / weight_difference*100;
+        return score_difference / weight_difference * 100;
     }
 
     public boolean isDone() {
+        if (this.event_list.isEmpty())
+            return false;
         for (Event event: this.event_list) {
             if (!event.isDone())
                 return false;

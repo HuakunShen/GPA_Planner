@@ -7,7 +7,21 @@ import java.util.List;
 
 public class Year implements Serializable, Iterable<Semester> {
     private List<Semester> semester_list;
+
+
+    private List<Course> year_course_list;
     private String year_name;
+
+
+
+    public List<Course> getYear_course_list() {
+        return year_course_list;
+    }
+
+    public void setYear_course_list(List<Course> year_course_list) {
+        this.year_course_list = year_course_list;
+    }
+
 
     @Override
     public String toString() {
@@ -20,11 +34,22 @@ public class Year implements Serializable, Iterable<Semester> {
     public Year(List<Semester> semester_list, String year_name) {
         this.semester_list = semester_list;
         this.year_name = year_name;
+        this.year_course_list = new ArrayList<>();
     }
 
     public Year(String year_name) {
         this.semester_list = new ArrayList<>();
+        this.year_course_list = new ArrayList<>();
         this.year_name = year_name;
+    }
+
+    public boolean addCourse(Course course) {
+        for (Semester semester : this.semester_list) {
+            if (semester.courseExists(course.getCourse_code()))
+                return false;
+        }
+        this.year_course_list.add(course);
+        return true;
     }
 
     public boolean addSemester(Semester semester) {

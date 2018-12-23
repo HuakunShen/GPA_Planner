@@ -8,7 +8,7 @@ import android.widget.EditText;
 
 import project.gpa_calculator.R;
 
-public class add_course extends AppCompatActivity {
+public class AddCourseActivity extends AppCompatActivity {
     private EditText course_name_EditText;
     private EditText department_EditText;
     private EditText course_number_EditText;

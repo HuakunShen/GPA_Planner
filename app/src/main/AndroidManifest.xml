@@ -9,13 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.signup_activity" />
-        <activity android:name=".activities.year_activity" />
-        <activity android:name=".activities.semester_activity" />
-        <activity android:name=".activities.course_activity" />
-        <activity android:name=".activities.event_activity" />
-        <activity android:name=".activities.add_event" />
-        <activity android:name=".activities.add_course" />
+        <activity android:name=".activities.SignupActivity" />
+        <activity android:name=".activities.YearActivity" />
+        <activity android:name=".activities.AddSemesterActivity" />
+        <activity android:name=".activities.CourseActivity" />
+        <activity android:name=".activities.EventActivity" />
+        <activity android:name=".activities.AddEventActivity" />
+        <activity android:name=".activities.AddCourseActivity" />
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/title_activity_main"
@@ -26,6 +26,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.SemesterActivity"
+            android:label="@string/title_activity_semester"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

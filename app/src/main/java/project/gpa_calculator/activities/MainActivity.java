@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity
         local_user_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplication(), year_activity.class));
+                startActivity(new Intent(getApplication(), YearActivity.class));
             }
         });
     }

@@ -5,11 +5,11 @@ import android.os.Bundle;
 
 import project.gpa_calculator.R;
 
-public class event_activity extends AppCompatActivity {
+public class YearActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event);
+        setContentView(R.layout.activity_year);
     }
 }

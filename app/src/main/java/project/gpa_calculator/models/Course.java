@@ -121,7 +121,7 @@ public class Course implements Serializable, Iterable<Event> {
         double weight_sum = data_so_far[1];
         double total_weight = data_so_far[2];
         double weight_difference = total_weight - weight_sum;
-        return score_difference / weight_difference*200;
+        return score_difference / weight_difference*100;
     }
 
     @Override

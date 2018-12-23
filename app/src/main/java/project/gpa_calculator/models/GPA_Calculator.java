@@ -56,6 +56,10 @@ public class GPA_Calculator {
                 }
             }
         }
+        for (Course course : year.getYear_course_list()) {
+            gpa_sum += calculate_gpa(course) * course.getCredit();
+            weight_sum += course.getCredit();
+        }
         return gpa_sum / weight_sum;
     }
 

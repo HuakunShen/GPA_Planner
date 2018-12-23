@@ -5,11 +5,11 @@ import android.os.Bundle;
 
 import project.gpa_calculator.R;
 
-public class SemesterActivity extends AppCompatActivity {
+public class AddSemesterActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_semester);
+        setContentView(R.layout.activity_add_semester);
     }
 }

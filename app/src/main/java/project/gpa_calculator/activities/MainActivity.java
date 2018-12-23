@@ -18,7 +18,10 @@ import android.widget.Button;
 import project.gpa_calculator.R;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+    private Button local_user_button;
+    private Button to_semester_button;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +52,25 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setupButton() {
-        Button local_user_button = findViewById(R.id.local_user_B);
-        local_user_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplication(), YearActivity.class));
-            }
-        });
+        local_user_button = findViewById(R.id.local_user_B);
+        to_semester_button = findViewById(R.id.semester_B);
+        local_user_button.setOnClickListener(this);
+        to_semester_button.setOnClickListener(this);
     }
 
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.local_user_B:
+                startActivity(new Intent(getApplication(), YearActivity.class));
+                break;
+            case R.id.semester_B:
+                startActivity(new Intent(getApplication(), SemesterActivity.class));
+                break;
+
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -115,4 +128,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }

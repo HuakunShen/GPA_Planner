@@ -9,12 +9,12 @@ import android.view.View;
 
 import project.gpa_calculator.R;
 
-public class AddSemesterActivity extends AppCompatActivity {
+public class SemesterActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_semester);
+        setContentView(R.layout.activity_semester);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

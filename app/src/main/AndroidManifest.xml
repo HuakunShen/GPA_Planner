@@ -16,6 +16,8 @@
         <activity android:name=".activities.EventActivity" />
         <activity android:name=".activities.AddEventActivity" />
         <activity android:name=".activities.AddCourseActivity" />
+        <activity android:name=".activities.Add_pop"
+            android:theme="@style/AppTheme.Popup"/>
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/title_activity_main"

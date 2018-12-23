@@ -11,14 +11,13 @@ public class Course implements Serializable, Iterable<Event> {
     private String courseNumber;
     private String termCode;
     private double target;
+    private String course_code;
     private String course_name;
     private List<Event> event_list;
     private double credit;
 
-    public Course(String termCode, String name, double target, double credit) {
-        this.department = department;
-        this.courseNumber = courseNumber;
-        this.termCode = termCode;
+    public Course(String course_code, String name, double target, double credit) {
+        this.course_code = course_code;
         this.course_name = name;
         this.target = target;
         event_list = new ArrayList<>();

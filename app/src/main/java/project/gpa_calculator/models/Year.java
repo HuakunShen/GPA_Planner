@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Year implements Serializable, Iterable<Semester> {
     private List<Semester> semester_list;
+    private String year_name;
 
     @Override
     public String toString() {
@@ -15,8 +16,6 @@ public class Year implements Serializable, Iterable<Semester> {
                 ", \nyear_name='" + year_name + '\'' +
                 '}';
     }
-
-    private String year_name;
 
     public Year(List<Semester> semester_list, String year_name) {
         this.semester_list = semester_list;

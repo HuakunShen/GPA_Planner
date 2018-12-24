@@ -1,6 +1,8 @@
 package project.gpa_calculator.models;
 
-public class Event {
+import java.io.Serializable;
+
+public class Event implements Serializable {
     /**
      * true if is done
      * false if not done yet

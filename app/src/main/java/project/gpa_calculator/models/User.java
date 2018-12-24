@@ -1,17 +1,42 @@
 package project.gpa_calculator.models;
 
-public class User {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class User implements Serializable {
     private String username;
     private String nickname;
     private String password;
     private String student_number;
     private String school;
     private String student_type;
+    private List<Year> year_list;
 
     public User(String username, String nickname, String password) {
         this.username = username;
         this.nickname = nickname.equals("") ? username : nickname;
         this.password = password;
+        year_list = new ArrayList<>();
+    }
+
+    public boolean addYear(Year new_year) {
+        for (Year year : this.year_list) {
+            if (year.getYear_name().equals(new_year.getYear_name()))
+                return false;
+        }
+        this.year_list.add(new_year);
+        return true;
+    }
+
+    public boolean removeYear(String year_name) {
+        for (int i = 0; i < this.year_list.size(); i++) {
+            if (this.year_list.get(i).getYear_name().equals(year_name)) {
+                this.year_list.remove(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     public String getUsername() {

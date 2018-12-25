@@ -1,6 +1,7 @@
 package project.gpa_calculator.activities.semester;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,6 +24,7 @@ import java.util.List;
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.activities.Recycler_Adapter;
+import project.gpa_calculator.activities.course.CourseActivity;
 import project.gpa_calculator.activities.main.MainActivity;
 import project.gpa_calculator.models.ListItem;
 import project.gpa_calculator.models.Semester;
@@ -59,7 +61,7 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
 
         controller.setupListItems();
 
-        adapter = new RecyclerViewAdapter(this, controller.getListItems());
+        adapter = new RecyclerViewAdapter(this, controller.getListItems(), controller);
         recyclerView.setAdapter(adapter);
     }
 
@@ -93,6 +95,7 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
             saveToFile(MainActivity.userFile);
         }
     }
+
 
     public void saveToFile(String fileName) {
         try {

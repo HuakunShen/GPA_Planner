@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity
         Intent intent;
         switch (v.getId()) {
             case R.id.local_user_B:
-                intent = new Intent(getApplication(), YearActivity.class));
+                intent = new Intent(getApplication(), YearActivity.class);
                 intent.putExtra("userObject", controller.getUser());
                 startActivity(intent);
                 break;

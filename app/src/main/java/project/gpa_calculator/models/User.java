@@ -11,6 +11,7 @@ public class User implements Serializable {
     private String student_number;
     private String school;
     private String student_type;
+
     private List<Year> year_list;
 
     public User(String username, String nickname, String password) {
@@ -18,6 +19,14 @@ public class User implements Serializable {
         this.nickname = nickname.equals("") ? username : nickname;
         this.password = password;
         year_list = new ArrayList<>();
+    }
+
+    public List<Year> getYear_list() {
+        return year_list;
+    }
+
+    public void setYear_list(List<Year> year_list) {
+        this.year_list = year_list;
     }
 
     public boolean addYear(Year new_year) {

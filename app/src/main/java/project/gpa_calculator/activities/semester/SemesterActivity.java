@@ -9,11 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +31,6 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-    private List<ListItem> listItems;
     private SemesterActivityController controller;
 
     @Override
@@ -50,12 +52,11 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        listItems = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            ListItem item = new ListItem("Item " + (i + 1), "Description", "GPA: ");
-            listItems.add(item);
-        }
-        adapter = new RecyclerViewAdapter(this, listItems);
+        controller.setupUserForTesting();
+        controller.setupListItems();
+//        for (Semester semester : )
+
+        adapter = new RecyclerViewAdapter(this, controller.getListItems());
         recyclerView.setAdapter(adapter);
     }
 
@@ -85,5 +86,16 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
     @Override
     public void applyDialog(String name, String description) {
 
+    }
+
+    public void saveToFile(String fileName) {
+        try {
+            ObjectOutputStream outputStream = new ObjectOutputStream(
+                    this.openFileOutput(fileName, MODE_PRIVATE));
+            outputStream.writeObject(controller.getUser());
+            outputStream.close();
+        } catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
     }
 }

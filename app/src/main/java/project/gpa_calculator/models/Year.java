@@ -43,6 +43,14 @@ public class Year implements Serializable, Iterable<Semester> {
         this.year_name = year_name;
     }
 
+    public List<Semester> getSemester_list() {
+        return semester_list;
+    }
+
+    public void setSemester_list(List<Semester> semester_list) {
+        this.semester_list = semester_list;
+    }
+
     public boolean addCourse(Course course) {
         for (Semester semester : this.semester_list) {
             if (semester.courseExists(course.getCourse_code()))

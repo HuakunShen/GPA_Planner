@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import project.gpa_calculator.R;
+import project.gpa_calculator.activities.semester.SemesterActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {

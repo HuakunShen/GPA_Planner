@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -23,8 +24,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.context = context;
         this.list_items = list_items;
     }
-
-
 
 
     @NonNull
@@ -49,17 +48,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return list_items.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView name;
         private TextView description;
         private TextView gpa;
 
         private ViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             name = itemView.findViewById(R.id.title);
             description = itemView.findViewById(R.id.description);
             gpa = itemView.findViewById(R.id.gpa);
 
+        }
+
+        @Override
+        public void onClick(View v) {
+            // Get Position of row clicked
+            int position = getAdapterPosition();
+            ListItem item = list_items.get(position);
+            Toast.makeText(context, item.getName(), Toast.LENGTH_LONG).show();
         }
     }
 }

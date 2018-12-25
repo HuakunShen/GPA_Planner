@@ -25,7 +25,10 @@ import java.io.ObjectOutputStream;
 import project.gpa_calculator.R;
 import project.gpa_calculator.activities.YearActivity;
 import project.gpa_calculator.activities.semester.SemesterActivity;
+import project.gpa_calculator.models.Course;
+import project.gpa_calculator.models.Semester;
 import project.gpa_calculator.models.User;
+import project.gpa_calculator.models.Year;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -50,11 +53,16 @@ public class MainActivity extends AppCompatActivity
         setupNavigation(toolbar);
 
         setupButton();
+
+//        controller.setupUserForTesting();
     }
+
+
 
     private void setupController() {
         controller = new MainActivityController();
         loadFromFile(userFile);
+        controller.setupUserForTesting();
         saveToFile(userFile);
 
     }
@@ -90,6 +98,12 @@ public class MainActivity extends AppCompatActivity
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        loadFromFile(userFile);
+    }
+
+    @Override
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
@@ -101,6 +115,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.semester_B:
                 intent = new Intent(getApplication(), SemesterActivity.class);
                 intent.putExtra("userObject", controller.getUser());
+                intent.putExtra("year_name", "2018");
                 startActivity(intent);
                 break;
 

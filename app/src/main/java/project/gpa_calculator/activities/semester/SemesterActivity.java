@@ -52,8 +52,10 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
 
     private void setupController() {
         controller = new SemesterActivityController();
-        controller.setUser((User) getIntent().getSerializableExtra("userObject"));
-        controller.setupUserForTesting();
+        controller.setupUser((User) getIntent().getSerializableExtra("userObject"),
+                getIntent().getStringExtra("year_name"));
+        controller.setContext(this);
+//        controller.setupUserForTesting();
     }
 
     private void setupRecyclerView() {
@@ -96,11 +98,16 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
         });
     }
 
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        adapter.notifyDataSetChanged();
+//    }
+
     @Override
     public void applyDialog(String name, String description) {
         if (controller.addSemester(name, description)) {
             adapter.notifyItemInserted(controller.getListItems().size() - 1);
-            saveToFile(MainActivity.userFile);
         }
     }
 
@@ -111,14 +118,14 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
 //        itemTouchHelper.attachToRecyclerView(recyclerView);
 //    }
 
-    public void saveToFile(String fileName) {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    this.openFileOutput(fileName, MODE_PRIVATE));
-            outputStream.writeObject(controller.getUser());
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-    }
+//    public void saveToFile(String fileName) {
+//        try {
+//            ObjectOutputStream outputStream = new ObjectOutputStream(
+//                    this.openFileOutput(fileName, MODE_PRIVATE));
+//            outputStream.writeObject(controller.getUser());
+//            outputStream.close();
+//        } catch (IOException e) {
+//            Log.e("Exception", "File write failed: " + e.toString());
+//        }
+//    }
 }

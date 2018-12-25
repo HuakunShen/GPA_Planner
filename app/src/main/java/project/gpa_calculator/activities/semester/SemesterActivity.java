@@ -1,5 +1,6 @@
 package project.gpa_calculator.activities.semester;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +28,7 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private List<ListItem> listItems;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +44,7 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         listItems = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            ListItem item = new ListItem("Item "+ (i + 1), "Description", "GPA: ");
+            ListItem item = new ListItem("Item " + (i + 1), "Description", "GPA: ");
             listItems.add(item);
         }
         adapter = new RecyclerViewAdapter(this, listItems);
@@ -60,16 +63,6 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-//                AlertDialog.Builder mBuilder = new AlertDialog.Builder(getApplication());
-//                View mView = getLayoutInflater().inflate(R.layout.dialog_semester, null);
-//                EditText semester_dialog_name_ET = mView.findViewById(R.id.semester_dialog_name_ET);
-//                EditText semester_dialog_description_ET = mView.findViewById(R.id.semester_dialog_description_ET);
-//                Button confirm_Btn = mView.findViewById(R.id.semester_dialog_confirm_Btn);
-//                Button cancel_Btn = mView.findViewById(R.id.semester_dialog_cancel_Btn);
-//
-//                mBuilder.setView(mView);
-//                AlertDialog dialog = mBuilder.create();
-//                dialog.show();
                 openDialog();
             }
 

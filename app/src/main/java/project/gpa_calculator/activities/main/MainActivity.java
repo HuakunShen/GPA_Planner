@@ -1,4 +1,4 @@
-package project.gpa_calculator.activities;
+package project.gpa_calculator.activities.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,31 +23,43 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import project.gpa_calculator.R;
+import project.gpa_calculator.activities.YearActivity;
 import project.gpa_calculator.activities.semester.SemesterActivity;
+import project.gpa_calculator.models.User;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
-    public static final String userFile = "userFile";
+
     private Button local_user_button;
     private Button to_semester_button;
+    private MainActivityController controller;
+    public static final String userFile = "userFile";
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setupController();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        setupFAB();
 
+        setupNavigation(toolbar);
+
+        setupButton();
+    }
+
+    private void setupController() {
+        controller = new MainActivityController();
+        loadFromFile(userFile);
+        saveToFile(userFile);
+
+    }
+
+    private void setupNavigation(Toolbar toolbar) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -56,8 +68,17 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
 
-        setupButton();
+    private void setupFAB() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
     }
 
     private void setupButton() {
@@ -139,18 +160,13 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
-
     private void loadFromFile(String fileName) {
         try {
             InputStream inputStream = this.openFileInput(fileName);
             if (inputStream != null) {
                 ObjectInputStream input = new ObjectInputStream(inputStream);
-                if (fileName.equals(userFile)) {
-                    user = (User) input.readObject();
-                } else if (fileName.equals(gameStateFile) || fileName.equals(tempGameStateFile)) {
-                    boardManager = (MatchingBoardManager) input.readObject();
-                }
+                controller.setUser((User) input.readObject());
+//                user = (User) input.readObject();
                 inputStream.close();
             }
         } catch (FileNotFoundException e) {
@@ -171,11 +187,12 @@ public class MainActivity extends AppCompatActivity
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
                     this.openFileOutput(fileName, MODE_PRIVATE));
-                outputStream.writeObject(user);
+            outputStream.writeObject(controller.getUser());
             outputStream.close();
         } catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
+
 
 }

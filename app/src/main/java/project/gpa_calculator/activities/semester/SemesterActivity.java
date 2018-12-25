@@ -58,7 +58,6 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         controller.setupListItems();
-//        for (Semester semester : )
 
         adapter = new RecyclerViewAdapter(this, controller.getListItems());
         recyclerView.setAdapter(adapter);

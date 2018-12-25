@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activities.SignupActivity" />
         <activity android:name=".activities.YearActivity" />
-        <activity android:name=".activities.CourseActivity" />
+        <activity android:name=".activities.course.CourseActivity" />
         <activity android:name=".activities.EventActivity" />
         <activity android:name=".activities.AddEventActivity" />
         <activity android:name=".activities.AddCourseActivity" />

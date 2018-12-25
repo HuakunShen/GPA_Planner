@@ -1,4 +1,4 @@
-package project.gpa_calculator.activities;
+package project.gpa_calculator.activities.course;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

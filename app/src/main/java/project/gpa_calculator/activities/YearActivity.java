@@ -3,12 +3,14 @@ package project.gpa_calculator.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.provider.CalendarContract;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +25,7 @@ import java.util.List;
 import project.gpa_calculator.R;
 
 
-public class YearActivity extends AppCompatActivity implements Recycler_Adapter.ItemClickListener{
+public class YearActivity extends AppCompatActivity implements Recycler_Adapter.ItemClickListener, RecyclerItemTouchHelper.RecyclerItemTouchHelperListener{
     private Button add_course;
     private Recycler_Adapter adapter;
     List<String> item  = new ArrayList<>();
@@ -52,13 +54,48 @@ public class YearActivity extends AppCompatActivity implements Recycler_Adapter.
         adapter.setClickListener(this);
         recycler.setAdapter(adapter);
 
-//        final TextView all_year = (TextView)findViewById(R.id.recycler_text);
-//        all_year.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View l){
-//                all_year.setText("every year is great");
-//            }
-//        });
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recycler);
+
+
+        final TextView all_year = (TextView)findViewById(R.id.all_year);
+        all_year.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View l){
+                all_year.setText("every year is great");
+            }
+        });
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof Recycler_Adapter.ViewHolder) {
+            // get the removed item name to display it in snack bar
+            //String name = cartList.get(viewHolder.getAdapterPosition()).getName();
+
+            // backup of removed item for undo purpose
+            //final Item deletedItem = cartList.get(viewHolder.getAdapterPosition());
+            //final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            int removeIndex = 0;
+            item.remove(removeIndex);
+            adapter.notifyItemRemoved(removeIndex);
+
+            // showing snack bar with Undo option
+//            Snackbar snackbar = Snackbar
+//                    .make(coordinatorLayout, name + " removed from cart!", Snackbar.LENGTH_LONG);
+//            snackbar.setAction("UNDO", new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//
+//                    // undo is selected, restore the deleted item
+//                    adapter.restoreItem(deletedItem, deletedIndex);
+//                }
+//            });
+//            snackbar.setActionTextColor(Color.YELLOW);
+//            snackbar.show();
+        }
     }
 
     @Override

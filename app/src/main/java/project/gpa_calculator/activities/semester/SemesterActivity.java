@@ -22,20 +22,28 @@ import project.gpa_calculator.R;
 import project.gpa_calculator.activities.Recycler_Adapter;
 import project.gpa_calculator.models.ListItem;
 import project.gpa_calculator.models.Semester;
+import project.gpa_calculator.models.User;
 
 public class SemesterActivity extends AppCompatActivity implements SemesterDialog.SemesterDialogListener {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private List<ListItem> listItems;
+    private SemesterActivityController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_semester);
+        setupController();
         setupToolBar();
         setupAddButton();
         setupRecyclerView();
+    }
+
+    private void setupController() {
+        controller = new SemesterActivityController();
+        controller.setUser((User) getIntent().getSerializableExtra("userObject"));
     }
 
     private void setupRecyclerView() {

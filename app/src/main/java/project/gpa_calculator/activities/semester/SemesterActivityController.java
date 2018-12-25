@@ -1,14 +1,14 @@
-package project.gpa_calculator.activities.main;
+package project.gpa_calculator.activities.semester;
 
 import project.gpa_calculator.models.User;
 
-public class MainActivityController {
+public class SemesterActivityController {
+
 
     private User user;
 
+    public SemesterActivityController() {
 
-    public MainActivityController() {
-        user = new User("admin", "admin", "admin");
     }
 
     public User getUser() {
@@ -18,8 +18,6 @@ public class MainActivityController {
     public void setUser(User user) {
         this.user = user;
     }
-
-
 
 
 }

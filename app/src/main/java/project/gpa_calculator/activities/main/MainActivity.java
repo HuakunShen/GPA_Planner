@@ -91,12 +91,17 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.local_user_B:
-                startActivity(new Intent(getApplication(), YearActivity.class));
+                intent = new Intent(getApplication(), YearActivity.class));
+                intent.putExtra("userObject", controller.getUser());
+                startActivity(intent);
                 break;
             case R.id.semester_B:
-                startActivity(new Intent(getApplication(), SemesterActivity.class));
+                intent = new Intent(getApplication(), SemesterActivity.class);
+                intent.putExtra("userObject", controller.getUser());
+                startActivity(intent);
                 break;
 
         }

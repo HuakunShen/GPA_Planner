@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +47,7 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
         setupToolBar();
         setupAddButton();
         setupRecyclerView();
+//        setUpRecyclerView();
     }
 
     private void setupController() {
@@ -63,6 +65,12 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
 
         adapter = new RecyclerViewAdapter(this, controller.getListItems(), controller);
         recyclerView.setAdapter(adapter);
+
+
+//        recyclerView.setAdapter(adapter);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     private void setupToolBar() {
@@ -96,6 +104,12 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
         }
     }
 
+//    private void setUpRecyclerView() {
+//        recyclerView.setAdapter(adapter);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
+//        itemTouchHelper.attachToRecyclerView(recyclerView);
+//    }
 
     public void saveToFile(String fileName) {
         try {

@@ -3,14 +3,21 @@ package project.gpa_calculator.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.AbstractSequentialList;
 import java.util.List;
 
 import project.gpa_calculator.R;
@@ -22,6 +29,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private Context context;
     private List<ListItem> list_items;
     private SemesterActivityController controller;
+//    private AbstractSequentialList mListItems;
 
 
     public RecyclerViewAdapter(Context context, List<ListItem> list_items, SemesterActivityController controller) {
@@ -53,6 +61,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return list_items.size();
     }
 
+    public void deleteItem(int position) {
+        ListItem mRecentlyDeletedItem = this.list_items.get(position);
+        int mRecentlyDeletedItemPosition = position;
+        this.list_items.remove(position);
+        notifyItemRemoved(position);
+//        showUndoSnackbar();
+    }
+
+
+
+    public Context getContext() {
+        return context;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView name;
         private TextView description;
@@ -81,4 +103,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             Toast.makeText(context, item.getName(), Toast.LENGTH_LONG).show();
         }
     }
+
+
 }
+

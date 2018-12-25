@@ -23,6 +23,7 @@ import java.util.List;
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.activities.Recycler_Adapter;
+import project.gpa_calculator.activities.main.MainActivity;
 import project.gpa_calculator.models.ListItem;
 import project.gpa_calculator.models.Semester;
 import project.gpa_calculator.models.User;
@@ -31,6 +32,8 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
+//    private List<ListItem> listItems;
+
     private SemesterActivityController controller;
 
     @Override
@@ -46,13 +49,14 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
     private void setupController() {
         controller = new SemesterActivityController();
         controller.setUser((User) getIntent().getSerializableExtra("userObject"));
+        controller.setupUserForTesting();
     }
 
     private void setupRecyclerView() {
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        controller.setupUserForTesting();
+
         controller.setupListItems();
 //        for (Semester semester : )
 
@@ -85,7 +89,10 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
 
     @Override
     public void applyDialog(String name, String description) {
-
+        if (controller.addSemester(name, description)) {
+            adapter.notifyItemInserted(controller.getListItems().size() - 1);
+            saveToFile(MainActivity.userFile);
+        }
     }
 
     public void saveToFile(String fileName) {

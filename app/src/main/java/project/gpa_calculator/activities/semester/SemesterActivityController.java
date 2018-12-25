@@ -15,7 +15,10 @@ public class SemesterActivityController {
 
     private User user;
 
+    private Year current_year;
+
     SemesterActivityController() {
+//        current_year = user.getYear("2018");
     }
 
     public List<ListItem> getListItems() {
@@ -28,10 +31,6 @@ public class SemesterActivityController {
 
     public void setupListItems() {
         listItems = new ArrayList<>();
-//        for (int i = 0; i < 5; i++) {
-//            ListItem item = new ListItem("Item " + (i + 1), "Description", "GPA: ");
-//            listItems.add(item);
-//        }
         List<Year> year_list = user.getYear_list();
         List<Semester> semester_list = year_list.get(0).getSemester_list();
         for (Semester semester : semester_list) {
@@ -49,6 +48,10 @@ public class SemesterActivityController {
         this.user = user;
     }
 
+
+    /**
+     * just for testing, initialize a semester, comment out later
+     */
     public void setupUserForTesting() {
         Year year = new Year("2018");
         Semester semester = new Semester("2018fall");
@@ -56,5 +59,15 @@ public class SemesterActivityController {
         Course course = new Course("CSC207", "Software Design", 85d, 0.5d);
         semester.addCourse(course);
         user.addYear(year);
+        current_year = year;
+    }
+
+    public boolean addSemester(String name, String description) {
+        Semester semester = new Semester(name);
+        boolean result = current_year.addSemester(semester);
+        if (result) {
+            this.listItems.add(new ListItem(name, description, "GPA"));
+        }
+        return result;
     }
 }

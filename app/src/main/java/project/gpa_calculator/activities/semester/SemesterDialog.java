@@ -33,6 +33,8 @@ public class SemesterDialog extends AppCompatDialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_semester, null);
+        semester_name_ET = view.findViewById(R.id.semester_dialog_name_ET);
+        semester_description_ET = view.findViewById(R.id.semester_dialog_description_ET);
         builder.setView(view)
                 .setTitle("Add Semester")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -46,11 +48,11 @@ public class SemesterDialog extends AppCompatDialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         String semester_name = semester_name_ET.getText().toString();
                         String semester_description = semester_description_ET.getText().toString();
-                        listener.applyDialog(semester_name, semester_description);
+                        if (!semester_name.isEmpty())
+                            listener.applyDialog(semester_name, semester_description);
                     }
                 });
-        semester_name_ET = view.findViewById(R.id.semester_dialog_name_ET);
-        semester_description_ET = view.findViewById(R.id.semester_dialog_description_ET);
+
         return builder.create();
     }
 

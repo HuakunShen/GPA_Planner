@@ -21,6 +21,14 @@ public class User implements Serializable {
         year_list = new ArrayList<>();
     }
 
+    public Year getYear(String year_name) {
+        for (Year year : this.year_list) {
+            if (year.getYear_name().equals(year_name))
+                return year;
+        }
+        return null;
+    }
+
     public List<Year> getYear_list() {
         return year_list;
     }

@@ -42,7 +42,7 @@ public class CourseActivityController extends ActivityController {
     public void setupListItems() {
         listItems = new ArrayList<>();
         for (Course course : this.current_semester) {
-            ListItem item = new ListItem(course.getCourse_code(), course.getCourse_name(), "GPA: ");
+            ListItem item = new ListItem(course.getCourse_code(), course.getCourse_name(), "Target: " + course.getTarget());
             listItems.add(item);
         }
     }
@@ -54,19 +54,20 @@ public class CourseActivityController extends ActivityController {
 
     public void setupUser(User user, Year year, String semester_name) {
         this.user = user;
-        this.current_semester = year.getSemester(semester_name);
+        this.current_semester = user.getYear(year.getYear_name()).getSemester(semester_name);
     }
 
 
-    public boolean addCourse(String course_name, String description) {
+    public boolean addCourse(String course_name, String course_code, double target, double credit_weight) {
+        Course course = new Course(course_code, course_name, target, credit_weight);
 //        Course course = new Course(course_name);
-//        boolean result = current_year.addSemester(semester);
-//        if (result) {
-//            this.listItems.add(new ListItem(name, description, "GPA"));
-//            saveToFile(MainActivity.userFile);
-//        }
-//        return result;
-        return false;
+        boolean result = current_semester.addCourse(course);
+        if (result) {
+            this.listItems.add(new ListItem(course_code, course_name, "Target: " + target));
+            saveToFile(MainActivity.userFile);
+        }
+        return result;
+//        return false;
     }
 
     public void deleteItem(int position) {

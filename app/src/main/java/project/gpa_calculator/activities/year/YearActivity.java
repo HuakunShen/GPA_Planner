@@ -13,6 +13,7 @@ import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
 import project.gpa_calculator.Util.AddDialog;
+import project.gpa_calculator.activities.main.MainActivity;
 import project.gpa_calculator.models.User;
 
 public class YearActivity extends AppCompatActivity implements AddDialog.YearSemesterDialogListener {
@@ -46,6 +47,12 @@ public class YearActivity extends AppCompatActivity implements AddDialog.YearSem
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        controller.loadFromFile(MainActivity.userFile);
     }
 
     private void setupController() {

@@ -80,6 +80,8 @@ public class CourseActivity extends AppCompatActivity implements AddDialog.Cours
 
     @Override
     public void applyDialog(String course_name, String course_code, double target, double credit_weight) {
-
+        if (controller.addCourse(course_name, course_code, target, credit_weight)) {
+            adapter.notifyItemInserted(controller.getListItems().size() - 1);
+        }
     }
 }

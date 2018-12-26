@@ -13,6 +13,7 @@ import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.AddDialog;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
+import project.gpa_calculator.activities.main.MainActivity;
 import project.gpa_calculator.models.User;
 
 public class SemesterActivity extends AppCompatActivity implements AddDialog.YearSemesterDialogListener {
@@ -81,7 +82,11 @@ public class SemesterActivity extends AppCompatActivity implements AddDialog.Yea
         });
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        controller.loadFromFile(MainActivity.userFile);
+    }
 
     @Override
     public void applyDialog(String name, String description) {

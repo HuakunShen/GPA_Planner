@@ -40,16 +40,16 @@ public class AddDialog extends AppCompatDialogFragment {
         }
 
 
-            setupExtraInput(context);
-            try {
-                if (context instanceof YearActivity || context instanceof SemesterActivity) {
-                    listener = (YearSemesterDialogListener) context;
-                } else {
-                    listener = (CourseDialogListener ) context;
-                }
-            } catch (ClassCastException e) {
-                throw new ClassCastException(context.toString() + "must implement YearSemesterDialogListener");
+        setupExtraInput(context);
+        try {
+            if (context instanceof YearActivity || context instanceof SemesterActivity) {
+                listener = (YearSemesterDialogListener) context;
+            } else {
+                listener = (CourseDialogListener) context;
             }
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + "must implement YearSemesterDialogListener");
+        }
 
     }
 
@@ -92,20 +92,21 @@ public class AddDialog extends AppCompatDialogFragment {
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                        if (type.equalsIgnoreCase("Year") || type.equalsIgnoreCase("Semester")) {
+                        if (type.equalsIgnoreCase("Year") || type.equalsIgnoreCase("Semester")) {
                             String semester_name = name_ET.getText().toString();
                             String semester_description = description_ET.getText().toString();
                             if (!semester_name.isEmpty())
                                 ((YearSemesterDialogListener) listener).applyDialog(semester_name, semester_description);
-//                        } else if (type.equalsIgnoreCase("Course")) {
+                        } else if (type.equalsIgnoreCase("Course")) {
                             String course_name = name_ET.getText().toString();
                             String course_code = description_ET.getText().toString();
-//                        }
+                            double target = Double.valueOf(target_ET.getText().toString());
+                            double credit_weight = Double.valueOf(credit_weight_ET.getText().toString());
+                            ((CourseDialogListener) listener).applyDialog(course_name, course_code, target, credit_weight);
+                        }
                     }
                 });
-//        } else if (this.type.equalsIgnoreCase("Course")){
-//
-//        }
+
         return builder.create();
     }
 

@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private Button local_user_button;
-    private Button to_semester_button;
+//    private Button to_semester_button;
     private MainActivityController controller;
     public static final String userFile = "userFile";
 
@@ -88,9 +88,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setupButton() {
         local_user_button = findViewById(R.id.local_user_B);
-        to_semester_button = findViewById(R.id.semester_B);
         local_user_button.setOnClickListener(this);
-        to_semester_button.setOnClickListener(this);
     }
 
 
@@ -109,13 +107,6 @@ public class MainActivity extends AppCompatActivity
                 intent.putExtra("userObject", controller.getUser());
                 startActivity(intent);
                 break;
-            case R.id.semester_B:
-                intent = new Intent(getApplication(), SemesterActivity.class);
-                intent.putExtra("userObject", controller.getUser());
-                intent.putExtra("year_name", "2018");
-                startActivity(intent);
-                break;
-
         }
     }
 

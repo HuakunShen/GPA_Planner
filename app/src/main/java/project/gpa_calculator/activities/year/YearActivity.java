@@ -18,8 +18,6 @@ import project.gpa_calculator.models.User;
 public class YearActivity extends AppCompatActivity implements AddDialog.SemesterDialogListener {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-//    private List<ListItem> listItems;
-
     private YearActivityController controller;
 
 

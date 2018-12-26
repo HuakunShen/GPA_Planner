@@ -51,10 +51,6 @@ public class YearActivityController extends ActivityController {
         return listItems;
     }
 
-    public void setListItems(List<ListItem> listItems) {
-        this.listItems = listItems;
-    }
-
     public void setupUser(User user) {
         this.user = user;
     }

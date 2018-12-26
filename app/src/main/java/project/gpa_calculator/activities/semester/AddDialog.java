@@ -9,13 +9,9 @@ import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-
-import java.util.zip.CheckedOutputStream;
-
 import project.gpa_calculator.R;
 import project.gpa_calculator.activities.course.CourseActivity;
 import project.gpa_calculator.activities.year.YearActivity;
-import project.gpa_calculator.models.Course;
 
 public class AddDialog extends AppCompatDialogFragment {
     private EditText semester_name_ET;

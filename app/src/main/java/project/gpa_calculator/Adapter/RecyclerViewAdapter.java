@@ -17,6 +17,7 @@ import project.gpa_calculator.Util.ActivityController;
 import project.gpa_calculator.activities.course.CourseActivity;
 import project.gpa_calculator.activities.semester.SemesterActivity;
 import project.gpa_calculator.activities.semester.SemesterActivityController;
+import project.gpa_calculator.activities.year.YearActivity;
 import project.gpa_calculator.models.ListItem;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
@@ -94,8 +95,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //            intent.putExtra("user_object", controller.getUser());
 //            intent.putExtra("semester_object", controller.getCurrentSemester(item.getName()));
 //            context.startActivity(intent);
-
-            if (context instanceof SemesterActivity) {
+            if (context instanceof YearActivity) {
+                Intent intent = new Intent(context, SemesterActivity.class);
+                intent.putExtra("userObject", controller.getUser());
+                intent.putExtra("year_name", item.getName());
+                context.startActivity(intent);
+            } else if (context instanceof SemesterActivity) {
                 Intent intent = new Intent(context, CourseActivity.class);
                 intent.putExtra("semester_name", item.getName());
                 intent.putExtra("user_object", controller.getUser());

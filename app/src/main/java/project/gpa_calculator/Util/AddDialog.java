@@ -127,7 +127,7 @@ public class AddDialog extends AppCompatDialogFragment {
                             double event_weight = description_ET.getText().toString().equals("") ? 0d : Double.valueOf(description_ET.getText().toString());
                             if (!event_name.isEmpty())
                                 ((EventDialogListener) listener).applyDialog(event_name, event_weight);
-                        }else if (type.equalsIgnoreCase("Event")) {
+                        }else if (type.equalsIgnoreCase("GPA")) {
                             String mark = name_ET.getText().toString();
                             double gpa = description_ET.getText().toString().equals("") ? 0d : Double.valueOf(target_ET.getText().toString());
                             int low = target_ET.getText().toString().equals("") ? 0 : Integer.valueOf(target_ET.getText().toString());

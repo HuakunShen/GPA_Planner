@@ -47,10 +47,6 @@ public class YearActivityController extends ActivityController {
         saveToFile(MainActivity.userFile);
     }
 
-    @Override
-    public User getUser() {
-        return this.user;
-    }
 
     public List<ListItem> getListItems() {
         return listItems;

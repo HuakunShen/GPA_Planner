@@ -1,4 +1,4 @@
-package project.gpa_calculator.activities.semester;
+package project.gpa_calculator.activities.event;
 
 import android.content.Context;
 import android.util.Log;
@@ -14,6 +14,7 @@ import java.util.List;
 import project.gpa_calculator.Util.ActivityController;
 import project.gpa_calculator.activities.main.MainActivity;
 import project.gpa_calculator.models.Course;
+import project.gpa_calculator.models.Event;
 import project.gpa_calculator.models.ListItem;
 import project.gpa_calculator.models.Semester;
 import project.gpa_calculator.models.User;
@@ -21,63 +22,50 @@ import project.gpa_calculator.models.Year;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class SemesterActivityController extends ActivityController {
-
+public class EventActivityController extends ActivityController {
+    private Context context;
+    private User user;
+    private Course current_course;
     private List<ListItem> listItems;
 
-    private User user;
-
-
-    private Year current_year;
-
-    private Context context;
-
-    private String year_name;
-
-    SemesterActivityController() {
+    public EventActivityController(Context context) {
+        this.context = context;
     }
 
-    public void setContext(Context context) {
-        this.context = context;
+    @Override
+    public void deleteItem(int position) {
+        this.current_course.removeFromEventList(position);
+        saveToFile(MainActivity.userFile);
+    }
+
+    public void setupCurrentCourse(Year year, Semester semester, String course_code) {
+        this.current_course = this.user.getYear(year.getYear_name()).
+                getSemester(semester.getSemester_name()).getCourse(course_code);
+    }
+
+    public void setupListItems() {
+        this.listItems = new ArrayList<>();
+        for (Event event : this.current_course) {
+            ListItem item = new ListItem(event.getEvent_name(), "Score: " +
+                    event.getEvent_score(), "Weight: " + event.getEvent_weight());
+            listItems.add(item);
+        }
     }
 
     public List<ListItem> getListItems() {
         return listItems;
     }
 
-    public void setupListItems() {
-        listItems = new ArrayList<>();
-        for (Semester semester : current_year) {
-            ListItem item = new ListItem(semester.getSemester_name(), "Description", "GPA: ");
-            listItems.add(item);
-        }
-    }
-
-    public Year getCurrent_year() {
-        return current_year;
-    }
-
-
-    public void setupCurrentYear(String year_name) {
-        this.current_year = user.getYear(year_name);
-//        this.year_name = year_name;
-    }
-
-
-    public boolean addSemester(String name, String description) {
-        Semester semester = new Semester(name);
-//        Course course = new Course(course_name);
-        boolean result = current_year.addSemester(semester);
+    public boolean addEvent(String name, double weight) {
+        if (name.equals(""))
+            return false;
+        Event event = new Event(name, weight);
+        boolean result = this.current_course.addEvent(event);
         if (result) {
-            this.listItems.add(new ListItem(name, description, "GPA"));
+            this.listItems.add(new ListItem(name, "Weight: " + weight + "%", "Score: " + event.getEvent_score()));
             saveToFile(MainActivity.userFile);
         }
         return result;
-    }
-
-    public void deleteItem(int position) {
-        current_year.removeFromSemesterList(position);
-        saveToFile(MainActivity.userFile);
     }
 
     public void loadFromFile(String fileName) {
@@ -108,5 +96,4 @@ public class SemesterActivityController extends ActivityController {
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
-
 }

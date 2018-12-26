@@ -13,4 +13,5 @@
     <string name="title_activity_semester">SemesterActivity</string>
     <string name="title_activity_course">CourseActivity</string>
     <string name="title_activity_year">YearActivity</string>
+    <string name="title_activity_event">EventActivity</string>
 </resources>

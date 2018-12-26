@@ -5,5 +5,4 @@ import project.gpa_calculator.models.User;
 public abstract class ActivityController {
     public abstract void deleteItem(int position);
 
-    public abstract User getUser();
 }

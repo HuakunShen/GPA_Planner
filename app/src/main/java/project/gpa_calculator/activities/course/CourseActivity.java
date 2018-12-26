@@ -72,7 +72,7 @@ public class CourseActivity extends AppCompatActivity implements AddDialog.Cours
 
             private void openDialog() {
                 AddDialog dialog = new AddDialog();
-                dialog.show(getSupportFragmentManager(), "Add Semester Dialog");
+                dialog.show(getSupportFragmentManager(), "Add Course Dialog");
             }
 
         });

@@ -28,7 +28,14 @@ public class Semester implements Serializable, Iterable<Course> {
         this.semester_name = semester_name;
     }
 
-
+    public Course getCourse(String course_name) {
+        for (Course course : this.course_list) {
+            if (course.getCourse_code().equals(course_name)) {
+                return course;
+            }
+        }
+        return null;
+    }
 
     public boolean addCourse(Course course) {
         if (!courseExists(course.getCourse_code())) {

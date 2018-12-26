@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 
 import project.gpa_calculator.R;
 import project.gpa_calculator.activities.course.CourseActivity;
+import project.gpa_calculator.activities.event.EventActivity;
 import project.gpa_calculator.activities.semester.SemesterActivity;
 import project.gpa_calculator.activities.year.YearActivity;
 
@@ -44,8 +45,10 @@ public class AddDialog extends AppCompatDialogFragment {
         try {
             if (context instanceof YearActivity || context instanceof SemesterActivity) {
                 listener = (YearSemesterDialogListener) context;
-            } else {
+            } else if (context instanceof CourseActivity) {
                 listener = (CourseDialogListener) context;
+            } else if (context instanceof EventActivity) {
+                listener = (EventDialogListener) context;
             }
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "must implement YearSemesterDialogListener");
@@ -80,6 +83,9 @@ public class AddDialog extends AppCompatDialogFragment {
             credit_weight_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             dialog_linearLayout.addView(credit_weight_ET);
             description_ET.setHint("Course Code");
+        } else if (this.type.equalsIgnoreCase("Event")) {
+            description_ET.setHint("Weight (Percentage)");
+            description_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         }
         builder.setView(view)
                 .setTitle("Add " + type)
@@ -103,6 +109,11 @@ public class AddDialog extends AppCompatDialogFragment {
                             double target = target_ET.getText().toString().equals("") ? 0d : Double.valueOf(target_ET.getText().toString());
                             double credit_weight = credit_weight_ET.getText().toString().equals("") ? 0d : Double.valueOf(credit_weight_ET.getText().toString());
                             ((CourseDialogListener) listener).applyDialog(course_name, course_code, target, credit_weight);
+                        } else if (type.equalsIgnoreCase("Event")) {
+                            String event_name = name_ET.getText().toString();
+                            double event_weight = description_ET.getText().toString().equals("") ? 0d : Double.valueOf(description_ET.getText().toString());
+                            if (!event_name.isEmpty())
+                                ((EventDialogListener) listener).applyDialog(event_name, event_weight);
                         }
                     }
                 });
@@ -112,7 +123,10 @@ public class AddDialog extends AppCompatDialogFragment {
 
 
     public interface DialogListener {
+    }
 
+    public interface EventDialogListener extends DialogListener {
+        void applyDialog(String name, double weight);
     }
 
     public interface YearSemesterDialogListener extends DialogListener {

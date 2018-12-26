@@ -130,6 +130,14 @@ public class Course implements Serializable, Iterable<Event> {
         return new EventIterator();
     }
 
+    public boolean removeFromEventList(int position) {
+        if (position >= this.event_list.size() || position < 0) {
+            return false;
+        } else {
+            this.event_list.remove(position);
+            return true;
+        }
+    }
 
 
     private class EventIterator implements Iterator<Event> {

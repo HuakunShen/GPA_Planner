@@ -15,6 +15,8 @@ import java.util.List;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.ActivityController;
 import project.gpa_calculator.activities.course.CourseActivity;
+import project.gpa_calculator.activities.course.CourseActivityController;
+import project.gpa_calculator.activities.event.EventActivity;
 import project.gpa_calculator.activities.semester.SemesterActivity;
 import project.gpa_calculator.activities.semester.SemesterActivityController;
 import project.gpa_calculator.activities.year.YearActivity;
@@ -89,22 +91,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             // Get Position of row clicked
             int position = getAdapterPosition();
             ListItem item = list_items.get(position);
-//            Intent intent = new Intent(context, CourseActivity.class);
-//
-//            intent.putExtra("semester_name", item.getName());
-//            intent.putExtra("user_object", controller.getUser());
-//            intent.putExtra("semester_object", controller.getCurrentSemester(item.getName()));
-//            context.startActivity(intent);
             if (context instanceof YearActivity) {
                 Intent intent = new Intent(context, SemesterActivity.class);
-//                intent.putExtra("userObject", controller.getUser());
                 intent.putExtra("year_name", item.getName());
                 context.startActivity(intent);
             } else if (context instanceof SemesterActivity) {
                 Intent intent = new Intent(context, CourseActivity.class);
                 intent.putExtra("semester_name", item.getName());
-//                intent.putExtra("user_object", controller.getUser());
                 intent.putExtra("year_object", ((SemesterActivityController) controller).getCurrent_year());
+                context.startActivity(intent);
+            } else if (context instanceof CourseActivity) {
+                Intent intent = new Intent(context, EventActivity.class);
+                intent.putExtra("year_object", ((CourseActivityController) controller).getCurrent_year());
+                intent.putExtra("semester_object", ((CourseActivityController) controller).getCurrent_semester());
+
+                // Here item.getName() returns the course code instead of name
+                intent.putExtra("course_code", item.getName());
                 context.startActivity(intent);
             }
 

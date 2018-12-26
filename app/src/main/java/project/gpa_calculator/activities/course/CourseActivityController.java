@@ -26,11 +26,23 @@ public class CourseActivityController extends ActivityController {
 
     private User user;
 
+
     private Semester current_semester;
 
     private Context context;
 
+
+    private Year current_year;
+
     CourseActivityController() {
+    }
+
+    public Year getCurrent_year() {
+        return current_year;
+    }
+
+    public Semester getCurrent_semester() {
+        return current_semester;
     }
 
     public void setContext(Context context) {
@@ -51,12 +63,10 @@ public class CourseActivityController extends ActivityController {
     }
 
 
-    public User getUser() {
-        return user;
-    }
 
     public void setupCurrentSemester(Year year, String semester_name) {
         this.current_semester = user.getYear(year.getYear_name()).getSemester(semester_name);
+        this.current_year = year;
     }
 
 

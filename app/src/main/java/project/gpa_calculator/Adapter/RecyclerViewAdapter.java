@@ -104,8 +104,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 Intent intent = new Intent(context, CourseActivity.class);
                 intent.putExtra("semester_name", item.getName());
                 intent.putExtra("user_object", controller.getUser());
-                intent.putExtra("semester_object",
-                        ((SemesterActivityController) controller).getCurrentSemester(item.getName()));
+                intent.putExtra("year_object", ((SemesterActivityController) controller).getCurrent_year());
                 context.startActivity(intent);
             }
 

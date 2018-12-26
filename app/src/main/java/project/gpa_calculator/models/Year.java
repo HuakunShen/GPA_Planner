@@ -43,6 +43,14 @@ public class Year implements Serializable, Iterable<Semester> {
         this.year_name = year_name;
     }
 
+    public Semester getSemester(String semester_name) {
+        for (Semester semester : this.semester_list) {
+            if (semester.getSemester_name().equals(semester_name))
+                return semester;
+        }
+        return null;
+    }
+
     public boolean removeFromSemesterList(int position) {
         if (position >= this.semester_list.size() || position < 0) {
             return false;

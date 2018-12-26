@@ -24,6 +24,7 @@ public class SemesterActivityController extends ActivityController {
 
     private User user;
 
+
     private Year current_year;
 
     private Context context;
@@ -47,6 +48,9 @@ public class SemesterActivityController extends ActivityController {
         }
     }
 
+    public Year getCurrent_year() {
+        return current_year;
+    }
 
     public User getUser() {
         return user;
@@ -71,10 +75,6 @@ public class SemesterActivityController extends ActivityController {
     public void deleteItem(int position) {
         current_year.removeFromSemesterList(position);
         saveToFile(MainActivity.userFile);
-    }
-
-    public Semester getCurrentSemester(String name) {
-        return new Semester("2019Fall");
     }
 
 

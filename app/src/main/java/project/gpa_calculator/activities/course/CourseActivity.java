@@ -14,6 +14,7 @@ import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
 import project.gpa_calculator.models.User;
+import project.gpa_calculator.models.Year;
 
 public class CourseActivity extends AppCompatActivity {
     private CourseActivityController controller;
@@ -23,19 +24,19 @@ public class CourseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_semester);
+        setContentView(R.layout.activity_course);
         setupController();
         setupToolBar();
-
         setupAddButton();
+        setupRecyclerView();
     }
 
     private void setupController() {
         controller = new CourseActivityController();
-        controller.setupUser((User) getIntent().getSerializableExtra("userObject"),
+        controller.setupUser((User) getIntent().getSerializableExtra("user_object"),
+                (Year) getIntent().getSerializableExtra("year_object"),
                 getIntent().getStringExtra("semester_name"));
         controller.setContext(this);
-//        controller.setupUserForTesting();
     }
 
     private void setupRecyclerView() {
@@ -72,7 +73,8 @@ public class CourseActivity extends AppCompatActivity {
 //    }
 
     private void setupAddButton() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_semester_button);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_course_button
+        );
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -10,6 +10,7 @@ import java.util.List;
 
 import project.gpa_calculator.Util.ActivityController;
 import project.gpa_calculator.activities.main.MainActivity;
+import project.gpa_calculator.models.Course;
 import project.gpa_calculator.models.ListItem;
 import project.gpa_calculator.models.Semester;
 import project.gpa_calculator.models.User;
@@ -22,7 +23,7 @@ public class CourseActivityController extends ActivityController {
 
     private User user;
 
-    private Year current_year;
+    private Semester current_semester;
 
     private Context context;
 
@@ -37,16 +38,11 @@ public class CourseActivityController extends ActivityController {
         return listItems;
     }
 
-    public void setListItems(List<ListItem> listItems) {
-        this.listItems = listItems;
-    }
 
     public void setupListItems() {
         listItems = new ArrayList<>();
-        List<Year> year_list = user.getYear_list();
-        List<Semester> semester_list = year_list.get(0).getSemester_list();
-        for (Semester semester : semester_list) {
-            ListItem item = new ListItem(semester.getSemester_name(), "Description", "GPA: ");
+        for (Course course : this.current_semester) {
+            ListItem item = new ListItem(course.getCourse_name(), "Description", "GPA: ");
             listItems.add(item);
         }
     }
@@ -56,25 +52,26 @@ public class CourseActivityController extends ActivityController {
         return user;
     }
 
-    public void setupUser(User user, String semester_name) {
+    public void setupUser(User user, Year year, String semester_name) {
         this.user = user;
-//        this.current_year = user.getYe;
+        this.current_semester = year.getSemester(semester_name);
     }
 
 
-    public boolean addSemester(String name, String description) {
-        Semester semester = new Semester(name);
-        boolean result = current_year.addSemester(semester);
-        if (result) {
-            this.listItems.add(new ListItem(name, description, "GPA"));
-            saveToFile(MainActivity.userFile);
-        }
-        return result;
+    public boolean addCourse(String course_name, String description) {
+//        Course course = new Course(course_name);
+//        boolean result = current_year.addSemester(semester);
+//        if (result) {
+//            this.listItems.add(new ListItem(name, description, "GPA"));
+//            saveToFile(MainActivity.userFile);
+//        }
+//        return result;
+        return false;
     }
 
     public void deleteItem(int position) {
-        current_year.getSemester_list().remove(position);
-        saveToFile(MainActivity.userFile);
+//        current_year.getSemester_list().remove(position);
+//        saveToFile(MainActivity.userFile);
     }
 
 

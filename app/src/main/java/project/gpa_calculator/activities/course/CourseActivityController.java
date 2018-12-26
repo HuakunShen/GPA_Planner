@@ -18,6 +18,7 @@ import project.gpa_calculator.models.ListItem;
 import project.gpa_calculator.models.Semester;
 import project.gpa_calculator.models.User;
 import project.gpa_calculator.models.Year;
+import project.gpa_calculator.models.YearListItem;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -57,7 +58,7 @@ public class CourseActivityController extends ActivityController {
     public void setupListItems() {
         listItems = new ArrayList<>();
         for (Course course : this.current_semester) {
-            ListItem item = new ListItem(course.getCourse_code(), course.getCourse_name(), "Target: " + course.getTarget());
+            ListItem item = new YearListItem(course.getCourse_code(), course.getCourse_name(), "Target: " + course.getTarget());
             listItems.add(item);
         }
     }
@@ -74,14 +75,12 @@ public class CourseActivityController extends ActivityController {
         if (course_code.equals("") && course_name.equals(""))
             return false;
         Course course = new Course(course_code, course_name, target, credit_weight);
-//        Course course = new Course(course_name);
         boolean result = current_semester.addCourse(course);
         if (result) {
-            this.listItems.add(new ListItem(course_code, course_name, "Target: " + target));
+            this.listItems.add(new YearListItem(course_code, course_name, "Target: " + target));
             saveToFile(MainActivity.userFile);
         }
         return result;
-//        return false;
     }
 
     public void deleteItem(int position) {

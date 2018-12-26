@@ -20,6 +20,7 @@
         </activity>
         <activity android:name=".activities.SignupActivity" />
         <activity android:name=".activities.AddEventActivity" />
+        <activity android:name=".activities.GPA_setter.GPA_setter_Activity" />
         <activity android:name=".activities.AddCourseActivity" />
         <activity
             android:name=".activities.Add_pop"

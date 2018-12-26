@@ -23,6 +23,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import project.gpa_calculator.R;
+import project.gpa_calculator.activities.GPA_setter.GPA_setter_Activity;
 import project.gpa_calculator.activities.semester.SemesterActivity;
 import project.gpa_calculator.activities.year.YearActivity;
 import project.gpa_calculator.models.Course;
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity
         Intent intent;
         switch (v.getId()) {
             case R.id.local_user_B:
-                intent = new Intent(getApplication(), YearActivity.class);
+                intent = new Intent(getApplication(), GPA_setter_Activity.class);
                 startActivity(intent);
                 break;
         }

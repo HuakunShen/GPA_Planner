@@ -19,6 +19,7 @@ import project.gpa_calculator.models.ListItem;
 import project.gpa_calculator.models.Semester;
 import project.gpa_calculator.models.User;
 import project.gpa_calculator.models.Year;
+import project.gpa_calculator.models.YearListItem;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -46,7 +47,7 @@ public class EventActivityController extends ActivityController {
     public void setupListItems() {
         this.listItems = new ArrayList<>();
         for (Event event : this.current_course) {
-            ListItem item = new ListItem(event.getEvent_name(), "Score: " +
+            ListItem item = new YearListItem(event.getEvent_name(), "Score: " +
                     event.getEvent_score(), "Weight: " + event.getEvent_weight());
             listItems.add(item);
         }
@@ -62,7 +63,7 @@ public class EventActivityController extends ActivityController {
         Event event = new Event(name, weight);
         boolean result = this.current_course.addEvent(event);
         if (result) {
-            this.listItems.add(new ListItem(name, "Weight: " + weight + "%", "Score: " + event.getEvent_score()));
+            this.listItems.add(new YearListItem(name, "Weight: " + weight + "%", "Score: " + event.getEvent_score()));
             saveToFile(MainActivity.userFile);
         }
         return result;

@@ -18,6 +18,7 @@ import project.gpa_calculator.models.ListItem;
 import project.gpa_calculator.models.Semester;
 import project.gpa_calculator.models.User;
 import project.gpa_calculator.models.Year;
+import project.gpa_calculator.models.YearListItem;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -48,7 +49,7 @@ public class SemesterActivityController extends ActivityController {
     public void setupListItems() {
         listItems = new ArrayList<>();
         for (Semester semester : current_year) {
-            ListItem item = new ListItem(semester.getSemester_name(), "Description", "GPA: ");
+            ListItem item = new YearListItem(semester.getSemester_name(), "Description", "GPA: ");
             listItems.add(item);
         }
     }
@@ -69,7 +70,7 @@ public class SemesterActivityController extends ActivityController {
 //        Course course = new Course(course_name);
         boolean result = current_year.addSemester(semester);
         if (result) {
-            this.listItems.add(new ListItem(name, description, "GPA"));
+            this.listItems.add(new YearListItem(name, description, "GPA"));
             saveToFile(MainActivity.userFile);
         }
         return result;

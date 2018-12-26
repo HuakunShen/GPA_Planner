@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import project.gpa_calculator.R;
+import project.gpa_calculator.activities.GPA_setter.GPA_setter_Activity;
 import project.gpa_calculator.activities.course.CourseActivity;
 import project.gpa_calculator.activities.event.EventActivity;
 import project.gpa_calculator.activities.semester.SemesterActivity;
@@ -36,8 +37,10 @@ public class AddDialog extends AppCompatDialogFragment {
             type = "Semester";
         } else if (context instanceof CourseActivity) {
             type = "Course";
-        } else {
+        } else if (context instanceof EventActivity){
             type = "Event";
+        }else{
+            type = "GPA";
         }
 
 
@@ -49,6 +52,8 @@ public class AddDialog extends AppCompatDialogFragment {
                 listener = (CourseDialogListener) context;
             } else if (context instanceof EventActivity) {
                 listener = (EventDialogListener) context;
+            } else if (context instanceof GPA_setter_Activity) {
+                listener = (GPADialogListener) context;
             }
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString() + "must implement YearSemesterDialogListener");
@@ -86,6 +91,14 @@ public class AddDialog extends AppCompatDialogFragment {
         } else if (this.type.equalsIgnoreCase("Event")) {
             description_ET.setHint("Weight (Percentage)");
             description_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        }else if (this.type.equalsIgnoreCase("GPA")) {
+            target_ET.setHint("lower bound");
+            target_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            dialog_linearLayout.addView(target_ET);
+            credit_weight_ET.setHint("upper bound");
+            credit_weight_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            dialog_linearLayout.addView(credit_weight_ET);
+            description_ET.setHint("GPA");
         }
         builder.setView(view)
                 .setTitle("Add " + type)
@@ -114,6 +127,12 @@ public class AddDialog extends AppCompatDialogFragment {
                             double event_weight = description_ET.getText().toString().equals("") ? 0d : Double.valueOf(description_ET.getText().toString());
                             if (!event_name.isEmpty())
                                 ((EventDialogListener) listener).applyDialog(event_name, event_weight);
+                        }else if (type.equalsIgnoreCase("Event")) {
+                            String mark = name_ET.getText().toString();
+                            double gpa = description_ET.getText().toString().equals("") ? 0d : Double.valueOf(target_ET.getText().toString());
+                            int low = target_ET.getText().toString().equals("") ? 0 : Integer.valueOf(target_ET.getText().toString());
+                            int high = credit_weight_ET.getText().toString().equals("") ? 0 : Integer.valueOf(credit_weight_ET.getText().toString());
+                            ((GPADialogListener) listener).applyDialog(low,high,gpa,mark);
                         }
                     }
                 });
@@ -135,5 +154,9 @@ public class AddDialog extends AppCompatDialogFragment {
 
     public interface CourseDialogListener extends DialogListener {
         void applyDialog(String course_name, String course_code, double target, double credit_weight);
+    }
+
+    public interface GPADialogListener extends DialogListener {
+        void applyDialog(int low, int high,double gpa,String mark);
     }
 }

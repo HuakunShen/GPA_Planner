@@ -14,6 +14,8 @@ import java.util.List;
 
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.ActivityController;
+import project.gpa_calculator.Util.AddDialog;
+import project.gpa_calculator.activities.GPA_setter.GPA_setter_Activity;
 import project.gpa_calculator.activities.course.CourseActivity;
 import project.gpa_calculator.activities.course.CourseActivityController;
 import project.gpa_calculator.activities.event.EventActivity;
@@ -108,7 +110,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 // Here item.getName() returns the course code instead of name
                 intent.putExtra("course_code", item.getName());
                 context.startActivity(intent);
+            }else if (context instanceof GPA_setter_Activity) {
+
             }
+
+
 
 
             Toast.makeText(context, item.getName(), Toast.LENGTH_LONG).show();

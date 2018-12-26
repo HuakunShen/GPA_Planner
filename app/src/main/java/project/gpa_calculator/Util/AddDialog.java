@@ -20,11 +20,11 @@ import project.gpa_calculator.activities.semester.SemesterActivity;
 import project.gpa_calculator.activities.year.YearActivity;
 
 public class AddDialog extends AppCompatDialogFragment {
-    private EditText name_ET;
-    private EditText description_ET;
+    private EditText first_ET;
+    private EditText second_ET;
 
-    private EditText target_ET;
-    private EditText credit_weight_ET;
+    private EditText third_ET;
+    private EditText fourth_ET;
     private String type;
     private DialogListener listener;
 
@@ -62,8 +62,8 @@ public class AddDialog extends AppCompatDialogFragment {
     }
 
     private void setupExtraInput(Context context) {
-        target_ET = new EditText(context);
-        credit_weight_ET = new EditText(context);
+        third_ET = new EditText(context);
+        fourth_ET = new EditText(context);
     }
 
 
@@ -77,28 +77,34 @@ public class AddDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.dialog_year_and_semester, null);
         LinearLayout dialog_linearLayout = view.findViewById(R.id.dialog_id);
 
-        name_ET = view.findViewById(R.id.dialog_name_ET);
-        name_ET.setHint(this.type + " Name");
-        description_ET = view.findViewById(R.id.dialog_description_ET);
+        first_ET = view.findViewById(R.id.dialog_name_ET);
+        first_ET.setHint(this.type + " Name");
+        second_ET = view.findViewById(R.id.dialog_description_ET);
         if (this.type.equalsIgnoreCase("Course")) {
-            target_ET.setHint("Target Score (Percentage)");
-            target_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            dialog_linearLayout.addView(target_ET);
-            credit_weight_ET.setHint("Credit Hint");
-            credit_weight_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            dialog_linearLayout.addView(credit_weight_ET);
-            description_ET.setHint("Course Code");
+            third_ET.setHint("Target Score (Percentage)");
+            third_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            dialog_linearLayout.addView(third_ET);
+            fourth_ET.setHint("Credit Hint");
+            fourth_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            dialog_linearLayout.addView(fourth_ET);
+            second_ET.setHint("Course Code");
         } else if (this.type.equalsIgnoreCase("Event")) {
-            description_ET.setHint("Weight (Percentage)");
-            description_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            second_ET.setHint("Weight (Percentage)");
+            second_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         }else if (this.type.equalsIgnoreCase("GPA")) {
-            target_ET.setHint("lower bound");
-            target_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            dialog_linearLayout.addView(target_ET);
-            credit_weight_ET.setHint("upper bound");
-            credit_weight_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-            dialog_linearLayout.addView(credit_weight_ET);
-            description_ET.setHint("GPA");
+            first_ET.setHint("GPA Grade");
+            second_ET.setHint("GPA Points");
+            second_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+
+            third_ET.setHint("lower bound");
+            third_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+            fourth_ET.setHint("upper bound");
+            fourth_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            dialog_linearLayout.addView(third_ET);
+            dialog_linearLayout.addView(fourth_ET);
+
         }
         builder.setView(view)
                 .setTitle("Add " + type)
@@ -112,26 +118,27 @@ public class AddDialog extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (type.equalsIgnoreCase("Year") || type.equalsIgnoreCase("Semester")) {
-                            String semester_name = name_ET.getText().toString();
-                            String semester_description = description_ET.getText().toString();
+                            String semester_name = first_ET.getText().toString();
+                            String semester_description = second_ET.getText().toString();
                             if (!semester_name.isEmpty())
                                 ((YearSemesterDialogListener) listener).applyDialog(semester_name, semester_description);
                         } else if (type.equalsIgnoreCase("Course")) {
-                            String course_name = name_ET.getText().toString();
-                            String course_code = description_ET.getText().toString();
-                            double target = target_ET.getText().toString().equals("") ? 0d : Double.valueOf(target_ET.getText().toString());
-                            double credit_weight = credit_weight_ET.getText().toString().equals("") ? 0d : Double.valueOf(credit_weight_ET.getText().toString());
+                            String course_name = first_ET.getText().toString();
+                            String course_code = second_ET.getText().toString();
+                            double target = third_ET.getText().toString().equals("") ? 0d : Double.valueOf(third_ET.getText().toString());
+                            double credit_weight = fourth_ET.getText().toString().equals("") ? 0d : Double.valueOf(fourth_ET.getText().toString());
                             ((CourseDialogListener) listener).applyDialog(course_name, course_code, target, credit_weight);
                         } else if (type.equalsIgnoreCase("Event")) {
-                            String event_name = name_ET.getText().toString();
-                            double event_weight = description_ET.getText().toString().equals("") ? 0d : Double.valueOf(description_ET.getText().toString());
+                            String event_name = first_ET.getText().toString();
+                            double event_weight = second_ET.getText().toString().equals("") ? 0d : Double.valueOf(second_ET.getText().toString());
                             if (!event_name.isEmpty())
                                 ((EventDialogListener) listener).applyDialog(event_name, event_weight);
                         }else if (type.equalsIgnoreCase("GPA")) {
-                            String mark = name_ET.getText().toString();
-                            double gpa = description_ET.getText().toString().equals("") ? 0d : Double.valueOf(target_ET.getText().toString());
-                            int low = target_ET.getText().toString().equals("") ? 0 : Integer.valueOf(target_ET.getText().toString());
-                            int high = credit_weight_ET.getText().toString().equals("") ? 0 : Integer.valueOf(credit_weight_ET.getText().toString());
+                            String mark = first_ET.getText().toString();
+                            double gpa = second_ET.getText().toString().equals("") ? 0d : Double.valueOf(third_ET.getText().toString());
+                            int low = third_ET.getText().toString().equals("") ? 0 : Integer.valueOf(third_ET.getText().toString());
+                            int high = fourth_ET.getText().toString().equals("") ? 0 : Integer.valueOf(fourth_ET.getText().toString());
+
                             ((GPADialogListener) listener).applyDialog(low,high,gpa,mark);
                         }
                     }

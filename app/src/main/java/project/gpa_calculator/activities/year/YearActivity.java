@@ -1,8 +1,7 @@
-package project.gpa_calculator.activities.course;
+package project.gpa_calculator.activities.year;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,29 +12,25 @@ import android.view.View;
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
+import project.gpa_calculator.activities.semester.AddDialog;
 import project.gpa_calculator.models.User;
 
-public class CourseActivity extends AppCompatActivity {
-    private CourseActivityController controller;
+public class YearActivity extends AppCompatActivity implements AddDialog.SemesterDialogListener {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
+//    private List<ListItem> listItems;
+
+    private YearActivityController controller;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_semester);
+        setContentView(R.layout.activity_year);
         setupController();
         setupToolBar();
-
         setupAddButton();
-    }
-
-    private void setupController() {
-        controller = new CourseActivityController();
-        controller.setupUser((User) getIntent().getSerializableExtra("userObject"),
-                getIntent().getStringExtra("semester_name"));
-        controller.setContext(this);
-//        controller.setupUserForTesting();
+        setupRecyclerView();
     }
 
     private void setupRecyclerView() {
@@ -55,38 +50,39 @@ public class CourseActivity extends AppCompatActivity {
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
+    private void setupController() {
+        controller = new YearActivityController();
+        controller.setupUser((User) getIntent().getSerializableExtra("userObject"));
+        controller.setContext(this);
+    }
+
     private void setupToolBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
-//    private void setupFAB() {
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-//    }
-
     private void setupAddButton() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_semester_button);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_year_Btn);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-//                openDialog();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG);
+//                        .setAction("Action", null).show();
+                openDialog();
             }
 
-//            private void openDialog() {
-//                AddDialog dialog = new AddDialog();
-//                dialog.show(getSupportFragmentManager(), "Add Semester Dialog");
-//            }
-
+            private void openDialog() {
+                AddDialog dialog = new AddDialog();
+                dialog.show(getSupportFragmentManager(), "Add Semester Dialog");
+            }
         });
+    }
+
+    @Override
+    public void applyDialog(String name, String description) {
+        if (controller.addYear(name, description)) {
+            adapter.notifyItemInserted(controller.getListItems().size() - 1);
+        }
     }
 
 }

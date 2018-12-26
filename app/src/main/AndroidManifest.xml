@@ -10,7 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.SignupActivity" />
-        <activity android:name=".activities.YearActivity" />
         <activity android:name=".activities.EventActivity" />
         <activity android:name=".activities.AddEventActivity" />
         <activity android:name=".activities.AddCourseActivity" />
@@ -34,6 +33,10 @@
         <activity
             android:name=".activities.course.CourseActivity"
             android:label="@string/title_activity_course"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activities.year.YearActivity"
+            android:label="@string/title_activity_year"
             android:theme="@style/AppTheme"></activity>
     </application>
 

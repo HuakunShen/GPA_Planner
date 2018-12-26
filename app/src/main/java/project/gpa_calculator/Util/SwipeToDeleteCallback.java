@@ -1,4 +1,4 @@
-package project.gpa_calculator.activities.semester;
+package project.gpa_calculator.Util;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

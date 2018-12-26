@@ -11,9 +11,10 @@ import android.view.View;
 
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
+import project.gpa_calculator.Util.SwipeToDeleteCallback;
 import project.gpa_calculator.models.User;
 
-public class SemesterActivity extends AppCompatActivity implements SemesterDialog.SemesterDialogListener {
+public class SemesterActivity extends AppCompatActivity implements AddDialog.SemesterDialogListener {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -73,7 +74,7 @@ public class SemesterActivity extends AppCompatActivity implements SemesterDialo
             }
 
             private void openDialog() {
-                SemesterDialog dialog = new SemesterDialog();
+                AddDialog dialog = new AddDialog();
                 dialog.show(getSupportFragmentManager(), "Add Semester Dialog");
             }
 

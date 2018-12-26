@@ -39,15 +39,9 @@ public class SemesterActivityController extends ActivityController {
         return listItems;
     }
 
-    public void setListItems(List<ListItem> listItems) {
-        this.listItems = listItems;
-    }
-
     public void setupListItems() {
         listItems = new ArrayList<>();
-        List<Year> year_list = user.getYear_list();
-        List<Semester> semester_list = year_list.get(0).getSemester_list();
-        for (Semester semester : semester_list) {
+        for (Semester semester : current_year) {
             ListItem item = new ListItem(semester.getSemester_name(), "Description", "GPA: ");
             listItems.add(item);
         }
@@ -75,7 +69,7 @@ public class SemesterActivityController extends ActivityController {
     }
 
     public void deleteItem(int position) {
-        current_year.getSemester_list().remove(position);
+        current_year.removeFromSemesterList(position);
         saveToFile(MainActivity.userFile);
     }
 

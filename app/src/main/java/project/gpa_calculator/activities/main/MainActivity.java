@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity
     private void setupController() {
         controller = new MainActivityController();
         loadFromFile(userFile);
-        controller.setupUserForTesting();
+//        controller.setupUserForTesting();
         saveToFile(userFile);
 
     }

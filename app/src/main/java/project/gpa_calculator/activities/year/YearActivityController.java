@@ -39,7 +39,9 @@ public class YearActivityController extends ActivityController {
 
     @Override
     public void deleteItem(int position) {
-
+//        user.getYear_list().remove(position);
+        user.removeFromYearList(position);
+        saveToFile(MainActivity.userFile);
     }
 
     @Override

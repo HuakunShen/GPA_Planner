@@ -29,6 +29,15 @@ public class User implements Serializable {
         return null;
     }
 
+    public boolean removeFromYearList(int position) {
+        if (position >= this.year_list.size() || position < 0) {
+            return false;
+        } else {
+            this.year_list.remove(position);
+            return true;
+        }
+    }
+
     public List<Year> getYear_list() {
         return year_list;
     }

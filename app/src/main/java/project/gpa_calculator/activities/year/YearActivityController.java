@@ -56,9 +56,10 @@ public class YearActivityController extends ActivityController {
         return listItems;
     }
 
-    public void setupUser(User user) {
-        this.user = user;
-    }
+//    public void setupCurrentSemester(User user) {
+//        this.user = user;
+//        saveToFile(MainActivity.userFile);
+//    }
 
     public boolean addYear(String year_name, String description) {
         Year year= new Year(year_name);

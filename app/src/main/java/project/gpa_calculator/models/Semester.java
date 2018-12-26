@@ -38,6 +38,15 @@ public class Semester implements Serializable, Iterable<Course> {
         return false;
     }
 
+    public boolean removeFromCourseList(int position) {
+        if (position >= this.course_list.size() || position < 0) {
+            return false;
+        } else {
+            this.course_list.remove(position);
+            return true;
+        }
+    }
+
     public boolean removeCourse(String course_name) {
         for (Course course : course_list) {
             if (courseExists(course.getCourse_code())) {

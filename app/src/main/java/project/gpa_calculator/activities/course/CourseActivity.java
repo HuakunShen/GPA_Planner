@@ -8,12 +8,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.widget.Toast;
 
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.AddDialog;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
-import project.gpa_calculator.models.User;
+import project.gpa_calculator.activities.main.MainActivity;
 import project.gpa_calculator.models.Year;
 
 public class CourseActivity extends AppCompatActivity implements AddDialog.CourseDialogListener  {
@@ -33,10 +34,10 @@ public class CourseActivity extends AppCompatActivity implements AddDialog.Cours
 
     private void setupController() {
         controller = new CourseActivityController();
-        controller.setupUser((User) getIntent().getSerializableExtra("user_object"),
-                (Year) getIntent().getSerializableExtra("year_object"),
-                getIntent().getStringExtra("semester_name"));
         controller.setContext(this);
+        controller.loadFromFile(MainActivity.userFile);
+        controller.setupCurrentSemester((Year) getIntent().getSerializableExtra("year_object"),
+                getIntent().getStringExtra("semester_name"));
     }
 
     private void setupRecyclerView() {
@@ -82,6 +83,8 @@ public class CourseActivity extends AppCompatActivity implements AddDialog.Cours
     public void applyDialog(String course_name, String course_code, double target, double credit_weight) {
         if (controller.addCourse(course_name, course_code, target, credit_weight)) {
             adapter.notifyItemInserted(controller.getListItems().size() - 1);
+        } else {
+            Toast.makeText(getApplication(), "Course Exists or Input Not Valid", Toast.LENGTH_LONG).show();
         }
     }
 }

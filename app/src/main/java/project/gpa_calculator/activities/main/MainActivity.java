@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
         setupButton();
 
         controller.initializeUserForTesting();
-        saveToFile(userFile);
+        controller.saveToFile(userFile);
 //        controller.setupUserForTesting();
     }
 
@@ -65,9 +65,9 @@ public class MainActivity extends AppCompatActivity
 
     private void setupController() {
         controller = new MainActivityController();
-        loadFromFile(userFile);
-//        controller.setupUserForTesting();
-        saveToFile(userFile);
+        controller.setContext(this);
+        controller.loadFromFile(userFile);
+        controller.saveToFile(userFile);
 
     }
 
@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        loadFromFile(userFile);
+        controller.loadFromFile(userFile);
     }
 
     @Override
@@ -111,7 +111,6 @@ public class MainActivity extends AppCompatActivity
         switch (v.getId()) {
             case R.id.local_user_B:
                 intent = new Intent(getApplication(), YearActivity.class);
-                intent.putExtra("userObject", controller.getUser());
                 startActivity(intent);
                 break;
         }
@@ -175,39 +174,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    private void loadFromFile(String fileName) {
-        try {
-            InputStream inputStream = this.openFileInput(fileName);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                controller.setUser((User) input.readObject());
-//                user = (User) input.readObject();
-                inputStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e("login activity", "File contained unexpected data type: " + e.toString());
-        }
-    }
 
-    /**
-     * Save the board manager to fileName.
-     *
-     * @param fileName the name of the file
-     */
-    public void saveToFile(String fileName) {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    this.openFileOutput(fileName, MODE_PRIVATE));
-            outputStream.writeObject(controller.getUser());
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-    }
 
 
 }

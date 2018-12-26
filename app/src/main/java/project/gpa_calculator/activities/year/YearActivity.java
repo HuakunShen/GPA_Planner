@@ -57,8 +57,9 @@ public class YearActivity extends AppCompatActivity implements AddDialog.YearSem
 
     private void setupController() {
         controller = new YearActivityController();
-        controller.setupUser((User) getIntent().getSerializableExtra("userObject"));
+//        controller.setupCurrentYear((User) getIntent().getSerializableExtra("user_object"));
         controller.setContext(this);
+        controller.loadFromFile(MainActivity.userFile);
     }
 
     private void setupToolBar() {

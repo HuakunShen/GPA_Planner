@@ -32,6 +32,8 @@ public class SemesterActivityController extends ActivityController {
 
     private Context context;
 
+    private String year_name;
+
     SemesterActivityController() {
     }
 
@@ -59,14 +61,15 @@ public class SemesterActivityController extends ActivityController {
         return user;
     }
 
-    public void setupUser(User user, String year_name) {
-        this.user = user;
+    public void setupCurrentYear(String year_name) {
         this.current_year = user.getYear(year_name);
+//        this.year_name = year_name;
     }
 
 
     public boolean addSemester(String name, String description) {
         Semester semester = new Semester(name);
+//        Course course = new Course(course_name);
         boolean result = current_year.addSemester(semester);
         if (result) {
             this.listItems.add(new ListItem(name, description, "GPA"));

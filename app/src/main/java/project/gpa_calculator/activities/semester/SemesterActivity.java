@@ -14,7 +14,6 @@ import project.gpa_calculator.R;
 import project.gpa_calculator.Util.AddDialog;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
 import project.gpa_calculator.activities.main.MainActivity;
-import project.gpa_calculator.models.User;
 
 public class SemesterActivity extends AppCompatActivity implements AddDialog.YearSemesterDialogListener {
 
@@ -36,10 +35,9 @@ public class SemesterActivity extends AppCompatActivity implements AddDialog.Yea
 
     private void setupController() {
         controller = new SemesterActivityController();
-        controller.setupUser((User) getIntent().getSerializableExtra("userObject"),
-                getIntent().getStringExtra("year_name"));
         controller.setContext(this);
-//        controller.setupUserForTesting();
+        controller.loadFromFile(MainActivity.userFile);
+        controller.setupCurrentYear(getIntent().getStringExtra("year_name"));
     }
 
     private void setupRecyclerView() {
@@ -85,7 +83,7 @@ public class SemesterActivity extends AppCompatActivity implements AddDialog.Yea
     @Override
     protected void onResume() {
         super.onResume();
-        controller.loadFromFile(MainActivity.userFile);
+//        controller.loadFromFile(MainActivity.userFile);
     }
 
     @Override

@@ -3,7 +3,10 @@ package project.gpa_calculator.activities.course;
 import android.content.Context;
 import android.util.Log;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,13 +55,14 @@ public class CourseActivityController extends ActivityController {
         return user;
     }
 
-    public void setupUser(User user, Year year, String semester_name) {
-        this.user = user;
+    public void setupCurrentSemester(Year year, String semester_name) {
         this.current_semester = user.getYear(year.getYear_name()).getSemester(semester_name);
     }
 
 
     public boolean addCourse(String course_name, String course_code, double target, double credit_weight) {
+        if (course_code.equals("") && course_name.equals(""))
+            return false;
         Course course = new Course(course_code, course_name, target, credit_weight);
 //        Course course = new Course(course_name);
         boolean result = current_semester.addCourse(course);
@@ -71,10 +75,28 @@ public class CourseActivityController extends ActivityController {
     }
 
     public void deleteItem(int position) {
-//        current_year.getSemester_list().remove(position);
-//        saveToFile(MainActivity.userFile);
+        current_semester.removeFromCourseList(position);
+        saveToFile(MainActivity.userFile);
     }
 
+
+    public void loadFromFile(String fileName) {
+        try {
+            InputStream inputStream = this.context.openFileInput(fileName);
+            if (inputStream != null) {
+                ObjectInputStream input = new ObjectInputStream(inputStream);
+                this.user = (User) input.readObject();
+//                user = (User) input.readObject();
+                inputStream.close();
+            }
+        } catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        } catch (ClassNotFoundException e) {
+            Log.e("login activity", "File contained unexpected data type: " + e.toString());
+        }
+    }
 
     public void saveToFile(String fileName) {
         try {

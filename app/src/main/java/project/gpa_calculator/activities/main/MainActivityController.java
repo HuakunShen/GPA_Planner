@@ -1,5 +1,14 @@
 package project.gpa_calculator.activities.main;
 
+import android.content.Context;
+import android.util.Log;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import project.gpa_calculator.models.Course;
 import project.gpa_calculator.models.Event;
 import project.gpa_calculator.models.GPA_Calculator;
@@ -7,10 +16,13 @@ import project.gpa_calculator.models.Semester;
 import project.gpa_calculator.models.User;
 import project.gpa_calculator.models.Year;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class MainActivityController {
 
     private User user;
 
+    private Context context;
 
     public MainActivityController() {
         user = new User("admin", "admin", "admin");
@@ -24,6 +36,9 @@ public class MainActivityController {
         this.user = user;
     }
 
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
     public void initializeUserForTesting() {
         Year year2018ForTesting = new Year("year2018ForTesting");
@@ -43,4 +58,42 @@ public class MainActivityController {
         this.user.addYear(year2018ForTesting);
 
     }
+
+
+    public void loadFromFile(String fileName) {
+        try {
+            InputStream inputStream = context.openFileInput(fileName);
+            if (inputStream != null) {
+                ObjectInputStream input = new ObjectInputStream(inputStream);
+                this.user = (User) input.readObject();
+//                user = (User) input.readObject();
+                inputStream.close();
+            }
+        } catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        } catch (ClassNotFoundException e) {
+            Log.e("login activity", "File contained unexpected data type: " + e.toString());
+        }
+    }
+
+    /**
+     * Save the board manager to fileName.
+     *
+     * @param fileName the name of the file
+     */
+    public void saveToFile(String fileName) {
+        try {
+            ObjectOutputStream outputStream = new ObjectOutputStream(
+                    context.openFileOutput(fileName, MODE_PRIVATE));
+            outputStream.writeObject(this.user);
+            outputStream.close();
+        } catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+
+
+
 }

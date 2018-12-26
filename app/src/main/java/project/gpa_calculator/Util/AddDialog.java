@@ -100,8 +100,8 @@ public class AddDialog extends AppCompatDialogFragment {
                         } else if (type.equalsIgnoreCase("Course")) {
                             String course_name = name_ET.getText().toString();
                             String course_code = description_ET.getText().toString();
-                            double target = Double.valueOf(target_ET.getText().toString());
-                            double credit_weight = Double.valueOf(credit_weight_ET.getText().toString());
+                            double target = target_ET.getText().toString().equals("") ? 0d : Double.valueOf(target_ET.getText().toString());
+                            double credit_weight = credit_weight_ET.getText().toString().equals("") ? 0d : Double.valueOf(credit_weight_ET.getText().toString());
                             ((CourseDialogListener) listener).applyDialog(course_name, course_code, target, credit_weight);
                         }
                     }

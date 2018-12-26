@@ -1,4 +1,4 @@
-package project.gpa_calculator.activities.semester;
+package project.gpa_calculator.activities.course;
 
 import android.content.Context;
 import android.util.Log;
@@ -10,7 +10,6 @@ import java.util.List;
 
 import project.gpa_calculator.Util.ActivityController;
 import project.gpa_calculator.activities.main.MainActivity;
-import project.gpa_calculator.models.Course;
 import project.gpa_calculator.models.ListItem;
 import project.gpa_calculator.models.Semester;
 import project.gpa_calculator.models.User;
@@ -18,8 +17,7 @@ import project.gpa_calculator.models.Year;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class SemesterActivityController extends ActivityController {
-
+public class CourseActivityController extends ActivityController {
     private List<ListItem> listItems;
 
     private User user;
@@ -28,7 +26,7 @@ public class SemesterActivityController extends ActivityController {
 
     private Context context;
 
-    SemesterActivityController() {
+    CourseActivityController() {
     }
 
     public void setContext(Context context) {
@@ -58,9 +56,9 @@ public class SemesterActivityController extends ActivityController {
         return user;
     }
 
-    public void setupUser(User user, String year_name) {
+    public void setupUser(User user, String semester_name) {
         this.user = user;
-        this.current_year = user.getYear(year_name);
+//        this.current_year = user.getYe;
     }
 
 
@@ -79,10 +77,6 @@ public class SemesterActivityController extends ActivityController {
         saveToFile(MainActivity.userFile);
     }
 
-    public Semester getCurrentSemester(String name) {
-        return new Semester("2019Fall");
-    }
-
 
     public void saveToFile(String fileName) {
         try {
@@ -94,5 +88,4 @@ public class SemesterActivityController extends ActivityController {
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
-
 }

@@ -11,12 +11,12 @@
         android:theme="@style/AppTheme">
         <activity android:name=".activities.SignupActivity" />
         <activity android:name=".activities.YearActivity" />
-        <activity android:name=".activities.course.CourseActivity" />
         <activity android:name=".activities.EventActivity" />
         <activity android:name=".activities.AddEventActivity" />
         <activity android:name=".activities.AddCourseActivity" />
-        <activity android:name=".activities.Add_pop"
-            android:theme="@style/AppTheme.Popup"/>
+        <activity
+            android:name=".activities.Add_pop"
+            android:theme="@style/AppTheme.Popup" />
         <activity
             android:name=".activities.main.MainActivity"
             android:label="@string/title_activity_main"
@@ -30,6 +30,10 @@
         <activity
             android:name=".activities.semester.SemesterActivity"
             android:label="@string/title_activity_semester"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activities.course.CourseActivity"
+            android:label="@string/title_activity_course"
             android:theme="@style/AppTheme"></activity>
     </application>
 

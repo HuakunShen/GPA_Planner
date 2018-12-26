@@ -11,10 +11,11 @@ import android.view.View;
 
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
+import project.gpa_calculator.Util.AddDialog;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
 import project.gpa_calculator.models.User;
 
-public class SemesterActivity extends AppCompatActivity implements AddDialog.SemesterDialogListener {
+public class SemesterActivity extends AppCompatActivity implements AddDialog.YearSemesterDialogListener {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -30,7 +31,6 @@ public class SemesterActivity extends AppCompatActivity implements AddDialog.Sem
         setupToolBar();
         setupAddButton();
         setupRecyclerView();
-//        setUpRecyclerView();
     }
 
     private void setupController() {
@@ -81,11 +81,7 @@ public class SemesterActivity extends AppCompatActivity implements AddDialog.Sem
         });
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        adapter.notifyDataSetChanged();
-//    }
+
 
     @Override
     public void applyDialog(String name, String description) {
@@ -94,12 +90,6 @@ public class SemesterActivity extends AppCompatActivity implements AddDialog.Sem
         }
     }
 
-//    private void setUpRecyclerView() {
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
-//        itemTouchHelper.attachToRecyclerView(recyclerView);
-//    }
 
 //    public void saveToFile(String fileName) {
 //        try {

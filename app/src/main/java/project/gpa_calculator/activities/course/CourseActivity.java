@@ -2,7 +2,6 @@ package project.gpa_calculator.activities.course;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,11 +11,12 @@ import android.view.View;
 
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
+import project.gpa_calculator.Util.AddDialog;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
 import project.gpa_calculator.models.User;
 import project.gpa_calculator.models.Year;
 
-public class CourseActivity extends AppCompatActivity {
+public class CourseActivity extends AppCompatActivity implements AddDialog.CourseDialogListener  {
     private CourseActivityController controller;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -60,22 +60,26 @@ public class CourseActivity extends AppCompatActivity {
 
 
     private void setupAddButton() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_course_button
-        );
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_course_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-//                openDialog();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                openDialog();
             }
 
-//            private void openDialog() {
-//                AddDialog dialog = new AddDialog();
-//                dialog.show(getSupportFragmentManager(), "Add Semester Dialog");
-//            }
+            private void openDialog() {
+                AddDialog dialog = new AddDialog();
+                dialog.show(getSupportFragmentManager(), "Add Semester Dialog");
+            }
 
         });
+
     }
 
+    @Override
+    public void applyDialog(String course_name, String course_code, double target, double credit_weight) {
+
+    }
 }

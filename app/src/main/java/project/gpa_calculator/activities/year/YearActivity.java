@@ -12,10 +12,10 @@ import android.view.View;
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
-import project.gpa_calculator.activities.semester.AddDialog;
+import project.gpa_calculator.Util.AddDialog;
 import project.gpa_calculator.models.User;
 
-public class YearActivity extends AppCompatActivity implements AddDialog.SemesterDialogListener {
+public class YearActivity extends AppCompatActivity implements AddDialog.YearSemesterDialogListener {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private YearActivityController controller;

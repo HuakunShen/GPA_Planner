@@ -25,7 +25,11 @@ import java.io.ObjectOutputStream;
 import project.gpa_calculator.R;
 import project.gpa_calculator.activities.semester.SemesterActivity;
 import project.gpa_calculator.activities.year.YearActivity;
+import project.gpa_calculator.models.Course;
+import project.gpa_calculator.models.Event;
+import project.gpa_calculator.models.Semester;
 import project.gpa_calculator.models.User;
+import project.gpa_calculator.models.Year;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -51,8 +55,11 @@ public class MainActivity extends AppCompatActivity
 
         setupButton();
 
+        controller.initializeUserForTesting();
+        saveToFile(userFile);
 //        controller.setupUserForTesting();
     }
+
 
 
 

@@ -42,7 +42,7 @@ public class CourseActivityController extends ActivityController {
     public void setupListItems() {
         listItems = new ArrayList<>();
         for (Course course : this.current_semester) {
-            ListItem item = new ListItem(course.getCourse_name(), "Description", "GPA: ");
+            ListItem item = new ListItem(course.getCourse_code(), course.getCourse_name(), "GPA: ");
             listItems.add(item);
         }
     }

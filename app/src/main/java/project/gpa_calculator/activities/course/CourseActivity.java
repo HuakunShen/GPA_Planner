@@ -49,9 +49,6 @@ public class CourseActivity extends AppCompatActivity {
         adapter = new RecyclerViewAdapter(this, controller.getListItems(), controller);
         recyclerView.setAdapter(adapter);
 
-
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
@@ -61,16 +58,6 @@ public class CourseActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
-//    private void setupFAB() {
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-//    }
 
     private void setupAddButton() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_course_button

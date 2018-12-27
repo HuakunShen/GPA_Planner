@@ -37,9 +37,9 @@ public class AddDialog extends AppCompatDialogFragment {
             type = "Semester";
         } else if (context instanceof CourseActivity) {
             type = "Course";
-        } else if (context instanceof EventActivity){
+        } else if (context instanceof EventActivity) {
             type = "Event";
-        }else{
+        } else {
             type = "GPA";
         }
 
@@ -77,6 +77,53 @@ public class AddDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.dialog_year_and_semester, null);
         LinearLayout dialog_linearLayout = view.findViewById(R.id.dialog_id);
 
+        setupInputProperties(view, dialog_linearLayout);
+        builder.setView(view)
+                .setTitle("Add " + type)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setupConfirmAction();
+                    }
+                });
+
+        return builder.create();
+    }
+
+    private void setupConfirmAction() {
+        if (type.equalsIgnoreCase("Year") || type.equalsIgnoreCase("Semester")) {
+            String semester_name = first_ET.getText().toString();
+            String semester_description = second_ET.getText().toString();
+            if (!semester_name.isEmpty())
+                ((YearSemesterDialogListener) listener).applyDialog(semester_name, semester_description);
+        } else if (type.equalsIgnoreCase("Course")) {
+            String course_name = first_ET.getText().toString();
+            String course_code = second_ET.getText().toString();
+            double target = third_ET.getText().toString().equals("") ? 0d : Double.valueOf(third_ET.getText().toString());
+            double credit_weight = fourth_ET.getText().toString().equals("") ? 0d : Double.valueOf(fourth_ET.getText().toString());
+            ((CourseDialogListener) listener).applyDialog(course_name, course_code, target, credit_weight);
+        } else if (type.equalsIgnoreCase("Event")) {
+            String event_name = first_ET.getText().toString();
+            double event_weight = second_ET.getText().toString().equals("") ? 0d : Double.valueOf(second_ET.getText().toString());
+            if (!event_name.isEmpty())
+                ((EventDialogListener) listener).applyDialog(event_name, event_weight);
+        } else if (type.equalsIgnoreCase("GPA")) {
+            String mark = first_ET.getText().toString();
+            double gpa = second_ET.getText().toString().equals("") ? 0d : Double.valueOf(third_ET.getText().toString());
+            int low = third_ET.getText().toString().equals("") ? 0 : Integer.valueOf(third_ET.getText().toString());
+            int high = fourth_ET.getText().toString().equals("") ? 0 : Integer.valueOf(fourth_ET.getText().toString());
+
+            ((GPADialogListener) listener).applyDialog(low, high, gpa, mark);
+        }
+    }
+
+    private void setupInputProperties(View view, LinearLayout dialog_linearLayout) {
         first_ET = view.findViewById(R.id.dialog_name_ET);
         first_ET.setHint(this.type + " Name");
         second_ET = view.findViewById(R.id.dialog_description_ET);
@@ -91,8 +138,8 @@ public class AddDialog extends AppCompatDialogFragment {
         } else if (this.type.equalsIgnoreCase("Event")) {
             second_ET.setHint("Weight (Percentage)");
             second_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        }else if (this.type.equalsIgnoreCase("GPA")) {
-            first_ET.setHint("GPA Grade");
+        } else if (this.type.equalsIgnoreCase("GPA")) {
+            first_ET.setHint("Letter Grade");
             second_ET.setHint("GPA Points");
             second_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
@@ -104,47 +151,7 @@ public class AddDialog extends AppCompatDialogFragment {
             fourth_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             dialog_linearLayout.addView(third_ET);
             dialog_linearLayout.addView(fourth_ET);
-
         }
-        builder.setView(view)
-                .setTitle("Add " + type)
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (type.equalsIgnoreCase("Year") || type.equalsIgnoreCase("Semester")) {
-                            String semester_name = first_ET.getText().toString();
-                            String semester_description = second_ET.getText().toString();
-                            if (!semester_name.isEmpty())
-                                ((YearSemesterDialogListener) listener).applyDialog(semester_name, semester_description);
-                        } else if (type.equalsIgnoreCase("Course")) {
-                            String course_name = first_ET.getText().toString();
-                            String course_code = second_ET.getText().toString();
-                            double target = third_ET.getText().toString().equals("") ? 0d : Double.valueOf(third_ET.getText().toString());
-                            double credit_weight = fourth_ET.getText().toString().equals("") ? 0d : Double.valueOf(fourth_ET.getText().toString());
-                            ((CourseDialogListener) listener).applyDialog(course_name, course_code, target, credit_weight);
-                        } else if (type.equalsIgnoreCase("Event")) {
-                            String event_name = first_ET.getText().toString();
-                            double event_weight = second_ET.getText().toString().equals("") ? 0d : Double.valueOf(second_ET.getText().toString());
-                            if (!event_name.isEmpty())
-                                ((EventDialogListener) listener).applyDialog(event_name, event_weight);
-                        }else if (type.equalsIgnoreCase("GPA")) {
-                            String mark = first_ET.getText().toString();
-                            double gpa = second_ET.getText().toString().equals("") ? 0d : Double.valueOf(third_ET.getText().toString());
-                            int low = third_ET.getText().toString().equals("") ? 0 : Integer.valueOf(third_ET.getText().toString());
-                            int high = fourth_ET.getText().toString().equals("") ? 0 : Integer.valueOf(fourth_ET.getText().toString());
-
-                            ((GPADialogListener) listener).applyDialog(low,high,gpa,mark);
-                        }
-                    }
-                });
-
-        return builder.create();
     }
 
 
@@ -164,6 +171,6 @@ public class AddDialog extends AppCompatDialogFragment {
     }
 
     public interface GPADialogListener extends DialogListener {
-        void applyDialog(int low, int high,double gpa,String mark);
+        void applyDialog(int low, int high, double gpa, String mark);
     }
 }

@@ -15,7 +15,9 @@ import java.util.List;
 
 import project.gpa_calculator.Util.ActivityController;
 import project.gpa_calculator.activities.main.MainActivity;
+import project.gpa_calculator.models.GPA;
 import project.gpa_calculator.models.GPAListItem;
+import project.gpa_calculator.models.GPA_setting;
 import project.gpa_calculator.models.ListItem;
 import project.gpa_calculator.models.User;
 import project.gpa_calculator.models.Year;
@@ -27,7 +29,7 @@ public class GPA_setter_Controller extends ActivityController {
 
     private User user;
 
-
+    GPA_setting gpa_setting;
     private Context context;
 
     public GPA_setter_Controller() {
@@ -36,17 +38,21 @@ public class GPA_setter_Controller extends ActivityController {
     public void setupListItems() {
         this.listItems = new ArrayList<>();
 
-        ListItem listItem1 = new GPAListItem(85,100,4.0,"A");
-        ListItem listItem2 = new GPAListItem(80,84,3.7,"A-");
-        ListItem listItem3 = new GPAListItem(77,79,3.3,"B+");
-        ListItem listItem4 = new GPAListItem(73,76,3.0,"B");
-        ListItem listItem5 = new GPAListItem(70,72,2.7,"B-");
-        ListItem listItem6 = new GPAListItem(67,69,2.3,"C+");
-        ListItem listItem7 = new GPAListItem(63,66,2.0,"C");
-        ListItem listItem8 = new GPAListItem(60,62,1.7,"C-");
+//        ListItem listItem1 = new GPAListItem(85,100,4.0,"A");
+//        ListItem listItem2 = new GPAListItem(80,84,3.7,"A-");
+//        ListItem listItem3 = new GPAListItem(77,79,3.3,"B+");
+//        ListItem listItem4 = new GPAListItem(73,76,3.0,"B");
+//        ListItem listItem5 = new GPAListItem(70,72,2.7,"B-");
+//        ListItem listItem6 = new GPAListItem(67,69,2.3,"C+");
+//        ListItem listItem7 = new GPAListItem(63,66,2.0,"C");
+//        ListItem listItem8 = new GPAListItem(60,62,1.7,"C-");
+//
+//        listItems.addAll(Arrays.asList(listItem1,listItem2,listItem3,listItem4,listItem5,listItem6,listItem7,listItem8))
+        gpa_setting = user.getGpa_setting();
+        for(GPA g:gpa_setting){
+            listItems.add(new GPAListItem(g.getLower(),g.getUpper(),g.getGrade_point(),g.getGrade()));
+        }
 
-        listItems.addAll(Arrays.asList(listItem1,listItem2,listItem3,listItem4,listItem5,listItem6,listItem7,listItem8));
-//        List<Semester> semester_list = year_list.get(0).getSemester_list();
 
     }
 
@@ -69,12 +75,11 @@ public class GPA_setter_Controller extends ActivityController {
     //TODO later
     public boolean addGPA(int low, int high,double gpa,String mark) {
         GPAListItem new_gpa= new GPAListItem(low,high,gpa,mark);
-        //boolean result = user.addYear(year);
-       // if (result) {
-            this.listItems.add(new_gpa);
-           // saveToFile(MainActivity.userFile);
-        //}
-       // return result;
+        user.addGPA(low,high,gpa,mark);
+
+        this.listItems.add(new_gpa);
+        saveToFile(MainActivity.userFile);
+
         return true;
     }
 

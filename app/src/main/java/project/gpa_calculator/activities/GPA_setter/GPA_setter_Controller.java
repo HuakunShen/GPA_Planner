@@ -59,7 +59,7 @@ public class GPA_setter_Controller extends ActivityController {
     @Override
     public void deleteItem(int position) {
 //        user.getYear_list().remove(position);
-        user.removeFromYearList(position);
+        user.removeFromGPA(position);
         saveToFile(MainActivity.userFile);
     }
 

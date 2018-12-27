@@ -106,6 +106,10 @@ public class User implements Serializable {
         return gpa_setting;
     }
 
+    public void removeFromGPA(int pos){
+        gpa_setting.remove(pos);
+    }
+
     public String getStudent_number() {
         return student_number;
     }

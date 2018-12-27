@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity
         Intent intent;
         switch (v.getId()) {
             case R.id.local_user_B:
-                intent = new Intent(getApplication(), GPA_setter_Activity.class);
+                intent = new Intent(getApplication(), YearActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -143,6 +143,8 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(getApplication(), GPA_setter_Activity.class);
+            startActivity(intent);
             return true;
         }
 

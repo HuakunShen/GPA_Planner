@@ -1,82 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:id="@+id/list_row"
+
+<RelativeLayout
+    android:id="@+id/gpa_row"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+   >
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/list_row_cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="@dimen/cardview_compat_inset_shadow"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+       >
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/list_row_cardView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="@dimen/cardview_compat_inset_shadow"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
-            app:contentPadding="5dp">
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingLeft="14dp"
+            android:paddingTop="5dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:paddingLeft="14dp"
-                android:paddingTop="5dp">
+            <TextView
+                android:id="@+id/gpa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="range" />
 
-                <TextView
-                    android:id="@+id/gpa"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="range" />
+            <EditText
+                android:id="@+id/low"
+                android:layout_width="36dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName" />
 
-                <EditText
-                    android:id="@+id/low"
-                    android:layout_width="36dp"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TO" />
 
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="TO" />
+            <EditText
+                android:id="@+id/high"
+                android:layout_width="61dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName" />
 
-                <EditText
-                    android:id="@+id/high"
-                    android:layout_width="61dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
+            <EditText
+                android:id="@+id/GPA_grade"
+                android:layout_width="97dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName" />
 
-                <EditText
-                    android:id="@+id/GPA_grade"
-                    android:layout_width="97dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
+            <EditText
+                android:id="@+id/GPA_point"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:inputType="textPersonName" />
 
-                <EditText
-                    android:id="@+id/GPA_point"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ems="10"
-                    android:inputType="textPersonName" />
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-    </RelativeLayout>
-</android.support.constraint.ConstraintLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

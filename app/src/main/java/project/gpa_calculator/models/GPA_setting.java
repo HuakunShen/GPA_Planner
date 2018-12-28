@@ -53,4 +53,7 @@ public class GPA_setting implements Iterable<GPA>, Serializable {
     public void remove(int pos){
         GPAs.remove(pos);
     }
+    public void update(int pos,GPA new_gpa){
+        GPAs.set(pos,new_gpa);
+    }
 }

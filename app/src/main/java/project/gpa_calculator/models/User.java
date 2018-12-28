@@ -134,5 +134,7 @@ public class User implements Serializable {
         this.student_type = student_type;
     }
 
-
+    public void setGpa_setting(GPA_setting gpa_setting) {
+        this.gpa_setting = gpa_setting;
+    }
 }

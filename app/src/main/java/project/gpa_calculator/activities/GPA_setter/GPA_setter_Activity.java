@@ -1,12 +1,17 @@
 package project.gpa_calculator.activities.GPA_setter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
@@ -14,11 +19,12 @@ import project.gpa_calculator.R;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
 import project.gpa_calculator.Util.AddDialog;
 import project.gpa_calculator.activities.main.MainActivity;
+import project.gpa_calculator.models.GPA;
 import project.gpa_calculator.models.User;
 
 public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.GPADialogListener {
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    private RecyclerViewAdapter adapter;
     private GPA_setter_Controller controller;
 
 
@@ -30,6 +36,7 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
         setupToolBar();
         setupAddButton();
         setupRecyclerView();
+
     }
 
     private void setupRecyclerView() {
@@ -53,6 +60,24 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
     protected void onResume() {
         super.onResume();
         controller.loadFromFile(MainActivity.userFile);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //adapter.load_GPA(controller);
+        //controller.sort_GPA();
+        for (int x = recyclerView.getChildCount(), i = 0; i < x; i++) {
+            RecyclerViewAdapter.GPAViewHolder holder = ( RecyclerViewAdapter.GPAViewHolder)recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
+            int low = holder.getLow();
+            int high = holder.getHigh();
+            double point = holder.getGpa_point();
+            String grade = holder.getGpa_grade();
+            controller.gpa_setting.update(i,new GPA(low,high,point,grade));
+        }
+       controller.save_update();
+
+        super.onBackPressed();
+
     }
 
     private void setupController() {

@@ -157,18 +157,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             gpa_point = itemView.findViewById(R.id.GPA_point);
 
             gpa_point.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-
-            low.setHint("lower bound");
             low.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-
-            high.setHint("upper bound");
             high.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         }
         @Override
         public void onClick(View v) {
 
+        }
+
+        public Integer getLow() {
+            return low.getText().toString().equals("") ? Integer.valueOf(low.getHint().toString()) : Integer.valueOf(low.getText().toString());
+        }
+
+        public Integer getHigh() {
+            return high.getText().toString().equals("") ? Integer.valueOf(high.getHint().toString()) : Integer.valueOf(high.getText().toString());
+        }
+
+        public String getGpa_grade() {
+            return gpa_grade.getText().toString().equals("") ? gpa_grade.getHint().toString():gpa_grade.getText().toString();
+        }
+
+        public Double getGpa_point() {
+            return gpa_point.getText().toString().equals("") ? Double.valueOf(gpa_point.getHint().toString()) : Double.valueOf(gpa_point.getText().toString());
         }
     }
 

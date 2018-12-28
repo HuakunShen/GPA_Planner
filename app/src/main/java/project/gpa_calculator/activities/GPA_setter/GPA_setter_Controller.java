@@ -56,6 +56,7 @@ public class GPA_setter_Controller extends ActivityController {
 
     }
 
+
     @Override
     public void deleteItem(int position) {
 //        user.getYear_list().remove(position);
@@ -75,16 +76,22 @@ public class GPA_setter_Controller extends ActivityController {
     //TODO later
     public boolean addGPA(int low, int high,double gpa,String mark) {
         GPAListItem new_gpa= new GPAListItem(low,high,gpa,mark);
-        user.addGPA(low,high,gpa,mark);
+        gpa_setting.add(new GPA(low,high,gpa,mark));
+        //user.addGPA(low,high,gpa,mark);
 
         this.listItems.add(new_gpa);
-        saveToFile(MainActivity.userFile);
+        //saveToFile(MainActivity.userFile);
 
         return true;
     }
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public void save_update(){
+        user.setGpa_setting(gpa_setting);
+        saveToFile(MainActivity.userFile);
     }
 
     public void loadFromFile(String fileName) {

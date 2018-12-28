@@ -45,7 +45,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        //TODO possible change to switch?
         if(controller instanceof GPA_setter_Controller){
              view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.gpa_row, parent, false);
@@ -59,6 +58,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     }
 
+    /**
+     * connect item to view
+     * @param viewHolder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder viewHolder, int position) {
         ListItem item = list_items.get(position);
@@ -116,6 +120,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         }
 
+        /**
+         * click to go to next page
+         * @param v
+         */
         @Override
         public void onClick(View v) {
             // Get Position of row clicked

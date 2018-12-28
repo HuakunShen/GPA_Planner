@@ -35,25 +35,15 @@ public class GPA_setter_Controller extends ActivityController {
     public GPA_setter_Controller() {
     }
 
+    /**
+     * set up recycler view base on information in user
+     */
     public void setupListItems() {
         this.listItems = new ArrayList<>();
-
-//        ListItem listItem1 = new GPAListItem(85,100,4.0,"A");
-//        ListItem listItem2 = new GPAListItem(80,84,3.7,"A-");
-//        ListItem listItem3 = new GPAListItem(77,79,3.3,"B+");
-//        ListItem listItem4 = new GPAListItem(73,76,3.0,"B");
-//        ListItem listItem5 = new GPAListItem(70,72,2.7,"B-");
-//        ListItem listItem6 = new GPAListItem(67,69,2.3,"C+");
-//        ListItem listItem7 = new GPAListItem(63,66,2.0,"C");
-//        ListItem listItem8 = new GPAListItem(60,62,1.7,"C-");
-//
-//        listItems.addAll(Arrays.asList(listItem1,listItem2,listItem3,listItem4,listItem5,listItem6,listItem7,listItem8))
         gpa_setting = user.getGpa_setting();
         for(GPA g:gpa_setting){
             listItems.add(new GPAListItem(g.getLower(),g.getUpper(),g.getGrade_point(),g.getGrade()));
         }
-
-
     }
 
 
@@ -69,19 +59,19 @@ public class GPA_setter_Controller extends ActivityController {
         return listItems;
     }
 
-//    public void setupCurrentSemester(User user) {
-//        this.user = user;
-//        saveToFile(MainActivity.userFile);
-//    }
-    //TODO later
+
+    /**
+     * add a new GPA to recycler voew
+     * @param low
+     * @param high
+     * @param gpa
+     * @param mark
+     * @return return true if success, in this case, alway true
+     */
     public boolean addGPA(int low, int high,double gpa,String mark) {
         GPAListItem new_gpa= new GPAListItem(low,high,gpa,mark);
         gpa_setting.add(new GPA(low,high,gpa,mark));
-        //user.addGPA(low,high,gpa,mark);
-
         this.listItems.add(new_gpa);
-        //saveToFile(MainActivity.userFile);
-
         return true;
     }
 
@@ -89,11 +79,18 @@ public class GPA_setter_Controller extends ActivityController {
         this.context = context;
     }
 
+    /**
+     * save the update on gpa_setting to user
+     */
     public void save_update(){
         user.setGpa_setting(gpa_setting);
         saveToFile(MainActivity.userFile);
     }
 
+    /**
+     * load all data from fileName which store the information
+     * @param fileName
+     */
     public void loadFromFile(String fileName) {
         try {
             InputStream inputStream = this.context.openFileInput(fileName);

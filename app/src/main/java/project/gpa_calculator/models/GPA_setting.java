@@ -30,6 +30,9 @@ public class GPA_setting implements Iterable<GPA>, Serializable {
 
     }
 
+    /**
+     * basic setting that match University of Toronto GPA
+     */
     public GPA_setting(){
         GPAs.add(new GPA(100,90,4.0,"A+"));
         GPAs.add(new GPA(89,85,4.0,"A"));

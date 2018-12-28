@@ -28,6 +28,10 @@ public class AddDialog extends AppCompatDialogFragment {
     private String type;
     private DialogListener listener;
 
+    /**
+     * check which Activity is Attach to
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -96,6 +100,9 @@ public class AddDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
+    /**
+     * get information from the view
+     */
     private void setupConfirmAction() {
         if (type.equalsIgnoreCase("Year") || type.equalsIgnoreCase("Semester")) {
             String semester_name = first_ET.getText().toString();
@@ -123,6 +130,11 @@ public class AddDialog extends AppCompatDialogFragment {
         }
     }
 
+    /**
+     * set up the view
+     * @param view
+     * @param dialog_linearLayout
+     */
     private void setupInputProperties(View view, LinearLayout dialog_linearLayout) {
         first_ET = view.findViewById(R.id.dialog_name_ET);
         first_ET.setHint(this.type + " Name");

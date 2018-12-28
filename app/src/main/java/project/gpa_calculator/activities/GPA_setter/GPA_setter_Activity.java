@@ -1,17 +1,12 @@
 package project.gpa_calculator.activities.GPA_setter;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
@@ -20,7 +15,6 @@ import project.gpa_calculator.Util.SwipeToDeleteCallback;
 import project.gpa_calculator.Util.AddDialog;
 import project.gpa_calculator.activities.main.MainActivity;
 import project.gpa_calculator.models.GPA;
-import project.gpa_calculator.models.User;
 
 public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.GPADialogListener {
     private RecyclerView recyclerView;
@@ -64,8 +58,7 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
 
     @Override
     public void onBackPressed() {
-        //adapter.load_GPA(controller);
-        //controller.sort_GPA();
+        //should put in controller but idk how
         for (int x = recyclerView.getChildCount(), i = 0; i < x; i++) {
             RecyclerViewAdapter.GPAViewHolder holder = ( RecyclerViewAdapter.GPAViewHolder)recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
             int low = holder.getLow();
@@ -87,11 +80,17 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
         controller.loadFromFile(MainActivity.userFile);
     }
 
+    /**
+     * set up the toolbar on the top of the screen
+     */
     private void setupToolBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
+    /**
+     * set up add button for add new GPA
+     */
     private void setupAddButton() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_gpa_button);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +108,13 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
         });
     }
 
+    /**
+     * apply change on GPA recycler view
+     * @param low
+     * @param high
+     * @param gpa
+     * @param mark
+     */
     @Override
     public void applyDialog(int low, int high,double gpa,String mark) {
         if (controller.addGPA(low,high,gpa,mark)) {

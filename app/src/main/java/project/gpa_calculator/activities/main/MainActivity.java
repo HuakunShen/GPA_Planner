@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
+//import com.google.firebase.auth.FirebaseAuth;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.FileNotFoundException;

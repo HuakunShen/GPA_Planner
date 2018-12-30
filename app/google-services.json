@@ -31,6 +31,14 @@
           }
         },
         {
+          "client_id": "1036137210902-3eo483v9oa4e9f0e4cc6d8dk8kd0l9os.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "project.gpa_calculator",
+            "certificate_hash": "2c7a7cd977a7b1791c226abf2a44d000a56d77d4"
+          }
+        },
+        {
           "client_id": "1036137210902-skomrd95v8mh98iqd7ambs25jum1r7gh.apps.googleusercontent.com",
           "client_type": 3
         }

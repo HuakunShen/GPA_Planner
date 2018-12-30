@@ -2,23 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="project.gpa_calculator">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+
     <application
         android:allowBackup="true"
-        android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:label="@string/title_activity_main"
             android:name=".activities.main.MainActivity"
-            android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".activities.SignupActivity"/>
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".activities.SignupActivity" />
         <activity android:name=".activities.GPA_setter.GPA_setter_Activity" />
         <activity
             android:name=".activities.Add_pop"
@@ -38,7 +36,14 @@
         <activity
             android:name=".activities.event.EventActivity"
             android:label="@string/title_activity_event"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activities.login.login_activity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

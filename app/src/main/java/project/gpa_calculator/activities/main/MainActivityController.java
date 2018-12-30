@@ -3,6 +3,11 @@ package project.gpa_calculator.activities.main;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +28,14 @@ public class MainActivityController {
     private User user;
 
     private Context context;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    private FirebaseUser mUser = mAuth.getCurrentUser();
+
+
 
     public MainActivityController() {
         user = new User("admin", "admin", "admin");
@@ -57,6 +70,10 @@ public class MainActivityController {
         event3.setEvent_score(70);
         this.user.addYear(year2018ForTesting);
 
+
+        String uId = mUser.getUid();
+        DocumentReference docRef = db.document("Users/" + uId);
+        docRef.set(user);
     }
 
 

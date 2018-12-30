@@ -86,9 +86,24 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                 signOut();
                 break;
             case R.id.signup_btn:
-                createEmailPasswordAccount();
+                verifyEmail();
                 break;
         }
+    }
+
+    private void verifyEmail() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        user.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "Email sent.");
+                            Toast.makeText(login_activity.this, "Email Sent", Toast.LENGTH_SHORT).show();
+                            createEmailPasswordAccount();
+                        }
+                    }
+                });
     }
 
     private void createEmailPasswordAccount() {
@@ -108,12 +123,11 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(login_activity.this, "Authentication failed.",
+                                Toast.makeText(login_activity.this, "Authentication failed.\n Account May Exists Already",
                                         Toast.LENGTH_SHORT).show();
                                 updateUI(null);
                             }
 
-                            // ...
                         }
                     });
         }
@@ -212,6 +226,9 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
 
         // Google sign out
         googleSignOut();
+
+        // quit app
+        finishAndRemoveTask();
     }
 
     private void googleSignOut() {

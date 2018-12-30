@@ -31,7 +31,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "login_activity";
-    private EditText email, password;
+    private EditText email_ET, password_ET;
 
 
     @Override
@@ -65,10 +65,11 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void setupLayout() {
-        email = findViewById(R.id.emailET);
-        password = findViewById(R.id.passwordET);
+        email_ET = findViewById(R.id.emailET);
+        password_ET = findViewById(R.id.passwordET);
         findViewById(R.id.google_sign_in_button).setOnClickListener(this);
-        findViewById(R.id.loginBtn).setOnClickListener(this);
+        findViewById(R.id.login_btn).setOnClickListener(this);
+        findViewById(R.id.signup_btn).setOnClickListener(this);
         findViewById(R.id.signout_btn).setOnClickListener(this);
     }
 
@@ -78,20 +79,52 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
             case R.id.google_sign_in_button:
                 googleSignIn();
                 break;
-            case R.id.loginBtn:
+            case R.id.login_btn:
                 emailSignIn();
                 break;
             case R.id.signout_btn:
                 signOut();
                 break;
+            case R.id.signup_btn:
+                createEmailPasswordAccount();
+                break;
         }
     }
 
+    private void createEmailPasswordAccount() {
+        String email = email_ET.getText().toString();
+        String password = password_ET.getText().toString();
+        if (!(email.isEmpty() || password.isEmpty())) {
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "createUserWithEmail:success");
+                                Toast.makeText(login_activity.this, "Account Created", Toast.LENGTH_SHORT).show();
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                updateUI(user);
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                Toast.makeText(login_activity.this, "Authentication failed.",
+                                        Toast.LENGTH_SHORT).show();
+                                updateUI(null);
+                            }
+
+                            // ...
+                        }
+                    });
+        }
+
+    }
+
     private void emailSignIn() {
-        String emailStr = email.getText().toString();
-        String passwordStr = password.getText().toString();
-        if (!(emailStr.isEmpty() || passwordStr.isEmpty())) {
-            mAuth.signInWithEmailAndPassword(emailStr, passwordStr)
+        String email = email_ET.getText().toString();
+        String password = password_ET.getText().toString();
+        if (!(email.isEmpty() || password.isEmpty())) {
+            mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -166,11 +199,8 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             updateUI(null);
-                        }
 
-                        // [START_EXCLUDE]
-//                        hideProgressDialog();
-                        // [END_EXCLUDE]
+                        }
                     }
                 });
     }

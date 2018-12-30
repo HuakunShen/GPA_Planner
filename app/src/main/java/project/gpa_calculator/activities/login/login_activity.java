@@ -51,7 +51,13 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
+        googleSignOut();
         updateUI(currentUser);
     }
 
@@ -95,6 +101,8 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                                 Toast.makeText(login_activity.this, "Login Succeed", Toast.LENGTH_SHORT).show();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
+                                startActivity(new Intent(login_activity.this, MainActivity.class));
+                                finish();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -153,6 +161,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                             updateUI(user);
                             Toast.makeText(login_activity.this, "Successfully Login", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(login_activity.this, MainActivity.class));
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -172,6 +181,10 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
         mAuth.signOut();
 
         // Google sign out
+        googleSignOut();
+    }
+
+    private void googleSignOut() {
         mGoogleSignInClient.signOut().addOnCompleteListener(this,
                 new OnCompleteListener<Void>() {
                     @Override

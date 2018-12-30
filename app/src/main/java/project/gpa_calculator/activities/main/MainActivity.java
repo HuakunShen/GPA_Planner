@@ -26,6 +26,7 @@ import java.io.ObjectOutputStream;
 
 import project.gpa_calculator.R;
 import project.gpa_calculator.activities.GPA_setter.GPA_setter_Activity;
+import project.gpa_calculator.activities.login.login_activity;
 import project.gpa_calculator.activities.semester.SemesterActivity;
 import project.gpa_calculator.activities.year.YearActivity;
 import project.gpa_calculator.models.Course;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity
 //    private Button to_semester_button;
     private MainActivityController controller;
     public static final String userFile = "userFile";
+    private FirebaseAuth mAuth;
 
 
 
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity
         setupController();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        setupFirebase();
         setupFAB();
 
         setupNavigation(toolbar);
@@ -63,6 +65,9 @@ public class MainActivity extends AppCompatActivity
 //        controller.setupUserForTesting();
     }
 
+    private void setupFirebase() {
+        mAuth = FirebaseAuth.getInstance();
+    }
 
 
 
@@ -143,12 +148,24 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(getApplication(), GPA_setter_Activity.class);
-            startActivity(intent);
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                Intent intent = new Intent(getApplication(), GPA_setter_Activity.class);
+                startActivity(intent);
+                return true;
+            case R.id.signout_btn:
+                mAuth.signOut();
+                startActivity(new Intent(this, login_activity.class));
+                finish();
+                return true;
+
         }
+
+//        if (id == R.id.action_settings) {
+//            Intent intent = new Intent(getApplication(), GPA_setter_Activity.class);
+//            startActivity(intent);
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

@@ -86,25 +86,12 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                 signOut();
                 break;
             case R.id.signup_btn:
-                verifyEmail();
+                createEmailPasswordAccount();
                 break;
         }
     }
 
-    private void verifyEmail() {
-        FirebaseUser user = mAuth.getCurrentUser();
-        user.sendEmailVerification()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "Email sent.");
-                            Toast.makeText(login_activity.this, "Email Sent", Toast.LENGTH_SHORT).show();
-                            createEmailPasswordAccount();
-                        }
-                    }
-                });
-    }
+
 
     private void createEmailPasswordAccount() {
         String email = email_ET.getText().toString();

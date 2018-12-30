@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "1036137210902",
+    "firebase_url": "https://androidappgpacalculator.firebaseio.com",
+    "project_id": "androidappgpacalculator",
+    "storage_bucket": "androidappgpacalculator.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1036137210902:android:2fc9036641204f22",
+        "android_client_info": {
+          "package_name": "project.gpa_calculator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1036137210902-p5lqo8ml03dvu3oshi7ppdor4pbda5nt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "project.gpa_calculator",
+            "certificate_hash": "0fbd6ed008579bf274d729c1dd76c2a40d6ea228"
+          }
+        },
+        {
+          "client_id": "1036137210902-oovmv1eeg7l7nc4gubnemeoukltjgj2u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "project.gpa_calculator",
+            "certificate_hash": "d547e18e0a0c1170ed31641bf820373e39ea5266"
+          }
+        },
+        {
+          "client_id": "1036137210902-skomrd95v8mh98iqd7ambs25jum1r7gh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbOqbUbFE72n-ZJX8MxUPwCgI0bOX6P6s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1036137210902-skomrd95v8mh98iqd7ambs25jum1r7gh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

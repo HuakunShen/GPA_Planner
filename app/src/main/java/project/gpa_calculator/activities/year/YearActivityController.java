@@ -2,6 +2,7 @@ package project.gpa_calculator.activities.year;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.Util.ActivityController;
 import project.gpa_calculator.activities.main.MainActivity;
 import project.gpa_calculator.models.ListItem;
@@ -35,7 +37,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class YearActivityController extends ActivityController {
     private List<ListItem> listItems = new ArrayList<>();
 
-//    private User user;
+//    private YearActivity yearActivity;
 
     private Context context;
 
@@ -47,11 +49,25 @@ public class YearActivityController extends ActivityController {
 
     private List<Year> year_list;
 
+
+    public List<Year> getYear_list() {
+        return year_list;
+    }
+
+    public void setYear_list(List<Year> year_list) {
+        this.year_list = year_list;
+    }
+
+
     private static final String TAG = "YearActivityController";
 
 
     public YearActivityController() {
+//        this.yearActivity = yearActivity;
+        this.year_list = new ArrayList<>();
+
     }
+
 
     public void setupListItems() {
 //        this.listItems = new ArrayList<>();
@@ -68,6 +84,7 @@ public class YearActivityController extends ActivityController {
 
     public void setupYearList() {
         this.year_list = new ArrayList<>();
+
         userRef.collection("Years")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -78,11 +95,14 @@ public class YearActivityController extends ActivityController {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 year_list.add(document.toObject(Year.class));
                             }
+
+//                            adapter = new RecyclerViewAdapter(context, listItems, );
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
+        setupListItems();
     }
 
     @Override
@@ -112,6 +132,9 @@ public class YearActivityController extends ActivityController {
 //        }
         return true;
     }
+
+
+
 
     public void setContext(Context context) {
         this.context = context;

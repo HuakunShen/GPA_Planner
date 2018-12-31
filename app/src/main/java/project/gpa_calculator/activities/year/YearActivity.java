@@ -30,67 +30,22 @@ import project.gpa_calculator.Util.AddDialog;
 import project.gpa_calculator.models.Year;
 
 public class YearActivity extends AppCompatActivity implements AddDialog.YearSemesterDialogListener {
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private YearActivityController controller;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private static final String TAG = "YearActivity";
-    private List<Year> year_list;
 
+    private YearActivityController controller;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_year);
         setupController();
-        setupRecyclerView();
+        controller.setupRecyclerView();
         setupToolBar();
         setupAddButton();
-        setupRecyclerViewContent();
-    }
-
-    private void setupRecyclerViewContent() {
-        year_list = new ArrayList<>();
-        db.collection("Users").document(mAuth.getUid()).collection("Years")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                year_list.add(document.toObject(Year.class));
-                            }
-                            controller.setYear_list(year_list);
-                            controller.setupListItems();
-                            adapter = new RecyclerViewAdapter(YearActivity.this, controller.getListItems(), controller);
-                            recyclerView.setAdapter(adapter);
-                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
-                            itemTouchHelper.attachToRecyclerView(recyclerView);
-
-//                            adapter = new RecyclerViewAdapter(context, listItems, );
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "onFailure: " + e.getMessage());
-                Toast.makeText(YearActivity.this, "Unable to load Data From Years", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-
+        controller.setupRecyclerViewContent();
     }
 
     private void setupController() {
-        controller = new YearActivityController();
-        controller.setContext(this);
-
+        controller = new YearActivityController(this);
     }
 
     private void setupToolBar() {
@@ -113,25 +68,15 @@ public class YearActivity extends AppCompatActivity implements AddDialog.YearSem
         });
     }
 
-    private void setupRecyclerView() {
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
     }
 
-
-
-
     @Override
     public void applyDialog(String name, String description) {
         if (controller.addYear(name, description)) {
-            adapter.notifyItemInserted(controller.getListItems().size() - 1);
+            controller.getAdapter().notifyItemInserted(controller.getListItems().size() - 1);
         }
     }
 

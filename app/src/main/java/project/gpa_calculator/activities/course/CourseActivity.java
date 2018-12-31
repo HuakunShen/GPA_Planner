@@ -15,43 +15,25 @@ import project.gpa_calculator.R;
 import project.gpa_calculator.Util.AddDialog;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
 import project.gpa_calculator.activities.main.MainActivity;
+import project.gpa_calculator.activities.semester.SemesterActivityController;
 import project.gpa_calculator.models.Year;
 
 public class CourseActivity extends AppCompatActivity implements AddDialog.CourseDialogListener  {
     private CourseActivityController controller;
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course);
         setupController();
+        controller.setupRecyclerView();
         setupToolBar();
         setupAddButton();
-        setupRecyclerView();
+        controller.setupRecyclerViewContent();
     }
 
     private void setupController() {
-        controller = new CourseActivityController();
-        controller.setContext(this);
-        controller.loadFromFile(MainActivity.userFile);
-        controller.setupCurrentSemester((Year) getIntent().getSerializableExtra("year_object"),
-                getIntent().getStringExtra("semester_name"));
-    }
-
-    private void setupRecyclerView() {
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        controller.setupListItems();
-
-        adapter = new RecyclerViewAdapter(this, controller.getListItems(), controller);
-        recyclerView.setAdapter(adapter);
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+        controller = new CourseActivityController(this, getIntent().getStringExtra("semester_doc_path"));
     }
 
     private void setupToolBar() {
@@ -59,14 +41,11 @@ public class CourseActivity extends AppCompatActivity implements AddDialog.Cours
         setSupportActionBar(toolbar);
     }
 
-
     private void setupAddButton() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_course_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
                 openDialog();
             }
 
@@ -74,15 +53,19 @@ public class CourseActivity extends AppCompatActivity implements AddDialog.Cours
                 AddDialog dialog = new AddDialog();
                 dialog.show(getSupportFragmentManager(), "Add Course Dialog");
             }
-
         });
-
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
 
     @Override
     public void applyDialog(String course_name, String course_code, double target, double credit_weight) {
         if (controller.addCourse(course_name, course_code, target, credit_weight)) {
-            adapter.notifyItemInserted(controller.getListItems().size() - 1);
+            controller.getAdapter().notifyItemInserted(controller.getListItems().size() - 1);
         } else {
             Toast.makeText(getApplication(), "Course Exists or Input Not Valid", Toast.LENGTH_LONG).show();
         }

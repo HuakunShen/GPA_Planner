@@ -1,5 +1,7 @@
 package project.gpa_calculator.models;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,6 +14,19 @@ public class Course implements Serializable, Iterable<Event> {
     private double target;
     private String course_code;
     private String course_name;
+
+    private String docID;
+
+    public Course(String course_code, String name, double target, double credit) {
+        this.course_code = course_code;
+        this.course_name = name;
+        this.target = target;
+        event_list = new ArrayList<>();
+        this.credit = credit;
+    }
+
+    public Course() {
+    }
 
     public String getCourse_code() {
         return course_code;
@@ -32,16 +47,18 @@ public class Course implements Serializable, Iterable<Event> {
     private List<Event> event_list;
     private double credit;
 
-    public Course(String course_code, String name, double target, double credit) {
-        this.course_code = course_code;
-        this.course_name = name;
-        this.target = target;
-        event_list = new ArrayList<>();
-        this.credit = credit;
-    }
+
 
     public double getCredit() {
         return credit;
+    }
+    @Exclude
+    public String getDocID() {
+        return docID;
+    }
+
+    public void setDocID(String docID) {
+        this.docID = docID;
     }
 
     public void setCredit(double credit) {

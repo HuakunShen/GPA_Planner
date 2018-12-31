@@ -24,8 +24,11 @@ import project.gpa_calculator.activities.event.EventActivity;
 import project.gpa_calculator.activities.semester.SemesterActivity;
 import project.gpa_calculator.activities.semester.SemesterActivityController;
 import project.gpa_calculator.activities.year.YearActivity;
+import project.gpa_calculator.activities.year.YearActivityController;
+import project.gpa_calculator.models.Course;
 import project.gpa_calculator.models.GPAListItem;
 import project.gpa_calculator.models.ListItem;
+import project.gpa_calculator.models.Semester;
 import project.gpa_calculator.models.Year;
 import project.gpa_calculator.models.YearListItem;
 
@@ -134,24 +137,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             if (context instanceof YearActivity) {
                 Intent intent = new Intent(context, SemesterActivity.class);
                 Year year = (Year) ((YearListItem) item).getObj();
-                intent.putExtra("year_docID", year.getDocID());
+//                intent.putExtra("year_docID", year.getDocID());
+                intent.putExtra("year_doc_path", ((YearActivityController) controller).getYearPath() + year.getDocID());
                 context.startActivity(intent);
             } else if (context instanceof SemesterActivity) {
                 Intent intent = new Intent(context, CourseActivity.class);
-                intent.putExtra("semester_name", item.getName());
+                Semester semester = (Semester) ((YearListItem) item).getObj();
+                intent.putExtra("semester_doc_path", ((SemesterActivityController) controller).getSemesterPath() + semester.getDocID());
 //                intent.putExtra("year_object", ((SemesterActivityController) controller).getCurrent_year());
                 context.startActivity(intent);
             } else if (context instanceof CourseActivity) {
                 Intent intent = new Intent(context, EventActivity.class);
-                intent.putExtra("year_object", ((CourseActivityController) controller).getCurrent_year());
-                intent.putExtra("semester_object", ((CourseActivityController) controller).getCurrent_semester());
-
-                // Here item.getName() returns the course code instead of name
-                intent.putExtra("course_code", item.getName());
+                Course course = (Course) ((YearListItem) item).getObj();
+                intent.putExtra("course_doc_path", ((CourseActivityController) controller).getCoursePath() + course.getDocID());
                 context.startActivity(intent);
             }
-
-
             Toast.makeText(context, item.getName(), Toast.LENGTH_LONG).show();
         }
     }

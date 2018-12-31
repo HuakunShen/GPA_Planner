@@ -16,7 +16,7 @@ public class SemesterActivity extends AppCompatActivity implements AddDialog.Yea
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_year);
+        setContentView(R.layout.activity_semester);
         setupController();
         controller.setupRecyclerView();
         setupToolBar();
@@ -25,7 +25,7 @@ public class SemesterActivity extends AppCompatActivity implements AddDialog.Yea
     }
 
     private void setupController() {
-        controller = new SemesterActivityController(this, getIntent().getStringExtra("year_docID"));
+        controller = new SemesterActivityController(this, getIntent().getStringExtra("year_doc_path"));
     }
 
     private void setupToolBar() {
@@ -34,7 +34,7 @@ public class SemesterActivity extends AppCompatActivity implements AddDialog.Yea
     }
 
     private void setupAddButton() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_year_Btn);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_semester_button);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -43,7 +43,7 @@ public class SemesterActivity extends AppCompatActivity implements AddDialog.Yea
 
             private void openDialog() {
                 AddDialog dialog = new AddDialog();
-                dialog.show(getSupportFragmentManager(), "Add Year Dialog");
+                dialog.show(getSupportFragmentManager(), "Add Semester Dialog");
             }
         });
     }

@@ -59,6 +59,10 @@ public class YearActivityController extends ActivityController {
         return adapter;
     }
 
+    public String getYearPath() {
+        return "/User/" + mAuth.getUid() + "/Years/";
+    }
+
     private void setupListItems() {
 
         for (Year year : this.year_list) {
@@ -104,11 +108,11 @@ public class YearActivityController extends ActivityController {
 
 
     boolean addYear(String year_name, String description) {
-        Year year = new Year(year_name);
+        final Year year = new Year(year_name);
         userRef.collection("Years").add(year).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-
+                year.setDocID(documentReference.getId());
             }
         });
         this.listItems.add(new YearListItem(year_name, description, "GPA", year));

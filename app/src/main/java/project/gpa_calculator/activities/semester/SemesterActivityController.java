@@ -28,7 +28,6 @@ import project.gpa_calculator.Util.ActivityController;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
 import project.gpa_calculator.models.ListItem;
 import project.gpa_calculator.models.Semester;
-import project.gpa_calculator.models.Year;
 import project.gpa_calculator.models.YearListItem;
 
 public class SemesterActivityController extends ActivityController {
@@ -40,7 +39,7 @@ public class SemesterActivityController extends ActivityController {
     private static final String SEMESTER_COLLECTION= "Semesters";
     private RecyclerView.Adapter adapter;
     private Context context;
-    private String year_docID;
+    private String year_path;
     private DocumentReference yearRef;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -52,13 +51,18 @@ public class SemesterActivityController extends ActivityController {
     private List<Semester> semester_list;
 
 
-    SemesterActivityController(Context context, String year_docID) {
+    SemesterActivityController(Context context, String year_path) {
         this.context = context;
         this.semester_list = new ArrayList<>();
-        this.year_docID = year_docID;
-        this.yearRef = db.collection("Users").document(mAuth.getUid()).collection("Years").document(year_docID);
+//        this.yearRef = db.collection("Users").document(mAuth.getUid()).collection("Years").document(year_docID);
+        this.year_path = year_path;
+        this.yearRef = db.document(year_path);
     }
 
+
+    public String getSemesterPath() {
+        return this.year_path + "/Semesters/";
+    }
 
     RecyclerView.Adapter getAdapter() {
         return adapter;
@@ -108,8 +112,15 @@ public class SemesterActivityController extends ActivityController {
 
 
     boolean addSemester(String semester_name, String description) {
-        Semester semester = new Semester(semester_name);
-        yearRef.collection(SEMESTER_COLLECTION).add(semester);
+        final Semester semester = new Semester(semester_name);
+        yearRef.collection(SEMESTER_COLLECTION)
+                .add(semester)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                semester.setDocID(documentReference.getId());
+            }
+        });
         this.listItems.add(new YearListItem(semester_name, description, "GPA", semester));
         return true;
     }
@@ -148,7 +159,7 @@ public class SemesterActivityController extends ActivityController {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d(TAG, "onFailure: " + e.getMessage());
-                        Toast.makeText(context, "Unable to load Data From Years", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Unable to load Data From Semester", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
@@ -20,6 +22,7 @@ public class YearActivity extends AppCompatActivity implements AddDialog.YearSem
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private YearActivityController controller;
+//    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
     @Override
@@ -32,34 +35,12 @@ public class YearActivity extends AppCompatActivity implements AddDialog.YearSem
         setupRecyclerView();
     }
 
-    private void setupRecyclerView() {
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        controller.setupListItems();
-
-        adapter = new RecyclerViewAdapter(this, controller.getListItems(), controller);
-        recyclerView.setAdapter(adapter);
-
-
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        controller.loadFromFile(MainActivity.userFile);
-    }
-
     private void setupController() {
         controller = new YearActivityController();
 //        controller.setupCurrentYear((User) getIntent().getSerializableExtra("user_object"));
         controller.setContext(this);
-        controller.loadFromFile(MainActivity.userFile);
+//        controller.loadFromFile(MainActivity.userFile);
+        controller.setupYearList();
     }
 
     private void setupToolBar() {
@@ -72,8 +53,6 @@ public class YearActivity extends AppCompatActivity implements AddDialog.YearSem
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG);
-//                        .setAction("Action", null).show();
                 openDialog();
             }
 
@@ -83,6 +62,33 @@ public class YearActivity extends AppCompatActivity implements AddDialog.YearSem
             }
         });
     }
+
+    private void setupRecyclerView() {
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        controller.setupListItems();
+
+        adapter = new RecyclerViewAdapter(this, controller.getListItems(), controller);
+        recyclerView.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
+
+
+//        recyclerView.setAdapter(adapter);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        controller.loadFromFile(MainActivity.userFile);
+    }
+
+
+
 
     @Override
     public void applyDialog(String name, String description) {

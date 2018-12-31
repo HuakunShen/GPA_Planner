@@ -25,7 +25,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
-import project.gpa_calculator.ModelsF.UserF;
+import project.gpa_calculator.modelsF.UserF;
 import project.gpa_calculator.R;
 import project.gpa_calculator.activities.main.MainActivity;
 import project.gpa_calculator.models.GPA_setting;
@@ -135,7 +135,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
         Log.d(TAG, "createUserDoc, uID = " + mAuth.getUid());
         db.document("Users/" + mAuth.getUid())
                 .set(new UserF(mAuth.getCurrentUser().getDisplayName(), mAuth.getUid()));
-        db.document("UserSetting/" + mAuth.getUid())
+        db.document("GPA Setting/" + mAuth.getUid())
                 .set(new GPA_setting());
     }
 
@@ -226,7 +226,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                                     if (document.exists()) {
                                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                     } else {
-                                        Log.d(TAG, "No such document");
+                                        Log.d(TAG, "No such document, and create the user document");
                                         createUserDoc();
                                     }
                                 } else {

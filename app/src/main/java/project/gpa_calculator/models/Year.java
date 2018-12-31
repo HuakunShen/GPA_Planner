@@ -1,5 +1,7 @@
 package project.gpa_calculator.models;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,12 +9,20 @@ import java.util.List;
 
 public class Year implements Serializable, Iterable<Semester> {
     private List<Semester> semester_list;
+    private String docID;
 
 
     private List<Course> year_course_list;
     private String year_name;
 
+    @Exclude
+    public String getDocID() {
+        return docID;
+    }
 
+    public void setDocID(String docID) {
+        this.docID = docID;
+    }
 
     public List<Course> getYear_course_list() {
         return year_course_list;
@@ -41,6 +51,9 @@ public class Year implements Serializable, Iterable<Semester> {
         this.semester_list = new ArrayList<>();
         this.year_course_list = new ArrayList<>();
         this.year_name = year_name;
+    }
+
+    public Year() {
     }
 
     public Semester getSemester(String semester_name) {

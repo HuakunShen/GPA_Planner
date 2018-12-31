@@ -22,8 +22,6 @@ import project.gpa_calculator.models.Year;
 
 public class EventActivity extends AppCompatActivity implements AddDialog.EventDialogListener {
     private EventActivityController controller;
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +34,7 @@ public class EventActivity extends AppCompatActivity implements AddDialog.EventD
     }
 
     private void setupController() {
-        controller = new EventActivityController(this, getIntent().getStringExtra("course_doc_ref"));
+        controller = new EventActivityController(this, getIntent().getStringExtra("course_doc_path"));
     }
 
 
@@ -63,7 +61,7 @@ public class EventActivity extends AppCompatActivity implements AddDialog.EventD
     @Override
     public void applyDialog(String name, double weight) {
         if (controller.addEvent(name, weight)) {
-            adapter.notifyItemInserted(controller.getListItems().size() - 1);
+            controller.getAdapter().notifyItemInserted(controller.getListItems().size() - 1);
         }
     }
 }

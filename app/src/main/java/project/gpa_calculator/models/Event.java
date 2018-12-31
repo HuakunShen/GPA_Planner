@@ -13,6 +13,8 @@ public class Event implements Serializable {
     private double event_score;
     private String docID;
 
+    public Event() {
+    }
 
     public Event(String event_name, double event_weight) {
         this.event_name = event_name;

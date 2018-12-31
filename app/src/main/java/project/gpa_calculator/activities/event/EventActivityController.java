@@ -131,7 +131,7 @@ public class EventActivityController extends ActivityController {
 
     void setupRecyclerViewContent() {
         courseRef.collection(EVENT_COLLECTION)
-                .orderBy("semester_name")
+                .orderBy("event_name")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

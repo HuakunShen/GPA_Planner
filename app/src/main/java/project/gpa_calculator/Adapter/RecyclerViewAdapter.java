@@ -89,12 +89,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public void deleteItem(int position) {
-        ListItem mRecentlyDeletedItem = this.list_items.get(position);
-        int mRecentlyDeletedItemPosition = position;
         this.list_items.remove(position);
         controller.deleteItem(position);
         notifyItemRemoved(position);
-//        showUndoSnackbar();
     }
 
 

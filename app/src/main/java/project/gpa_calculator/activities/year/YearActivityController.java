@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -86,10 +87,26 @@ public class YearActivityController extends ActivityController {
     }
 
     @Override
-    public void deleteItem(int position) {
-//        user.getYear_list().remove(position);
-//        user.removeFromYearList(position);
-//        saveToFile(MainActivity.userFile);
+    public void deleteItem(final int position) {
+        db.collection("Users").document(mAuth.getUid())
+                .collection("Years").document(year_list.get(position).getDocID())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        Toast.makeText(context, year_list.get(position).getYear_name() + " Deleted", Toast.LENGTH_SHORT).show();
+                        year_list.remove(position);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                        Toast.makeText(context, "Failed To Delete", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
     }
 
 
@@ -111,6 +128,7 @@ public class YearActivityController extends ActivityController {
 
     void setupRecyclerViewContent() {
         db.collection("Users").document(mAuth.getUid()).collection("Years")
+                .orderBy("year_name")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -118,7 +136,9 @@ public class YearActivityController extends ActivityController {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                year_list.add(document.toObject(Year.class));
+                                Year year = document.toObject(Year.class);
+                                year.setDocID(document.getId());
+                                year_list.add(year);
                             }
                             setupListItems();
                             adapter = new RecyclerViewAdapter(context, listItems, getInstance());

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -22,13 +21,18 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
+import project.gpa_calculator.ModelsF.UserF;
 import project.gpa_calculator.R;
 import project.gpa_calculator.activities.main.MainActivity;
 
 public class login_activity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
     private static final String TAG = "login_activity";
@@ -106,8 +110,8 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "createUserWithEmail:success");
                                 Toast.makeText(login_activity.this, "Account Created", Toast.LENGTH_SHORT).show();
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                updateUI(user);
+
+                                createUserObj();
                                 emailSignIn();
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -118,11 +122,21 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                             }
 
                         }
+
+
                     });
         }
 
 
     }
+
+
+    private void createUserObj() {
+        Log.d(TAG, "createUserObj, uID = " + mAuth.getUid());
+        db.document("Users/" + mAuth.getUid())
+                .set(new UserF(mAuth.getCurrentUser().getDisplayName(), mAuth.getUid()));
+    }
+
 
     private void emailSignIn() {
         String email = email_ET.getText().toString();
@@ -147,7 +161,6 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                                         Toast.LENGTH_SHORT).show();
                                 updateUI(null);
                             }
-
                         }
                     });
         }
@@ -190,9 +203,8 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
                             Toast.makeText(login_activity.this, "Successfully Login", Toast.LENGTH_SHORT).show();
+                            googleUserExists();
                             startActivity(new Intent(login_activity.this, MainActivity.class));
                             finish();
                         } else {
@@ -201,6 +213,25 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                             updateUI(null);
 
                         }
+                    }
+
+                    private void googleUserExists() {
+                        db.document("Users/" + mAuth.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                                    } else {
+                                        Log.d(TAG, "No such document");
+                                        createUserObj();
+                                    }
+                                } else {
+                                    Log.d(TAG, "get failed with ", task.getException());
+                                }
+                            }
+                        });
                     }
                 });
 

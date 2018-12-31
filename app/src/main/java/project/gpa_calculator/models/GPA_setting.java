@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class GPA_setting implements Iterable<GPA>, Serializable {
-    ArrayList<GPA> GPAs = new ArrayList<>();
+    private ArrayList<GPA> GPAs = new ArrayList<>();
 
     @Override
     public Iterator<GPA> iterator() {
@@ -29,6 +29,7 @@ public class GPA_setting implements Iterable<GPA>, Serializable {
         };
 
     }
+
 
     /**
      * basic setting that match University of Toronto GPA

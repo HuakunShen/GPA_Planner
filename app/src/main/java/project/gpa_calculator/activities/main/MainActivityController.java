@@ -71,9 +71,9 @@ public class MainActivityController {
         this.user.addYear(year2018ForTesting);
 
 
-        String uId = mUser.getUid();
-        DocumentReference docRef = db.document("Users/" + uId);
-        docRef.set(user);
+//        String uId = mUser.getUid();
+//        DocumentReference docRef = db.document("Users/" + uId);
+//        docRef.set(user);
     }
 
 

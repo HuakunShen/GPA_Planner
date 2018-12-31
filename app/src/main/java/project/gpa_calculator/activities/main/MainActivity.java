@@ -19,6 +19,8 @@ import android.widget.Button;
 //import com.google.firebase.auth.FirebaseAuth;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -39,12 +41,11 @@ import project.gpa_calculator.models.Year;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
-//    private FirebaseAuth mAuth;
     private Button local_user_button;
-//    private Button to_semester_button;
     private MainActivityController controller;
     public static final String userFile = "userFile";
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
 
 
@@ -64,7 +65,6 @@ public class MainActivity extends AppCompatActivity
 
         controller.initializeUserForTesting();
         controller.saveToFile(userFile);
-//        controller.setupUserForTesting();
     }
 
     private void setupFirebase() {
@@ -148,9 +148,7 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        switch (id) {
+        switch (item.getItemId()) {
             case R.id.action_settings:
                 Intent intent = new Intent(getApplication(), GPA_setter_Activity.class);
                 startActivity(intent);
@@ -160,15 +158,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(this, login_activity.class));
                 finish();
                 return true;
-
         }
-
-//        if (id == R.id.action_settings) {
-//            Intent intent = new Intent(getApplication(), GPA_setter_Activity.class);
-//            startActivity(intent);
-//            return true;
-//        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -196,9 +186,4 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
-
-
-
 }

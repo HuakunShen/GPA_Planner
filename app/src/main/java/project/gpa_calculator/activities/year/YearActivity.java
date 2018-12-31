@@ -47,7 +47,6 @@ public class YearActivity extends AppCompatActivity implements AddDialog.YearSem
         setupRecyclerView();
         setupToolBar();
         setupAddButton();
-//        controller.setupYearList();
         setupRecyclerViewContent();
     }
 
@@ -90,10 +89,7 @@ public class YearActivity extends AppCompatActivity implements AddDialog.YearSem
 
     private void setupController() {
         controller = new YearActivityController();
-//        controller.setupCurrentYear((User) getIntent().getSerializableExtra("user_object"));
         controller.setContext(this);
-//        controller.loadFromFile(MainActivity.userFile);
-//        controller.setupYearList();
 
     }
 
@@ -122,19 +118,11 @@ public class YearActivity extends AppCompatActivity implements AddDialog.YearSem
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
-//        adapter.notifyDataSetChanged();
-
-
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        controller.loadFromFile(MainActivity.userFile);
     }
 
 

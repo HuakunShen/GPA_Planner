@@ -11,12 +11,23 @@ public class Event implements Serializable {
     private String event_name;
     private double event_weight;
     private double event_score;
+    private String docID;
+
 
     public Event(String event_name, double event_weight) {
         this.event_name = event_name;
         this.event_weight = event_weight;
         this.event_score = 0d;
         this.isDone = false;
+    }
+
+
+    public String getDocID() {
+        return docID;
+    }
+
+    public void setDocID(String docID) {
+        this.docID = docID;
     }
 
     public boolean isDone() {

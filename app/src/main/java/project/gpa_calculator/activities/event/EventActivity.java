@@ -16,6 +16,7 @@ import project.gpa_calculator.Util.AddDialog;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
 import project.gpa_calculator.activities.course.CourseActivityController;
 import project.gpa_calculator.activities.main.MainActivity;
+import project.gpa_calculator.activities.semester.SemesterActivityController;
 import project.gpa_calculator.models.Semester;
 import project.gpa_calculator.models.Year;
 
@@ -27,37 +28,17 @@ public class EventActivity extends AppCompatActivity implements AddDialog.EventD
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
-        setupToolBar();
         setupController();
+        controller.setupRecyclerView();
+        setupToolBar();
         setupAddButton();
-        setupRecyclerView();
+        controller.setupRecyclerViewContent();
     }
 
     private void setupController() {
-        controller = new EventActivityController(this);
-//        controller.setContext(this);
-        controller.loadFromFile(MainActivity.userFile);
-        getIntent().getSerializableExtra("year_object");
-        getIntent().getSerializableExtra("semester_object");
-
-        controller.setupCurrentCourse((Year) getIntent().getSerializableExtra("year_object"),
-                (Semester) getIntent().getSerializableExtra("semester_object"),
-                getIntent().getStringExtra("course_code"));
+        controller = new EventActivityController(this, getIntent().getStringExtra("course_doc_ref"));
     }
 
-    private void setupRecyclerView() {
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        controller.setupListItems();
-
-        adapter = new RecyclerViewAdapter(this, controller.getListItems(), controller);
-        recyclerView.setAdapter(adapter);
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-    }
 
     private void setupToolBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -69,8 +50,6 @@ public class EventActivity extends AppCompatActivity implements AddDialog.EventD
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
                 openDialog();
             }
 

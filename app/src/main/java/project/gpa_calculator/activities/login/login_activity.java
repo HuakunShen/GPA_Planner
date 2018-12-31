@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -107,6 +108,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                                 Toast.makeText(login_activity.this, "Account Created", Toast.LENGTH_SHORT).show();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
+                                emailSignIn();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -118,6 +120,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                         }
                     });
         }
+
 
     }
 
@@ -145,10 +148,10 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                                 updateUI(null);
                             }
 
-                            // ...
                         }
                     });
         }
+
     }
 
     private void googleSignIn() {
@@ -179,10 +182,6 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
-        // [START_EXCLUDE silent]
-//        showProgressDialog();
-        // [END_EXCLUDE]
-
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -204,6 +203,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                         }
                     }
                 });
+
     }
 
 

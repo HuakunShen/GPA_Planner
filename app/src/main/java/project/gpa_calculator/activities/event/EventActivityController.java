@@ -48,7 +48,7 @@ public class EventActivityController extends ActivityController {
         this.listItems = new ArrayList<>();
         for (Event event : this.current_course) {
             ListItem item = new YearListItem(event.getEvent_name(), "Score: " +
-                    event.getEvent_score(), "Weight: " + event.getEvent_weight());
+                    event.getEvent_score(), "Weight: " + event.getEvent_weight(), null);
             listItems.add(item);
         }
     }
@@ -63,7 +63,7 @@ public class EventActivityController extends ActivityController {
         Event event = new Event(name, weight);
         boolean result = this.current_course.addEvent(event);
         if (result) {
-            this.listItems.add(new YearListItem(name, "Weight: " + weight + "%", "Score: " + event.getEvent_score()));
+            this.listItems.add(new YearListItem(name, "Weight: " + weight + "%", "Score: " + event.getEvent_score(), null));
             saveToFile(MainActivity.userFile);
         }
         return result;

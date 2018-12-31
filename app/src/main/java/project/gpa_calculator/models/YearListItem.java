@@ -1,17 +1,27 @@
 package project.gpa_calculator.models;
 
-public class YearListItem extends ListItem{
+public class YearListItem extends ListItem {
     private String name;
     private String description;
+    private Object obj;
 
 
     private String gpa;
 
 
-    public YearListItem(String name, String description, String gpa) {
+    public YearListItem(String name, String description, String gpa, Object obj) {
         this.name = name;
         this.description = description;
         this.gpa = gpa;
+        this.obj = obj;
+    }
+
+    public Object getObj() {
+        return obj;
+    }
+
+    public void setObj(Object obj) {
+        this.obj = obj;
     }
 
     public String getGpa() {

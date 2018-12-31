@@ -9,6 +9,8 @@ import java.util.zip.CheckedOutputStream;
 public class Semester implements Serializable, Iterable<Course> {
     private List<Course> course_list;
     private String semester_name;
+    private String docID;
+
 
     public Semester(String semester_name) {
         this.semester_name = semester_name;
@@ -18,6 +20,17 @@ public class Semester implements Serializable, Iterable<Course> {
     public Semester(List<Course> course_list, String semester_name) {
         this.course_list = course_list;
         this.semester_name = semester_name;
+    }
+
+    public Semester() {
+    }
+
+    public String getDocID() {
+        return docID;
+    }
+
+    public void setDocID(String docID) {
+        this.docID = docID;
     }
 
     public String getSemester_name() {

@@ -14,33 +14,21 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.ActivityController;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
-import project.gpa_calculator.activities.main.MainActivity;
 import project.gpa_calculator.models.ListItem;
-import project.gpa_calculator.models.Semester;
-import project.gpa_calculator.models.User;
 import project.gpa_calculator.models.Year;
 import project.gpa_calculator.models.YearListItem;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class YearActivityController extends ActivityController {
     private List<ListItem> listItems = new ArrayList<>();
@@ -74,7 +62,7 @@ public class YearActivityController extends ActivityController {
     private void setupListItems() {
 
         for (Year year : this.year_list) {
-            ListItem item = new YearListItem(year.getYear_name(), "Description", "GPA: ");
+            ListItem item = new YearListItem(year.getYear_name(), "Description", "GPA: ", year);
             this.listItems.add(item);
         }
     }
@@ -117,8 +105,13 @@ public class YearActivityController extends ActivityController {
 
     boolean addYear(String year_name, String description) {
         Year year = new Year(year_name);
-        userRef.collection("Years").add(year);
-        this.listItems.add(new YearListItem(year_name, description, "GPA"));
+        userRef.collection("Years").add(year).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+
+            }
+        });
+        this.listItems.add(new YearListItem(year_name, description, "GPA", year));
         return true;
     }
 

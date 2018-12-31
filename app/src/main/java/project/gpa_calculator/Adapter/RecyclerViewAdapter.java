@@ -26,6 +26,8 @@ import project.gpa_calculator.activities.semester.SemesterActivityController;
 import project.gpa_calculator.activities.year.YearActivity;
 import project.gpa_calculator.models.GPAListItem;
 import project.gpa_calculator.models.ListItem;
+import project.gpa_calculator.models.Year;
+import project.gpa_calculator.models.YearListItem;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private Context context;
@@ -45,14 +47,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        if(controller instanceof GPA_setter_Controller){
-             view = LayoutInflater.from(parent.getContext())
+        if (controller instanceof GPA_setter_Controller) {
+            view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.gpa_row, parent, false);
-             return new GPAViewHolder(view);
-        }else{
-             view = LayoutInflater.from(parent.getContext())
+            return new GPAViewHolder(view);
+        } else {
+            view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.list_row, parent, false);
-             return new YearViewHolder(view);
+            return new YearViewHolder(view);
         }
 
 
@@ -60,22 +62,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     /**
      * connect item to view
+     *
      * @param viewHolder
      * @param position
      */
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder viewHolder, int position) {
         ListItem item = list_items.get(position);
-        if(controller instanceof GPA_setter_Controller){
-            GPAListItem cur_item = (GPAListItem)item;
+        if (controller instanceof GPA_setter_Controller) {
+            GPAListItem cur_item = (GPAListItem) item;
             GPAViewHolder cur_view = (GPAViewHolder) viewHolder;
             cur_view.low.setHint(Integer.toString(cur_item.getLow()));
             cur_view.high.setHint(Integer.toString(cur_item.getHigh()));
             cur_view.gpa_point.setHint(Double.toString(cur_item.getGPA()));
             cur_view.gpa_grade.setHint(cur_item.getGPA_mark());
-        }
-        else {
-            YearViewHolder cur_view = (YearViewHolder)viewHolder;
+        } else {
+            YearViewHolder cur_view = (YearViewHolder) viewHolder;
             cur_view.name.setText(item.getName());
             cur_view.description.setText(item.getDescription());
             cur_view.gpa.setText(item.getGpa());
@@ -98,11 +100,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public Context getContext() {
         return context;
     }
-    public abstract class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+    public abstract class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ViewHolder(@NonNull View itemView) {
             super(itemView);
         }
     }
+
     public class YearViewHolder extends ViewHolder implements View.OnClickListener {
         private TextView name;
         private TextView description;
@@ -119,6 +123,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         /**
          * click to go to next page
+         *
          * @param v
          */
         @Override
@@ -128,12 +133,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             ListItem item = list_items.get(position);
             if (context instanceof YearActivity) {
                 Intent intent = new Intent(context, SemesterActivity.class);
-                intent.putExtra("year_name", item.getName());
+                Year year = (Year) ((YearListItem) item).getObj();
+                intent.putExtra("year_docID", year.getDocID());
                 context.startActivity(intent);
             } else if (context instanceof SemesterActivity) {
                 Intent intent = new Intent(context, CourseActivity.class);
                 intent.putExtra("semester_name", item.getName());
-                intent.putExtra("year_object", ((SemesterActivityController) controller).getCurrent_year());
+//                intent.putExtra("year_object", ((SemesterActivityController) controller).getCurrent_year());
                 context.startActivity(intent);
             } else if (context instanceof CourseActivity) {
                 Intent intent = new Intent(context, EventActivity.class);
@@ -151,7 +157,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public class GPAViewHolder extends ViewHolder implements View.OnClickListener {
-        private TextView low,high,gpa_grade,gpa_point;
+        private TextView low, high, gpa_grade, gpa_point;
 
         private GPAViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -166,6 +172,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             high.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
 
         }
+
         @Override
         public void onClick(View v) {
 
@@ -180,7 +187,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         public String getGpa_grade() {
-            return gpa_grade.getText().toString().equals("") ? gpa_grade.getHint().toString():gpa_grade.getText().toString();
+            return gpa_grade.getText().toString().equals("") ? gpa_grade.getHint().toString() : gpa_grade.getText().toString();
         }
 
         public Double getGpa_point() {

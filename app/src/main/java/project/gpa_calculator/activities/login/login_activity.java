@@ -134,7 +134,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
     private void createUserDoc() {
         Log.d(TAG, "createUserDoc, uID = " + mAuth.getUid());
         db.document("Users/" + mAuth.getUid())
-                .set(new UserF(mAuth.getCurrentUser().getDisplayName(), mAuth.getUid()));
+                .set(new UserF(mAuth.getCurrentUser().getDisplayName(), mAuth.getUid(), mAuth.getCurrentUser().getEmail()));
         db.document("GPA Setting/" + mAuth.getUid())
                 .set(new GPA_setting());
     }

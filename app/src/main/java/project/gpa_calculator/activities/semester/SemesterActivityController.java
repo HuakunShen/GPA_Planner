@@ -1,113 +1,155 @@
 package project.gpa_calculator.activities.semester;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import project.gpa_calculator.Adapter.RecyclerViewAdapter;
+import project.gpa_calculator.R;
 import project.gpa_calculator.Util.ActivityController;
-import project.gpa_calculator.activities.main.MainActivity;
-import project.gpa_calculator.models.Course;
+import project.gpa_calculator.Util.SwipeToDeleteCallback;
 import project.gpa_calculator.models.ListItem;
 import project.gpa_calculator.models.Semester;
-import project.gpa_calculator.models.User;
 import project.gpa_calculator.models.Year;
 import project.gpa_calculator.models.YearListItem;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class SemesterActivityController extends ActivityController {
 
-    private List<ListItem> listItems;
+    private List<ListItem> listItems = new ArrayList<>();
 
-    private User user;
-
-
-    private Year current_year;
-
+    private static final String TAG = "SemesterActivityControl";
+    private RecyclerView recyclerView;
+    private static final String SEMESTER_COLLECTION= "Semesters";
+    private RecyclerView.Adapter adapter;
     private Context context;
+    private String year_docID;
+    private DocumentReference yearRef;
 
-    private String year_name;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    SemesterActivityController() {
-    }
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-    public void setContext(Context context) {
+    private DocumentReference userRef = db.collection("Users").document(mAuth.getUid());
+
+    private List<Semester> semester_list;
+
+
+    SemesterActivityController(Context context, String year_docID) {
         this.context = context;
+        this.semester_list = new ArrayList<>();
+        this.year_docID = year_docID;
+        this.yearRef = db.collection("Users").document(mAuth.getUid()).collection("Years").document(year_docID);
     }
+
+
+    RecyclerView.Adapter getAdapter() {
+        return adapter;
+    }
+
+    private void setupListItems() {
+
+        for (Semester semester : this.semester_list) {
+            ListItem item = new YearListItem(semester.getSemester_name(), "Description", "GPA: ", semester);
+            this.listItems.add(item);
+        }
+    }
+
+    void setupRecyclerView() {
+        recyclerView = ((Activity) context).findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+    }
+
+    @Override
+    public void deleteItem(final int position) {
+        yearRef.collection(SEMESTER_COLLECTION).document(semester_list.get(position).getDocID())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        Toast.makeText(context, semester_list.get(position).getSemester_name() + " Deleted", Toast.LENGTH_SHORT).show();
+                        semester_list.remove(position);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                        Toast.makeText(context, "Failed To Delete", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+
 
     public List<ListItem> getListItems() {
         return listItems;
     }
 
-    public void setupListItems() {
-        listItems = new ArrayList<>();
-        for (Semester semester : current_year) {
-            ListItem item = new YearListItem(semester.getSemester_name(), "Description", "GPA: ");
-            listItems.add(item);
-        }
+
+    boolean addSemester(String semester_name, String description) {
+        Semester semester = new Semester(semester_name);
+        yearRef.collection(SEMESTER_COLLECTION).add(semester);
+        this.listItems.add(new YearListItem(semester_name, description, "GPA", semester));
+        return true;
     }
 
-    public Year getCurrent_year() {
-        return current_year;
+    SemesterActivityController getInstance() {
+        return this;
     }
 
+    void setupRecyclerViewContent() {
+        yearRef.collection(SEMESTER_COLLECTION)
+                .orderBy("semester_name")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                Semester semester = document.toObject(Semester.class);
+                                semester.setDocID(document.getId());
+                                semester_list.add(semester);
+                            }
+                            setupListItems();
+                            adapter = new RecyclerViewAdapter(context, listItems, getInstance());
+                            recyclerView.setAdapter(adapter);
+                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
+                            itemTouchHelper.attachToRecyclerView(recyclerView);
 
-    public void setupCurrentYear(String year_name) {
-        this.current_year = user.getYear(year_name);
-//        this.year_name = year_name;
+//                            adapter = new RecyclerViewAdapter(context, listItems, );
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "onFailure: " + e.getMessage());
+                        Toast.makeText(context, "Unable to load Data From Years", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
-
-
-    public boolean addSemester(String name, String description) {
-        Semester semester = new Semester(name);
-//        Course course = new Course(course_name);
-        boolean result = current_year.addSemester(semester);
-        if (result) {
-            this.listItems.add(new YearListItem(name, description, "GPA"));
-            saveToFile(MainActivity.userFile);
-        }
-        return result;
-    }
-
-    public void deleteItem(int position) {
-        current_year.removeFromSemesterList(position);
-        saveToFile(MainActivity.userFile);
-    }
-
-    public void loadFromFile(String fileName) {
-        try {
-            InputStream inputStream = this.context.openFileInput(fileName);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                this.user = (User) input.readObject();
-//                user = (User) input.readObject();
-                inputStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e("login activity", "File contained unexpected data type: " + e.toString());
-        }
-    }
-
-    public void saveToFile(String fileName) {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    context.openFileOutput(fileName, MODE_PRIVATE));
-            outputStream.writeObject(this.user);
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-    }
-
 }

@@ -58,7 +58,7 @@ public class CourseActivityController extends ActivityController {
     public void setupListItems() {
         listItems = new ArrayList<>();
         for (Course course : this.current_semester) {
-            ListItem item = new YearListItem(course.getCourse_code(), course.getCourse_name(), "Target: " + course.getTarget());
+            ListItem item = new YearListItem(course.getCourse_code(), course.getCourse_name(), "Target: " + course.getTarget(), null);
             listItems.add(item);
         }
     }
@@ -77,7 +77,7 @@ public class CourseActivityController extends ActivityController {
         Course course = new Course(course_code, course_name, target, credit_weight);
         boolean result = current_semester.addCourse(course);
         if (result) {
-            this.listItems.add(new YearListItem(course_code, course_name, "Target: " + target));
+            this.listItems.add(new YearListItem(course_code, course_name, "Target: " + target, null));
             saveToFile(MainActivity.userFile);
         }
         return result;

@@ -7,13 +7,24 @@ public class UserF {
     private String uID;
     private String student_number;
     private String school;
+    private String email;
+
 
     public UserF() {
     }
 
-    public UserF(String username, String uID) {
+    public UserF(String username, String uID, String email) {
         this.username = username;
         this.uID = uID;
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Exclude

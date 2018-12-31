@@ -10,12 +10,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import project.gpa_calculator.R;
@@ -25,9 +28,9 @@ import project.gpa_calculator.activities.year.YearActivity;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
-    private Button local_user_button;
+    private Button details_btn;
     private MainActivityController controller;
-    private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     public static final String userFile = "userFile";
 
@@ -40,16 +43,10 @@ public class MainActivity extends AppCompatActivity
         setupController();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setupFirebase();
         setupFAB();
         setupNavigation(toolbar);
         setupButton();
     }
-
-    private void setupFirebase() {
-        mAuth = FirebaseAuth.getInstance();
-    }
-
 
 
     private void setupController() {
@@ -65,6 +62,12 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        FirebaseUser user = mAuth.getCurrentUser();
+        View headerView = navigationView.getHeaderView(0);
+        TextView username_tv = headerView.findViewById(R.id.username);
+        TextView email_tv = headerView.findViewById(R.id.email_tv);
+        username_tv.setText(user.getDisplayName());
+        email_tv.setText(user.getEmail());
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -80,8 +83,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setupButton() {
-        local_user_button = findViewById(R.id.local_user_B);
-        local_user_button.setOnClickListener(this);
+        details_btn = findViewById(R.id.details_Btn);
+        details_btn.setOnClickListener(this);
     }
 
 
@@ -94,7 +97,7 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
-            case R.id.local_user_B:
+            case R.id.details_Btn:
                 intent = new Intent(getApplication(), YearActivity.class);
                 startActivity(intent);
                 break;

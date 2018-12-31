@@ -21,7 +21,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -29,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import project.gpa_calculator.ModelsF.UserF;
 import project.gpa_calculator.R;
 import project.gpa_calculator.activities.main.MainActivity;
+import project.gpa_calculator.models.GPA_setting;
 
 public class login_activity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
@@ -111,7 +111,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                                 Log.d(TAG, "createUserWithEmail:success");
                                 Toast.makeText(login_activity.this, "Account Created", Toast.LENGTH_SHORT).show();
 
-                                createUserObj();
+                                createUserDoc();
                                 emailSignIn();
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -131,10 +131,12 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    private void createUserObj() {
-        Log.d(TAG, "createUserObj, uID = " + mAuth.getUid());
+    private void createUserDoc() {
+        Log.d(TAG, "createUserDoc, uID = " + mAuth.getUid());
         db.document("Users/" + mAuth.getUid())
                 .set(new UserF(mAuth.getCurrentUser().getDisplayName(), mAuth.getUid()));
+        db.document("UserSetting/" + mAuth.getUid())
+                .set(new GPA_setting());
     }
 
 
@@ -204,7 +206,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             Toast.makeText(login_activity.this, "Successfully Login", Toast.LENGTH_SHORT).show();
-                            googleUserExists();
+                            createDocIfNotExists();
                             startActivity(new Intent(login_activity.this, MainActivity.class));
                             finish();
                         } else {
@@ -215,7 +217,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                         }
                     }
 
-                    private void googleUserExists() {
+                    private void createDocIfNotExists() {
                         db.document("Users/" + mAuth.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -225,7 +227,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                                     } else {
                                         Log.d(TAG, "No such document");
-                                        createUserObj();
+                                        createUserDoc();
                                     }
                                 } else {
                                     Log.d(TAG, "get failed with ", task.getException());

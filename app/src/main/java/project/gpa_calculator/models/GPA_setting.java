@@ -5,7 +5,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class GPA_setting implements Iterable<GPA>, Serializable {
+
     private ArrayList<GPA> GPAs = new ArrayList<>();
+
+    public ArrayList<GPA> getGPAs() {
+        return GPAs;
+    }
 
     @Override
     public Iterator<GPA> iterator() {

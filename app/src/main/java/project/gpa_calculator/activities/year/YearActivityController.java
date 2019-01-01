@@ -60,7 +60,7 @@ public class YearActivityController extends ActivityController {
     }
 
     public String getYearPath() {
-        return "/User/" + mAuth.getUid() + "/Years/";
+        return "/Users/" + mAuth.getUid() + "/Years/";
     }
 
     private void setupListItems() {

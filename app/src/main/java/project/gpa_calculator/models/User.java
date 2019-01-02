@@ -19,7 +19,7 @@ public class User implements Serializable {
         this.nickname = nickname.equals("") ? username : nickname;
         this.password = password;
         year_list = new ArrayList<>();
-        gpa_setting = new GPA_setting();
+        gpa_setting = GPA_setting.getInstance();
     }
 
     public Year getYear(String year_name) {
@@ -56,8 +56,8 @@ public class User implements Serializable {
         return true;
     }
 
-    public void addGPA(int low, int high,double gpa,String mark){
-        GPA new_gpa = new GPA(high,low,gpa,mark);
+    public void addGPA(int low, int high, double gpa, String mark) {
+        GPA new_gpa = new GPA(high, low, gpa, mark);
         gpa_setting.add(new_gpa);
     }
 
@@ -106,7 +106,7 @@ public class User implements Serializable {
         return gpa_setting;
     }
 
-    public void removeFromGPA(int pos){
+    public void removeFromGPA(int pos) {
         gpa_setting.remove(pos);
     }
 

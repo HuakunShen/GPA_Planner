@@ -122,6 +122,7 @@ public class SemesterActivityController extends ActivityController {
             }
         });
         this.listItems.add(new YearListItem(semester_name, description, "GPA", semester));
+        this.semester_list.add(semester);
         return true;
     }
 

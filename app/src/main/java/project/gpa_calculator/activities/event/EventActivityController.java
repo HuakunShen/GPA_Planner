@@ -37,7 +37,7 @@ public class EventActivityController extends ActivityController {
     private List<ListItem> listItems = new ArrayList<>();
     private static final String TAG = "EventActivityController";
     private RecyclerView recyclerView;
-    private static final String EVENT_COLLECTION= "Events";
+    private static final String EVENT_COLLECTION = "Events";
     private RecyclerView.Adapter adapter;
     private Context context;
     private String course_path;
@@ -70,7 +70,7 @@ public class EventActivityController extends ActivityController {
 
     void setupListItems() {
 
-        for (Event event: this.event_list) {
+        for (Event event : this.event_list) {
             ListItem item = new YearListItem(event.getEvent_name(), "Weight: " + event.getEvent_weight(), "GPA: ", event);
             this.listItems.add(item);
         }
@@ -122,6 +122,7 @@ public class EventActivityController extends ActivityController {
                     }
                 });
         this.listItems.add(new YearListItem(event_name, "Weight: " + weight, "GPA", event));
+        this.event_list.add(event);
         return true;
     }
 

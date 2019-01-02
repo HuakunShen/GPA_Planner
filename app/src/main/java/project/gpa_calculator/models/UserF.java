@@ -1,4 +1,4 @@
-package project.gpa_calculator.modelsF;
+package project.gpa_calculator.models;
 
 import com.google.firebase.database.Exclude;
 

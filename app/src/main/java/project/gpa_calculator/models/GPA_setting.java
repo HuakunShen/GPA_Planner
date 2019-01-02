@@ -6,11 +6,10 @@ import java.util.Iterator;
 
 public class GPA_setting implements Iterable<GPA>, Serializable {
 
+    private static GPA_setting instance;
+
     private ArrayList<GPA> GPAs = new ArrayList<>();
 
-    public ArrayList<GPA> getGPAs() {
-        return GPAs;
-    }
 
     @Override
     public Iterator<GPA> iterator() {
@@ -36,10 +35,11 @@ public class GPA_setting implements Iterable<GPA>, Serializable {
     }
 
 
+
     /**
      * basic setting that match University of Toronto GPA
      */
-    public GPA_setting(){
+    private GPA_setting(){
         GPAs.add(new GPA(100,90,4.0,"A+"));
         GPAs.add(new GPA(89,85,4.0,"A"));
         GPAs.add(new GPA(84,80,3.7,"A-"));
@@ -54,6 +54,21 @@ public class GPA_setting implements Iterable<GPA>, Serializable {
         GPAs.add(new GPA(52,50,0.7,"D-"));
         GPAs.add(new GPA(49,0,0.0,"F"));
 
+    }
+
+    public static GPA_setting getInstance() {
+        if(instance == null){
+            instance = new GPA_setting();
+        }
+        return instance;
+    }
+
+    public ArrayList<GPA> getGPAs() {
+        return GPAs;
+    }
+
+    public void setGPAs(ArrayList<GPA> GPAs) {
+        this.GPAs = GPAs;
     }
 
     public void add(GPA new_gpa){

@@ -25,7 +25,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
-import project.gpa_calculator.modelsF.UserF;
+import project.gpa_calculator.models.UserF;
 import project.gpa_calculator.R;
 import project.gpa_calculator.activities.main.MainActivity;
 import project.gpa_calculator.models.GPA_setting;
@@ -136,7 +136,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
         db.document("Users/" + mAuth.getUid())
                 .set(new UserF(mAuth.getCurrentUser().getDisplayName(), mAuth.getUid(), mAuth.getCurrentUser().getEmail()));
         db.document("GPA Setting/" + mAuth.getUid())
-                .set(new GPA_setting());
+                .set(GPA_setting.getInstance());
     }
 
 

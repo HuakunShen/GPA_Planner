@@ -122,6 +122,7 @@ public class CourseActivityController extends ActivityController {
                     }
                 });
         this.listItems.add(new YearListItem(course_code, course_name, "Target: " + target, course));
+        this.course_list.add(course);
         return true;
     }
 

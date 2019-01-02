@@ -14,13 +14,18 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.annotations.Nullable;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
@@ -44,14 +49,38 @@ public class YearActivityController extends ActivityController {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-    DocumentReference userRef = db.collection("Users").document(mAuth.getUid());
+    private DocumentReference userRef = db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()));
 
     private List<Year> year_list;
 
 
-    YearActivityController(Context context) {
+    YearActivityController(final Context context) {
         this.context = context;
         this.year_list = new ArrayList<>();
+        db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()))
+                .collection("Years")
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot querySnapshot,
+                                        @Nullable FirebaseFirestoreException e) {
+                        if (e != null) {
+                            Log.w(TAG, "Listen error", e);
+                            return;
+                        }
+
+                        for (DocumentChange change : querySnapshot.getDocumentChanges()) {
+                            if (change.getType() == DocumentChange.Type.ADDED) {
+                                Log.d(TAG, "New Year:" + change.getDocument().getData());
+                            }
+
+                            String source = querySnapshot.getMetadata().isFromCache() ?
+                                    "local cache" : "server";
+                            Log.d(TAG, "Data fetched from " + source);
+                            Toast.makeText(context, "Data fetched from " + source, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
     }
 
 
@@ -64,7 +93,6 @@ public class YearActivityController extends ActivityController {
     }
 
     private void setupListItems() {
-
         for (Year year : this.year_list) {
             ListItem item = new YearListItem(year.getYear_name(), "Description", "GPA: ", year);
             this.listItems.add(item);
@@ -80,7 +108,7 @@ public class YearActivityController extends ActivityController {
 
     @Override
     public void deleteItem(final int position) {
-        db.collection("Users").document(mAuth.getUid())
+        db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()))
                 .collection("Years").document(year_list.get(position).getDocID())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -116,6 +144,7 @@ public class YearActivityController extends ActivityController {
             }
         });
         this.listItems.add(new YearListItem(year_name, description, "GPA", year));
+        this.year_list.add(year);
         return true;
     }
 
@@ -124,14 +153,14 @@ public class YearActivityController extends ActivityController {
     }
 
     void setupRecyclerViewContent() {
-        db.collection("Users").document(mAuth.getUid()).collection("Years")
+        db.collection("Users").document(Objects.requireNonNull(mAuth.getUid())).collection("Years")
                 .orderBy("year_name")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 Year year = document.toObject(Year.class);
                                 year.setDocID(document.getId());

@@ -7,7 +7,10 @@ public class GPA implements Serializable {
     double grade_point;
     String grade;
 
-    public GPA(int lower,int upper,double grade_point,String grade){
+    public GPA() {
+    }
+
+    public GPA(int lower, int upper, double grade_point, String grade){
         this.upper = upper;
         this.lower = lower;
         this.grade_point = grade_point;

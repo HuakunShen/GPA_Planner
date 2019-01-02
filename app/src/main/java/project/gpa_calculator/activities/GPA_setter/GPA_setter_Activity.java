@@ -43,9 +43,6 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
         adapter = new RecyclerViewAdapter(this, controller.getListItems(), controller);
         recyclerView.setAdapter(adapter);
 
-
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
@@ -74,10 +71,8 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
     }
 
     private void setupController() {
-        controller = new GPA_setter_Controller();
-//        controller.setupCurrentYear((User) getIntent().getSerializableExtra("user_object"));
-        controller.setContext(this);
-        controller.loadFromFile(MainActivity.userFile);
+        controller = new GPA_setter_Controller(this);
+//        controller.loadFromFile(MainActivity.userFile);
     }
 
     /**

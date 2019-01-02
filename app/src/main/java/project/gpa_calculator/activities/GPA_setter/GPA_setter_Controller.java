@@ -27,12 +27,13 @@ import static android.content.Context.MODE_PRIVATE;
 public class GPA_setter_Controller extends ActivityController {
     private List<ListItem> listItems;
 
-    private User user;
+//    private User user;
 
     GPA_setting gpa_setting;
     private Context context;
 
-    public GPA_setter_Controller() {
+    public GPA_setter_Controller(Context context) {
+        this.context = context;
     }
 
     /**
@@ -40,7 +41,7 @@ public class GPA_setter_Controller extends ActivityController {
      */
     public void setupListItems() {
         this.listItems = new ArrayList<>();
-        gpa_setting = user.getGpa_setting();
+//        gpa_setting = user.getGpa_setting();
         for(GPA g:gpa_setting){
             listItems.add(new GPAListItem(g.getLower(),g.getUpper(),g.getGrade_point(),g.getGrade()));
         }
@@ -50,7 +51,7 @@ public class GPA_setter_Controller extends ActivityController {
     @Override
     public void deleteItem(int position) {
 //        user.getYear_list().remove(position);
-        user.removeFromGPA(position);
+//        user.removeFromGPA(position);
         saveToFile(MainActivity.userFile);
     }
 
@@ -83,20 +84,17 @@ public class GPA_setter_Controller extends ActivityController {
      * save the update on gpa_setting to user
      */
     public void save_update(){
-        user.setGpa_setting(gpa_setting);
+//        user.setGpa_setting(gpa_setting);
         saveToFile(MainActivity.userFile);
     }
 
-    /**
-     * load all data from fileName which store the information
-     * @param fileName
-     */
+
     public void loadFromFile(String fileName) {
         try {
             InputStream inputStream = this.context.openFileInput(fileName);
             if (inputStream != null) {
                 ObjectInputStream input = new ObjectInputStream(inputStream);
-                this.user = (User) input.readObject();
+//                this.user = (User) input.readObject();
 //                user = (User) input.readObject();
                 inputStream.close();
             }
@@ -104,8 +102,6 @@ public class GPA_setter_Controller extends ActivityController {
             Log.e("login activity", "File not found: " + e.toString());
         } catch (IOException e) {
             Log.e("login activity", "Can not read file: " + e.toString());
-        } catch (ClassNotFoundException e) {
-            Log.e("login activity", "File contained unexpected data type: " + e.toString());
         }
     }
 
@@ -113,7 +109,7 @@ public class GPA_setter_Controller extends ActivityController {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(
                     context.openFileOutput(fileName, MODE_PRIVATE));
-            outputStream.writeObject(this.user);
+//            outputStream.writeObject(this.user);
             outputStream.close();
         } catch (IOException e) {
             Log.e("Exception", "File write failed: " + e.toString());

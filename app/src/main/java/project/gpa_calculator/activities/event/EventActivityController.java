@@ -160,6 +160,11 @@ public class EventActivityController extends ActivityController {
                                     adapter.notifyItemRemoved(position);
                                     adapter.notifyItemRangeChanged(position, adapter.getItemCount());
                                 }
+
+                                @Override
+                                public void onLeftClicked(int position) {
+                                    Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show();
+                                }
                             });
 
                             ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);

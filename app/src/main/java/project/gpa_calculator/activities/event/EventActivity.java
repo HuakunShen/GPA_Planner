@@ -49,8 +49,9 @@ public class EventActivity extends AppCompatActivity implements AddDialog.EventD
 
     @Override
     public void applyDialog(String name, double weight) {
-        if (controller.addEvent(name, weight)) {
-            controller.getAdapter().notifyItemInserted(controller.getListItems().size() - 1);
-        }
+        controller.addEvent(name, weight);
+//        if (controller.addEvent(name, weight)) {
+//            controller.getAdapter().notifyItemInserted(controller.getEvent_list().size() - 1);
+//        }
     }
 }

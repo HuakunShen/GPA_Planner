@@ -21,6 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
@@ -46,7 +47,7 @@ public class SemesterActivityController extends ActivityController {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-    private DocumentReference userRef = db.collection("Users").document(mAuth.getUid());
+    private DocumentReference userRef = db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()));
 
     private List<Semester> semester_list;
 

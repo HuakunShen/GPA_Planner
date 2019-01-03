@@ -25,6 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
@@ -37,7 +38,7 @@ import project.gpa_calculator.models.Semester;
 import project.gpa_calculator.models.YearListItem;
 
 public class EventActivityController extends ActivityController {
-    private List<ListItem> listItems = new ArrayList<>();
+//    private List<ListItem> listItems = new ArrayList<>();
     private static final String TAG = "EventActivityController";
     private RecyclerView recyclerView;
     private static final String EVENT_COLLECTION = "Events";
@@ -76,7 +77,7 @@ public class EventActivityController extends ActivityController {
 
         for (Event event : this.event_list) {
             ListItem item = new YearListItem(event.getEvent_name(), "Weight: " + event.getEvent_weight(), "GPA: ", event);
-            this.listItems.add(item);
+//            this.listItems.add(item);
         }
     }
 
@@ -97,6 +98,8 @@ public class EventActivityController extends ActivityController {
                         Log.d(TAG, "DocumentSnapshot successfully deleted!");
                         Toast.makeText(context, event_list.get(position).getEvent_name() + " Deleted", Toast.LENGTH_SHORT).show();
                         event_list.remove(position);
+                        adapter.notifyItemRemoved(position);
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -110,8 +113,12 @@ public class EventActivityController extends ActivityController {
     }
 
 
-    public List<ListItem> getListItems() {
-        return listItems;
+//    public List<ListItem> getListItems() {
+//        return listItems;
+//    }
+
+    public List<Event> getEvent_list() {
+        return this.event_list;
     }
 
 
@@ -123,10 +130,12 @@ public class EventActivityController extends ActivityController {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         event.setDocID(documentReference.getId());
+                        event_list.add(event);
+                        adapter.notifyItemInserted(event_list.size() - 1);
+
                     }
                 });
-        this.listItems.add(new YearListItem(event_name, "Weight: " + weight, "GPA", event));
-        this.event_list.add(event);
+//        this.listItems.add(new YearListItem(event_name, "Weight: " + weight, "GPA", event));
         return true;
     }
 
@@ -142,13 +151,13 @@ public class EventActivityController extends ActivityController {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
+                        for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                             Log.d(TAG, document.getId() + " => " + document.getData());
                             Event event = document.toObject(Event.class);
                             event.setDocID(document.getId());
                             event_list.add(event);
                         }
-                        setupListItems();
+//                        setupListItems();
                         adapter = new EventActivityRecyclerViewAdapter(context, event_list);
 
 
@@ -174,9 +183,10 @@ public class EventActivityController extends ActivityController {
 //                                                    list_items.remove(position);
 //                                                    controller.deleteItem(position);
 //                                                    notifyItemRemoved(position);
-                                                adapter.getList_items().remove(position);
-                                                adapter.notifyItemRemoved(position);
-                                                adapter.notifyItemRangeChanged(position, adapter.getItemCount());
+//                                                adapter.getList_items().remove(position);
+//                                                adapter.notifyItemRemoved(position);
+//                                                adapter.notifyItemRangeChanged(position, adapter.getItemCount());
+                                                deleteItem(position);
                                             }
                                         }).show();
                             }

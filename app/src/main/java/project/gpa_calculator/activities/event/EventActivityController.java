@@ -136,87 +136,84 @@ public class EventActivityController extends ActivityController {
 
     void setupRecyclerViewContent() {
         courseRef.collection(EVENT_COLLECTION)
-                .orderBy("event_name")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                Event event = document.toObject(Event.class);
-                                event.setDocID(document.getId());
-                                event_list.add(event);
-                            }
-                            setupListItems();
-                            adapter = new EventActivityRecyclerViewAdapter(event_list);
+            .orderBy("event_name")
+            .get()
+            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d(TAG, document.getId() + " => " + document.getData());
+                            Event event = document.toObject(Event.class);
+                            event.setDocID(document.getId());
+                            event_list.add(event);
+                        }
+                        setupListItems();
+                        adapter = new EventActivityRecyclerViewAdapter(context, event_list);
 
 
 //                            adapter = new RecyclerViewAdapter(context, listItems, getInstance());
-                            recyclerView.setAdapter(adapter);
+                        recyclerView.setAdapter(adapter);
 
-                            swipeController = new SwipeController(new SwipeControllerActions() {
-                                @Override
-                                public void onRightClicked(final int position) {
-                                    new AlertDialog.Builder(context)
-                                            .setTitle("Deletion Warning!")
-                                            .setMessage("Do You Want To Delete?\nIt Is Unrecoverable!")
-                                            .setIcon(android.R.drawable.ic_dialog_alert)
-                                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    Toast.makeText(context, "Deletion Cancelled", Toast.LENGTH_SHORT).show();
-                                                }
-                                            })
-                                            .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
+                        swipeController = new SwipeController(new SwipeControllerActions() {
+                            @Override
+                            public void onRightClicked(final int position) {
+                                new AlertDialog.Builder(context)
+                                        .setTitle("Deletion Warning!")
+                                        .setMessage("Do You Want To Delete?\nIt Is Unrecoverable!")
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Toast.makeText(context, "Deletion Cancelled", Toast.LENGTH_SHORT).show();
+                                            }
+                                        })
+                                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
 //                                                    list_items.remove(position);
 //                                                    controller.deleteItem(position);
 //                                                    notifyItemRemoved(position);
-                                                    adapter.getList_items().remove(position);
-                                                    adapter.notifyItemRemoved(position);
-                                                    adapter.notifyItemRangeChanged(position, adapter.getItemCount());
-                                                }
-                                            }).show();
+                                                adapter.getList_items().remove(position);
+                                                adapter.notifyItemRemoved(position);
+                                                adapter.notifyItemRangeChanged(position, adapter.getItemCount());
+                                            }
+                                        }).show();
+                            }
 
+                            @Override
+                            public void onLeftClicked(int position) {
+                                Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
+                        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+                        itemTouchhelper.attachToRecyclerView(recyclerView);
 
-                                }
-
-                                @Override
-                                public void onLeftClicked(int position) {
-                                    Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                            ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
-                            itemTouchhelper.attachToRecyclerView(recyclerView);
-
-                            recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-                                @Override
-                                public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                                    swipeController.onDraw(c);
-                                }
-                            });
+                        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+                            @Override
+                            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                                swipeController.onDraw(c);
+                            }
+                        });
 //                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
 //                            itemTouchHelper.attachToRecyclerView(recyclerView);
 
 //                            adapter = new RecyclerViewAdapter(context, listItems, );
 
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                            Toast.makeText(context, "Error getting documents", Toast.LENGTH_SHORT).show();
-                        }
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                        Toast.makeText(context, "Error getting documents", Toast.LENGTH_SHORT).show();
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "onFailure: " + e.getMessage());
-                        Toast.makeText(context, "Unable to load Data From Event", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "onFailure: " + e.getMessage());
+                    Toast.makeText(context, "Unable to load Data From Event", Toast.LENGTH_SHORT).show();
+                }
+            });
     }
 
 

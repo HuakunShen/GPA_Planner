@@ -1,6 +1,8 @@
 package project.gpa_calculator.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,8 +17,6 @@ import java.util.List;
 
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.ActivityController;
-import project.gpa_calculator.Util.AddDialog;
-import project.gpa_calculator.activities.GPA_setter.GPA_setter_Activity;
 import project.gpa_calculator.activities.GPA_setter.GPA_setter_Controller;
 import project.gpa_calculator.activities.course.CourseActivity;
 import project.gpa_calculator.activities.course.CourseActivityController;
@@ -93,10 +93,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return list_items.size();
     }
 
-    public void deleteItem(int position) {
-        this.list_items.remove(position);
-        controller.deleteItem(position);
-        notifyItemRemoved(position);
+    public void deleteItem(final int position) {
+        new AlertDialog.Builder(context)
+                .setTitle("Deletion Warning!")
+                .setMessage("Do You Want To Delete?\nIt Is Unrecoverable!")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(context, "Deletion Cancelled", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        list_items.remove(position);
+                        controller.deleteItem(position);
+                        notifyItemRemoved(position);
+                    }
+                }).show();
+
+
     }
 
 
@@ -119,8 +136,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             super(itemView);
             itemView.setOnClickListener(this);
             name = itemView.findViewById(R.id.title);
-            description = itemView.findViewById(R.id.description);
-            gpa = itemView.findViewById(R.id.gpa);
+            description = itemView.findViewById(R.id.description1);
+            gpa = itemView.findViewById(R.id.description2);
 
         }
 

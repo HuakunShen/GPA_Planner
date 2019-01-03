@@ -3,6 +3,7 @@ package project.gpa_calculator.activities.event;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,7 +39,7 @@ public class EventActivityController extends ActivityController {
     private static final String TAG = "EventActivityController";
     private RecyclerView recyclerView;
     private static final String EVENT_COLLECTION = "Events";
-    private RecyclerView.Adapter adapter;
+    private EventActivityRecyclerViewAdapter adapter;
     private Context context;
     private String course_path;
     private DocumentReference courseRef;
@@ -50,6 +51,7 @@ public class EventActivityController extends ActivityController {
     private DocumentReference userRef = db.collection("Users").document(mAuth.getUid());
 
     private List<Event> event_list;
+    private SwipeController swipeController = null;
 
 
     EventActivityController(Context context, String course_path) {
@@ -80,8 +82,8 @@ public class EventActivityController extends ActivityController {
         recyclerView = ((Activity) context).findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
     }
+
 
     @Override
     public void deleteItem(final int position) {
@@ -145,12 +147,35 @@ public class EventActivityController extends ActivityController {
                                 event_list.add(event);
                             }
                             setupListItems();
-                            adapter = new RecyclerViewAdapter(context, listItems, getInstance());
+                            adapter = new EventActivityRecyclerViewAdapter(event_list);
+
+
+//                            adapter = new RecyclerViewAdapter(context, listItems, getInstance());
                             recyclerView.setAdapter(adapter);
-                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
-                            itemTouchHelper.attachToRecyclerView(recyclerView);
+
+                            swipeController = new SwipeController(new SwipeControllerActions() {
+                                @Override
+                                public void onRightClicked(int position) {
+                                    adapter.getList_items().remove(position);
+                                    adapter.notifyItemRemoved(position);
+                                    adapter.notifyItemRangeChanged(position, adapter.getItemCount());
+                                }
+                            });
+
+                            ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+                            itemTouchhelper.attachToRecyclerView(recyclerView);
+
+                            recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+                                @Override
+                                public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                                    swipeController.onDraw(c);
+                                }
+                            });
+//                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
+//                            itemTouchHelper.attachToRecyclerView(recyclerView);
 
 //                            adapter = new RecyclerViewAdapter(context, listItems, );
+
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                             Toast.makeText(context, "Error getting documents", Toast.LENGTH_SHORT).show();
@@ -165,4 +190,11 @@ public class EventActivityController extends ActivityController {
                     }
                 });
     }
+
+
 }
+
+
+
+
+

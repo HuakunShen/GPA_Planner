@@ -12,7 +12,8 @@ public class Event implements Serializable {
     private double event_weight;
     private double event_score;
     private String docID;
-
+    private double target;
+    
     public Event() {
     }
 
@@ -23,6 +24,13 @@ public class Event implements Serializable {
         this.isDone = false;
     }
 
+    public double getTarget() {
+        return target;
+    }
+
+    public void setTarget(double target) {
+        this.target = target;
+    }
 
     public String getDocID() {
         return docID;

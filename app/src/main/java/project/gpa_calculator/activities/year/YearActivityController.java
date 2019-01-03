@@ -76,7 +76,7 @@ public class YearActivityController extends ActivityController {
                             String source = querySnapshot.getMetadata().isFromCache() ?
                                     "local cache" : "server";
                             Log.d(TAG, "Data fetched from " + source);
-                            Toast.makeText(context, "Data fetched from " + source, Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(context, "Data fetched from " + source, Toast.LENGTH_SHORT).show();
                         }
 
                     }

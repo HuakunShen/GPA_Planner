@@ -1,8 +1,10 @@
 package project.gpa_calculator.activities.event;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -155,10 +157,31 @@ public class EventActivityController extends ActivityController {
 
                             swipeController = new SwipeController(new SwipeControllerActions() {
                                 @Override
-                                public void onRightClicked(int position) {
-                                    adapter.getList_items().remove(position);
-                                    adapter.notifyItemRemoved(position);
-                                    adapter.notifyItemRangeChanged(position, adapter.getItemCount());
+                                public void onRightClicked(final int position) {
+                                    new AlertDialog.Builder(context)
+                                            .setTitle("Deletion Warning!")
+                                            .setMessage("Do You Want To Delete?\nIt Is Unrecoverable!")
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    Toast.makeText(context, "Deletion Cancelled", Toast.LENGTH_SHORT).show();
+                                                }
+                                            })
+                                            .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+//                                                    list_items.remove(position);
+//                                                    controller.deleteItem(position);
+//                                                    notifyItemRemoved(position);
+                                                    adapter.getList_items().remove(position);
+                                                    adapter.notifyItemRemoved(position);
+                                                    adapter.notifyItemRangeChanged(position, adapter.getItemCount());
+                                                }
+                                            }).show();
+
+
+
                                 }
 
                                 @Override

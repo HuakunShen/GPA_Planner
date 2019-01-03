@@ -112,8 +112,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         notifyItemRemoved(position);
                     }
                 }).show();
-
-
     }
 
 

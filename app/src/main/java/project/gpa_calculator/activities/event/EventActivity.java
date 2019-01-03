@@ -2,23 +2,12 @@ package project.gpa_calculator.activities.event;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.AddDialog;
-import project.gpa_calculator.Util.SwipeToDeleteCallback;
-import project.gpa_calculator.activities.course.CourseActivityController;
-import project.gpa_calculator.activities.main.MainActivity;
-import project.gpa_calculator.activities.semester.SemesterActivityController;
-import project.gpa_calculator.models.Semester;
-import project.gpa_calculator.models.Year;
 
 public class EventActivity extends AppCompatActivity implements AddDialog.EventDialogListener {
     private EventActivityController controller;
@@ -44,7 +33,7 @@ public class EventActivity extends AppCompatActivity implements AddDialog.EventD
     }
 
     private void setupAddButton() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_event_btn);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

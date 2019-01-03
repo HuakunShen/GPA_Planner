@@ -8,10 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 import java.util.List;
-
 import project.gpa_calculator.R;
 import project.gpa_calculator.models.Event;
 
@@ -20,14 +17,9 @@ public class EventActivityRecyclerViewAdapter extends RecyclerView.Adapter<Event
     private List<Event> list_items;
     private Context context;
 
-    public EventActivityRecyclerViewAdapter(Context context, List<Event> list_items) {
+    EventActivityRecyclerViewAdapter(Context context, List<Event> list_items) {
         this.list_items = list_items;
         this.context = context;
-    }
-
-
-    public List<Event> getList_items() {
-        return list_items;
     }
 
 
@@ -56,10 +48,10 @@ public class EventActivityRecyclerViewAdapter extends RecyclerView.Adapter<Event
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private TextView name, score, weight, status, target;
 
-        public ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.title);
             weight = itemView.findViewById(R.id.description1);

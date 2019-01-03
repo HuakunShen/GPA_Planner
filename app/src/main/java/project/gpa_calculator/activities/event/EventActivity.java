@@ -11,6 +11,7 @@ import project.gpa_calculator.Util.AddDialog;
 
 public class EventActivity extends AppCompatActivity implements AddDialog.EventDialogListener {
     private EventActivityController controller;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,12 +29,12 @@ public class EventActivity extends AppCompatActivity implements AddDialog.EventD
 
 
     private void setupToolBar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
     private void setupAddButton() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_event_btn);
+        FloatingActionButton fab = findViewById(R.id.add_event_btn);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,8 +51,5 @@ public class EventActivity extends AppCompatActivity implements AddDialog.EventD
     @Override
     public void applyDialog(String name, double weight) {
         controller.addEvent(name, weight);
-//        if (controller.addEvent(name, weight)) {
-//            controller.getAdapter().notifyItemInserted(controller.getEvent_list().size() - 1);
-//        }
     }
 }

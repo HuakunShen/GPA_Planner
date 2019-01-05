@@ -53,10 +53,6 @@ public class CourseActivityController extends ActivityController {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-    private DocumentReference userRef = db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()));
-
     private List<Course> course_list;
 
     private SwipeController swipeController;
@@ -79,14 +75,6 @@ public class CourseActivityController extends ActivityController {
     RecyclerView.Adapter getAdapter() {
         return adapter;
     }
-
-//    private void setupListItems() {
-//
-//        for (Course course: this.course_list) {
-//            ListItem item = new YearListItem(course.getCourse_code(), course.getCourse_name(), "Target: " + course.getTarget(), course);
-//            this.listItems.add(item);
-//        }
-//    }
 
     void setupRecyclerView() {
         recyclerView = ((Activity) context).findViewById(R.id.recycler_view);
@@ -117,12 +105,6 @@ public class CourseActivityController extends ActivityController {
 
     }
 
-
-//    public List<ListItem> getListItems() {
-//        return listItems;
-//    }
-
-
     boolean addCourse(String course_name, String course_code, double target, double credit_weight) {
         final Course course = new Course(course_name, course_code, target, credit_weight);
         semesterRef.collection(COURSE_COLLECTION)
@@ -135,7 +117,6 @@ public class CourseActivityController extends ActivityController {
                         adapter.notifyItemInserted(course_list.size() - 1);
                     }
                 });
-//        this.listItems.add(new YearListItem(course_code, course_name, "Target: " + target, course));
         return true;
     }
 

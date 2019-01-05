@@ -1,4 +1,4 @@
-package project.gpa_calculator.activities.course;
+package project.gpa_calculator.activities.year;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,15 +12,18 @@ import android.widget.TextView;
 import java.util.List;
 
 import project.gpa_calculator.R;
+import project.gpa_calculator.activities.course.CourseActivityController;
+import project.gpa_calculator.activities.course.CourseActivityRecyclerViewAdapter;
 import project.gpa_calculator.activities.event.EventActivity;
+import project.gpa_calculator.activities.semester.SemesterActivity;
 import project.gpa_calculator.models.Course;
+import project.gpa_calculator.models.Year;
 
-public class CourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<CourseActivityRecyclerViewAdapter.ViewHolder> {
-    private List<Course> list_items;
+public class YearActivityRecyclerViewAdapter extends RecyclerView.Adapter<YearActivityRecyclerViewAdapter.ViewHolder> {
+    private List<Year> list_items;
     private Context context;
-    private CourseActivityController controller;
-
-    public CourseActivityRecyclerViewAdapter(Context context, List<Course> list_items, CourseActivityController controller) {
+    private YearActivityController controller;
+    public YearActivityRecyclerViewAdapter(Context context, List<Year> list_items, YearActivityController controller) {
         this.list_items = list_items;
         this.context = context;
         this.controller = controller;
@@ -28,7 +31,7 @@ public class CourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<Cour
 
     @NonNull
     @Override
-    public CourseActivityRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public YearActivityRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.list_row, viewGroup, false);
 
@@ -37,16 +40,14 @@ public class CourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<Cour
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        Course course = this.list_items.get(position);
-        viewHolder.name.setText(course.getCourse_name());
-        viewHolder.course_code.setText((String.valueOf(course.getCourse_code())));
+        Year year = this.list_items.get(position);
+        viewHolder.name.setText(year.getYear_name());
         // TODO: status isDone method is not complete since we use firestore instead of pure object
-        viewHolder.status.setText("Status: Not Done");
-//        viewHolder.status.setText(("Status: " + (course.isDone() ? "Done" : "Not Done")));
+        viewHolder.status.setText(("Status: " + "Not Done"));
+        viewHolder.gpa.setText(("GPA: " + 0.0d));
         // TODO: score_target should display either Score or Target depends on whether it's done, target is given but score is not Calculated
-        viewHolder.score_target.setText("Score: 0");
-//        viewHolder.score_target.setText((course.isDone() ? "Score: " : "Target: " + String.valueOf(course.getTarget())));
-        viewHolder.credit.setText(("Credit: " + String.valueOf(course.getCredit())));
+        viewHolder.target.setText(("Target: " + 0d));
+        viewHolder.credit.setText(("Credit: " + 0));
     }
 
     @Override
@@ -55,14 +56,14 @@ public class CourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<Cour
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
-        private TextView name, course_code, status, score_target, credit;
+        private TextView name, status, gpa, credit, target;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            course_code = itemView.findViewById(R.id.title);
-            name= itemView.findViewById(R.id.description1);
-            score_target = itemView.findViewById(R.id.description2);
-            status = itemView.findViewById(R.id.description3);
-            credit = itemView.findViewById(R.id.description4);
+            name = itemView.findViewById(R.id.title);
+            status= itemView.findViewById(R.id.description1);
+            gpa = itemView.findViewById(R.id.description2);
+            credit = itemView.findViewById(R.id.description3);
+            target = itemView.findViewById(R.id.description4);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }
@@ -70,16 +71,17 @@ public class CourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<Cour
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            Intent intent = new Intent(context, EventActivity.class);
-            Course course = list_items.get(position);
-            intent.putExtra("course_doc_path", controller.getCoursePath() + course.getDocID());
+            Intent intent = new Intent(context, SemesterActivity.class);
+            Year year = list_items.get(position);
+            intent.putExtra("year_doc_path", controller.getYearPath() + year.getDocID());
             context.startActivity(intent);
         }
 
         @Override
         public boolean onLongClick(View v) {
-            name.setText("LongClicked");
+            name.setText(("LongClicked"));
             return true;
         }
     }
+
 }

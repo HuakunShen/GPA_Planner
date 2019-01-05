@@ -1,4 +1,4 @@
-package project.gpa_calculator.activities.event;
+package project.gpa_calculator.Util;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -7,7 +7,6 @@ import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper.Callback;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -19,7 +18,7 @@ enum ButtonsState {
     RIGHT_VISIBLE
 }
 
-class SwipeController extends Callback {
+public class SwipeController extends Callback {
     private boolean swipeBack = false;
     private ButtonsState buttonShowedState = ButtonsState.GONE;
     private RectF buttonInstance = null;
@@ -28,7 +27,7 @@ class SwipeController extends Callback {
     private static final float buttonWidth = 300;
     private static final String TAG = "SwipeController";
 
-    SwipeController(SwipeControllerActions buttonsActions) {
+    public SwipeController(SwipeControllerActions buttonsActions) {
         this.buttonsActions = buttonsActions;
     }
 
@@ -178,7 +177,7 @@ class SwipeController extends Callback {
         c.drawText(text, button.centerX() - (textWidth / 2), button.centerY() + (textSize / 2), p);
     }
 
-    void onDraw(Canvas c) {
+    public void onDraw(Canvas c) {
         if (currentItemViewHolder != null) {
             drawButtons(c, currentItemViewHolder);
         }

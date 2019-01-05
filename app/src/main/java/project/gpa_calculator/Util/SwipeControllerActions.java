@@ -1,4 +1,4 @@
-package project.gpa_calculator.activities.event;
+package project.gpa_calculator.Util;
 
 public abstract class SwipeControllerActions {
 

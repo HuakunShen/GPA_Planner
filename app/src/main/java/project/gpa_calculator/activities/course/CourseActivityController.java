@@ -1,7 +1,10 @@
 package project.gpa_calculator.activities.course;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,19 +24,24 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.ActivityController;
+import project.gpa_calculator.Util.SwipeController;
+import project.gpa_calculator.Util.SwipeControllerActions;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
+import project.gpa_calculator.activities.event.EventActivityRecyclerViewAdapter;
 import project.gpa_calculator.activities.semester.SemesterActivityController;
 import project.gpa_calculator.models.Course;
+import project.gpa_calculator.models.Event;
 import project.gpa_calculator.models.ListItem;
 import project.gpa_calculator.models.Semester;
 import project.gpa_calculator.models.YearListItem;
 
 public class CourseActivityController extends ActivityController {
-    private List<ListItem> listItems = new ArrayList<>();
+//    private List<ListItem> listItems = new ArrayList<>();
 
     private static final String TAG = "CourseActivityControlle";
     private RecyclerView recyclerView;
@@ -50,6 +58,9 @@ public class CourseActivityController extends ActivityController {
     private DocumentReference userRef = db.collection("Users").document(mAuth.getUid());
 
     private List<Course> course_list;
+
+    private SwipeController swipeController;
+
 
 
     CourseActivityController(Context context, String semester_path) {
@@ -69,13 +80,13 @@ public class CourseActivityController extends ActivityController {
         return adapter;
     }
 
-    private void setupListItems() {
-
-        for (Course course: this.course_list) {
-            ListItem item = new YearListItem(course.getCourse_code(), course.getCourse_name(), "Target: " + course.getTarget(), course);
-            this.listItems.add(item);
-        }
-    }
+//    private void setupListItems() {
+//
+//        for (Course course: this.course_list) {
+//            ListItem item = new YearListItem(course.getCourse_code(), course.getCourse_name(), "Target: " + course.getTarget(), course);
+//            this.listItems.add(item);
+//        }
+//    }
 
     void setupRecyclerView() {
         recyclerView = ((Activity) context).findViewById(R.id.recycler_view);
@@ -93,6 +104,7 @@ public class CourseActivityController extends ActivityController {
                         Log.d(TAG, "DocumentSnapshot successfully deleted!");
                         Toast.makeText(context, course_list.get(position).getCourse_name() + " Deleted", Toast.LENGTH_SHORT).show();
                         course_list.remove(position);
+                        adapter.notifyItemRemoved(position);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -106,9 +118,9 @@ public class CourseActivityController extends ActivityController {
     }
 
 
-    public List<ListItem> getListItems() {
-        return listItems;
-    }
+//    public List<ListItem> getListItems() {
+//        return listItems;
+//    }
 
 
     boolean addCourse(String course_name, String course_code, double target, double credit_weight) {
@@ -119,10 +131,11 @@ public class CourseActivityController extends ActivityController {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         course.setDocID(documentReference.getId());
+                        course_list.add(course);
+                        adapter.notifyItemInserted(course_list.size() - 1);
                     }
                 });
-        this.listItems.add(new YearListItem(course_code, course_name, "Target: " + target, course));
-        this.course_list.add(course);
+//        this.listItems.add(new YearListItem(course_code, course_name, "Target: " + target, course));
         return true;
     }
 
@@ -138,21 +151,51 @@ public class CourseActivityController extends ActivityController {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                Course course = document.toObject(Course.class);
+                                Course course= document.toObject(Course.class);
                                 course.setDocID(document.getId());
                                 course_list.add(course);
                             }
-                            setupListItems();
-                            adapter = new RecyclerViewAdapter(context, listItems, getInstance());
+                            adapter = new CourseActivityRecyclerViewAdapter(context, course_list, getInstance());
                             recyclerView.setAdapter(adapter);
-                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
-                            itemTouchHelper.attachToRecyclerView(recyclerView);
+                            swipeController = new SwipeController(new SwipeControllerActions() {
+                                @Override
+                                public void onRightClicked(final int position) {
+                                    new AlertDialog.Builder(context)
+                                            .setTitle("Deletion Warning!")
+                                            .setMessage("Do You Want To Delete?\nIt Is Unrecoverable!")
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    Toast.makeText(context, "Deletion Cancelled", Toast.LENGTH_SHORT).show();
+                                                }
+                                            })
+                                            .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    deleteItem(position);
+                                                }
+                                            }).show();
+                                }
 
-//                            adapter = new RecyclerViewAdapter(context, listItems, );
+                                @Override
+                                public void onLeftClicked(int position) {
+                                    Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+                            itemTouchhelper.attachToRecyclerView(recyclerView);
+                            recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+                                @Override
+                                public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                                    swipeController.onDraw(c);
+                                }
+                            });
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
+                            Toast.makeText(context, "Error getting documents", Toast.LENGTH_SHORT).show();
                         }
                     }
                 })
@@ -160,7 +203,7 @@ public class CourseActivityController extends ActivityController {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d(TAG, "onFailure: " + e.getMessage());
-                        Toast.makeText(context, "Unable to load Data From Course", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Unable to load Data From Event", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

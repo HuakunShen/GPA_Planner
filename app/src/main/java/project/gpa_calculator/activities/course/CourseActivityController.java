@@ -55,7 +55,7 @@ public class CourseActivityController extends ActivityController {
 
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-    private DocumentReference userRef = db.collection("Users").document(mAuth.getUid());
+    private DocumentReference userRef = db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()));
 
     private List<Course> course_list;
 
@@ -203,7 +203,7 @@ public class CourseActivityController extends ActivityController {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d(TAG, "onFailure: " + e.getMessage());
-                        Toast.makeText(context, "Unable to load Data From Event", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Unable to load Data From Course", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

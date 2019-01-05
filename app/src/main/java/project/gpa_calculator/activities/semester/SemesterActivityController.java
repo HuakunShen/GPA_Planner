@@ -1,7 +1,10 @@
 package project.gpa_calculator.activities.semester;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,14 +29,17 @@ import java.util.Objects;
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.ActivityController;
+import project.gpa_calculator.Util.SwipeController;
+import project.gpa_calculator.Util.SwipeControllerActions;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
+import project.gpa_calculator.activities.course.CourseActivityRecyclerViewAdapter;
 import project.gpa_calculator.models.ListItem;
 import project.gpa_calculator.models.Semester;
 import project.gpa_calculator.models.YearListItem;
 
 public class SemesterActivityController extends ActivityController {
 
-    private List<ListItem> listItems = new ArrayList<>();
+//    private List<ListItem> listItems = new ArrayList<>();
 
     private static final String TAG = "SemesterActivityControl";
     private RecyclerView recyclerView;
@@ -50,6 +56,9 @@ public class SemesterActivityController extends ActivityController {
     private DocumentReference userRef = db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()));
 
     private List<Semester> semester_list;
+
+    private SwipeController swipeController;
+
 
 
     SemesterActivityController(Context context, String year_path) {
@@ -69,13 +78,13 @@ public class SemesterActivityController extends ActivityController {
         return adapter;
     }
 
-    private void setupListItems() {
-
-        for (Semester semester : this.semester_list) {
-            ListItem item = new YearListItem(semester.getSemester_name(), "Description", "GPA: ", semester);
-            this.listItems.add(item);
-        }
-    }
+//    private void setupListItems() {
+//
+//        for (Semester semester : this.semester_list) {
+//            ListItem item = new YearListItem(semester.getSemester_name(), "Description", "GPA: ", semester);
+//            this.listItems.add(item);
+//        }
+//    }
 
     void setupRecyclerView() {
         recyclerView = ((Activity) context).findViewById(R.id.recycler_view);
@@ -94,6 +103,7 @@ public class SemesterActivityController extends ActivityController {
                         Log.d(TAG, "DocumentSnapshot successfully deleted!");
                         Toast.makeText(context, semester_list.get(position).getSemester_name() + " Deleted", Toast.LENGTH_SHORT).show();
                         semester_list.remove(position);
+                        adapter.notifyItemRemoved(position);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -107,9 +117,9 @@ public class SemesterActivityController extends ActivityController {
     }
 
 
-    public List<ListItem> getListItems() {
-        return listItems;
-    }
+//    public List<ListItem> getListItems() {
+//        return listItems;
+//    }
 
 
     boolean addSemester(String semester_name, String description) {
@@ -120,10 +130,12 @@ public class SemesterActivityController extends ActivityController {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 semester.setDocID(documentReference.getId());
+                semester_list.add(semester);
+                adapter.notifyItemInserted(semester_list.size() - 1);
             }
         });
-        this.listItems.add(new YearListItem(semester_name, description, "GPA", semester));
-        this.semester_list.add(semester);
+//        this.listItems.add(new YearListItem(semester_name, description, "GPA", semester));
+//        this.semester_list.add(semester);
         return true;
     }
 
@@ -145,13 +157,42 @@ public class SemesterActivityController extends ActivityController {
                                 semester.setDocID(document.getId());
                                 semester_list.add(semester);
                             }
-                            setupListItems();
-                            adapter = new RecyclerViewAdapter(context, listItems, getInstance());
+                            adapter = new SemesterActivityRecyclerViewAdapter(context, semester_list, getInstance());
                             recyclerView.setAdapter(adapter);
-                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
-                            itemTouchHelper.attachToRecyclerView(recyclerView);
+                            swipeController = new SwipeController(new SwipeControllerActions() {
+                                @Override
+                                public void onRightClicked(final int position) {
+                                    new AlertDialog.Builder(context)
+                                            .setTitle("Deletion Warning!")
+                                            .setMessage("Do You Want To Delete?\nIt Is Unrecoverable!")
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    Toast.makeText(context, "Deletion Cancelled", Toast.LENGTH_SHORT).show();
+                                                }
+                                            })
+                                            .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    deleteItem(position);
+                                                }
+                                            }).show();
+                                }
 
-//                            adapter = new RecyclerViewAdapter(context, listItems, );
+                                @Override
+                                public void onLeftClicked(int position) {
+                                    Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+                            itemTouchhelper.attachToRecyclerView(recyclerView);
+                            recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+                                @Override
+                                public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                                    swipeController.onDraw(c);
+                                }
+                            });
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }

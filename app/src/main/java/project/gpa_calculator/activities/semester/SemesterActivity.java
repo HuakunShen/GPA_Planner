@@ -55,8 +55,9 @@ public class SemesterActivity extends AppCompatActivity implements AddDialog.Yea
 
     @Override
     public void applyDialog(String name, String description) {
-        if (controller.addSemester(name, description)) {
-            controller.getAdapter().notifyItemInserted(controller.getListItems().size() - 1);
-        }
+        controller.addSemester(name, description);
+//        if (controller.addSemester(name, description)) {
+//            controller.getAdapter().notifyItemInserted(controller.getListItems().size() - 1);
+//        }
     }
 }

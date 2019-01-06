@@ -55,9 +55,7 @@ public class YearActivity extends AppCompatActivity implements AddDialog.YearSem
 
     @Override
     public void applyDialog(String name, String description) {
-        if (controller.addYear(name, description)) {
-            controller.getAdapter().notifyItemInserted(controller.getListItems().size() - 1);
-        }
+        controller.addYear(name, description);
     }
 
 }

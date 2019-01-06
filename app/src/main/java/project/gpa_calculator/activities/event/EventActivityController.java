@@ -27,6 +27,8 @@ import java.util.Objects;
 
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.ActivityController;
+import project.gpa_calculator.Util.SwipeController;
+import project.gpa_calculator.Util.SwipeControllerActions;
 import project.gpa_calculator.models.Event;
 
 public class EventActivityController extends ActivityController {
@@ -38,7 +40,7 @@ public class EventActivityController extends ActivityController {
     private DocumentReference courseRef;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private List<Event> event_list;
-    private SwipeController swipeController = null;
+    private SwipeController swipeController;
 
 
     EventActivityController(Context context, String course_path) {

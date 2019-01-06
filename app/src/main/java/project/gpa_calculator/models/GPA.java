@@ -1,11 +1,13 @@
 package project.gpa_calculator.models;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 
 public class GPA implements Serializable {
     int upper,lower;
     double grade_point;
-    String grade;
+    String grade,docID;
 
     public GPA() {
     }
@@ -15,6 +17,15 @@ public class GPA implements Serializable {
         this.lower = lower;
         this.grade_point = grade_point;
         this.grade = grade;
+    }
+
+    @Exclude
+    public String getDocID() {
+        return docID;
+    }
+
+    public void setDocID(String docID) {
+        this.docID = docID;
     }
 
     public double getGrade_point() {

@@ -33,12 +33,14 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
 
     }
 
+    //TODO setup inside setup. need to change
     private void setupRecyclerView() {
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         controller.setupListItems();
+        controller.setupRecyclerView();
 
         adapter = new RecyclerViewAdapter(this, controller.getListItems(), controller);
         recyclerView.setAdapter(adapter);

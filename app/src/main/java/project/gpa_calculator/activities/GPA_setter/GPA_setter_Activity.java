@@ -17,8 +17,6 @@ import project.gpa_calculator.activities.main.MainActivity;
 import project.gpa_calculator.models.GPA;
 
 public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.GPADialogListener {
-    private RecyclerView recyclerView;
-    private RecyclerViewAdapter adapter;
     private GPA_setter_Controller controller;
 
 
@@ -29,25 +27,27 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
         setupController();
         setupToolBar();
         setupAddButton();
-        setupRecyclerView();
-
-    }
-
-    //TODO setup inside setup. need to change
-    private void setupRecyclerView() {
-        recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        setupRecyclerView();
+        controller.setupRecyclerViewContent();
 
         controller.setupListItems();
         controller.setupRecyclerView();
 
-        adapter = new RecyclerViewAdapter(this, controller.getListItems(), controller);
-        recyclerView.setAdapter(adapter);
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
-        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
+
+//    private void setupRecyclerView() {
+//        recyclerView = findViewById(R.id.recycler_view);
+//        recyclerView.setHasFixedSize(true);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//
+//
+//
+//        adapter = new RecyclerViewAdapter(this, controller.getListItems(), controller);
+//        recyclerView.setAdapter(adapter);
+//
+//        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
+//        itemTouchHelper.attachToRecyclerView(recyclerView);
+//    }
 
     @Override
     protected void onResume() {
@@ -58,14 +58,6 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
     @Override
     public void onBackPressed() {
         //should put in controller but idk how
-        for (int x = recyclerView.getChildCount(), i = 0; i < x; i++) {
-            RecyclerViewAdapter.GPAViewHolder holder = ( RecyclerViewAdapter.GPAViewHolder)recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
-            int low = holder.getLow();
-            int high = holder.getHigh();
-            double point = holder.getGpa_point();
-            String grade = holder.getGpa_grade();
-            controller.gpa_setting.update(i,new GPA(low,high,point,grade));
-        }
        controller.save_update();
 
         super.onBackPressed();
@@ -114,9 +106,7 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
      */
     @Override
     public void applyDialog(int low, int high,double gpa,String mark) {
-        if (controller.addGPA(low,high,gpa,mark)) {
-            adapter.notifyItemInserted(controller.getListItems().size() - 1);
-        }
+        controller.addGPA(low,high,gpa,mark);
     }
 
 }

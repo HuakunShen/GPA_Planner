@@ -61,11 +61,9 @@ public class GPA_setter_Controller extends ActivityController {
     private Context context;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
     private DocumentReference userRef = db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()));
-
+    //private DocumentReference GPAref;
 
     GPA_setting gpa_setting;
     private List<GPA> gpa_listItems;
@@ -73,30 +71,32 @@ public class GPA_setter_Controller extends ActivityController {
     GPA_setter_Controller(final Context context) {
         this.context = context;
         this.gpa_listItems = new ArrayList<>();
-        db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()))
-                .collection("GPA")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot querySnapshot,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            Log.w(TAG, "Listen error", e);
-                            return;
-                        }
-
-                        for (DocumentChange change : querySnapshot.getDocumentChanges()) {
-                            if (change.getType() == DocumentChange.Type.ADDED) {
-                                Log.d(TAG, "New Year:" + change.getDocument().getData());
-                            }
-
-                            String source = querySnapshot.getMetadata().isFromCache() ?
-                                    "local cache" : "server";
-                            Log.d(TAG, "Data fetched from " + source);
-//                            Toast.makeText(context, "Data fetched from " + source, Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
+        //this.GPAref = db.document("/Users/" + mAuth.getUid() + "/GPA/");
+        //don't what this part does
+//        db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()))
+//                .collection("GPA")
+//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onEvent(@Nullable QuerySnapshot querySnapshot,
+//                                        @Nullable FirebaseFirestoreException e) {
+//                        if (e != null) {
+//                            Log.w(TAG, "Listen error", e);
+//                            return;
+//                        }
+//
+//                        for (DocumentChange change : querySnapshot.getDocumentChanges()) {
+//                            if (change.getType() == DocumentChange.Type.ADDED) {
+//                                Log.d(TAG, "New Year:" + change.getDocument().getData());
+//                            }
+//
+//                            String source = querySnapshot.getMetadata().isFromCache() ?
+//                                    "local cache" : "server";
+//                            Log.d(TAG, "Data fetched from " + source);
+////                            Toast.makeText(context, "Data fetched from " + source, Toast.LENGTH_SHORT).show();
+//                        }
+//
+//                    }
+//                });
     }
 
     public String getGPAPath() {
@@ -166,7 +166,7 @@ public class GPA_setter_Controller extends ActivityController {
     }
 
     void setupRecyclerViewContent() {
-        db.collection("Users").document(Objects.requireNonNull(mAuth.getUid())).collection("GPA")
+        db.collection("GPA")
                 //.orderBy("year_name")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -203,9 +203,45 @@ public class GPA_setter_Controller extends ActivityController {
     /**
      * save the update on gpa_setting to user
      */
-    public void save_update(){
-        user.setGpa_setting(gpa_setting);
-        saveToFile(MainActivity.userFile);
+    public boolean save_update(){
+//        for(GPA g: gpa_listItems){
+//            GPAref.collection("GPA").document(g.getDocID())
+//                    .delete()
+//                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                        @Override
+//                        public void onSuccess(Void aVoid) {
+//                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Log.w(TAG, "Error deleting document", e);
+//                            Toast.makeText(context, "Failed To Delete", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//        }
+        //check
+        for (int x = recyclerView.getChildCount(), i = 0; i < x; i++) {
+            RecyclerViewAdapter.GPAViewHolder holder = ( RecyclerViewAdapter.GPAViewHolder)recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
+            int low = holder.getLow();
+            int high = holder.getHigh();
+            double point = holder.getGpa_point();
+            String grade = holder.getGpa_grade();
+           gpa_setting.update(i,new GPA(low,high,point,grade));
+        }
+
+        //add
+        for(final GPA g: gpa_listItems) {
+            userRef.collection("GPA").add(g).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
+                    g.setDocID(documentReference.getId());
+
+                }
+            });
+        }
+        return true;
     }
 
 

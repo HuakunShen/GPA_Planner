@@ -23,14 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,22 +31,18 @@ import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.ActivityController;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
-import project.gpa_calculator.activities.main.MainActivity;
+
 import project.gpa_calculator.models.GPA;
 import project.gpa_calculator.models.GPAListItem;
 import project.gpa_calculator.models.GPA_setting;
 import project.gpa_calculator.models.ListItem;
 import project.gpa_calculator.models.User;
-import project.gpa_calculator.models.Year;
 
-import static android.content.Context.MODE_PRIVATE;
 
 public class GPA_setter_Controller extends ActivityController {
     private List<ListItem> listItems = new ArrayList<>();
 
     private static final String TAG = "GPA_setter_Controller";
-
-    private User user;
 
     private RecyclerView recyclerView;
 
@@ -63,7 +52,7 @@ public class GPA_setter_Controller extends ActivityController {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private DocumentReference userRef = db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()));
-    //private DocumentReference GPAref;
+
 
     GPA_setting gpa_setting;
     private List<GPA> gpa_listItems;
@@ -71,32 +60,6 @@ public class GPA_setter_Controller extends ActivityController {
     GPA_setter_Controller(final Context context) {
         this.context = context;
         this.gpa_listItems = new ArrayList<>();
-        //this.GPAref = db.document("/Users/" + mAuth.getUid() + "/GPA/");
-        //don't what this part does
-//        db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()))
-//                .collection("GPA")
-//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onEvent(@Nullable QuerySnapshot querySnapshot,
-//                                        @Nullable FirebaseFirestoreException e) {
-//                        if (e != null) {
-//                            Log.w(TAG, "Listen error", e);
-//                            return;
-//                        }
-//
-//                        for (DocumentChange change : querySnapshot.getDocumentChanges()) {
-//                            if (change.getType() == DocumentChange.Type.ADDED) {
-//                                Log.d(TAG, "New Year:" + change.getDocument().getData());
-//                            }
-//
-//                            String source = querySnapshot.getMetadata().isFromCache() ?
-//                                    "local cache" : "server";
-//                            Log.d(TAG, "Data fetched from " + source);
-////                            Toast.makeText(context, "Data fetched from " + source, Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                    }
-//                });
     }
 
     public String getGPAPath() {
@@ -122,9 +85,7 @@ public class GPA_setter_Controller extends ActivityController {
 
     @Override
     public void deleteItem(int position) {
-        user.getYear_list().remove(position);
-        user.removeFromGPA(position);
-        saveToFile(MainActivity.userFile);
+
     }
 
 
@@ -142,10 +103,6 @@ public class GPA_setter_Controller extends ActivityController {
      * @return return true if success, in this case, alway true
      */
     public boolean addGPA(int low, int high,double gpa,String mark) {
-//        GPAListItem new_gpa= new GPAListItem(low,high,gpa,mark);
-//        gpa_setting.add(new GPA(low,high,gpa,mark));
-//        this.listItems.add(new_gpa);
-
         final GPA year = new GPA(low,high,gpa,mark);
 //        userRef.collection("GPA").add(year).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
 //            @Override
@@ -155,18 +112,12 @@ public class GPA_setter_Controller extends ActivityController {
 //        });
         this.listItems.add(new GPAListItem(low,high,gpa,mark));
         this.gpa_listItems.add(year);
+        adapter.notifyItemInserted(gpa_listItems.size() - 1);
         return true;
-    }
-    GPA_setter_Controller getInstance() {
-        return this;
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
     }
 
     void setupRecyclerViewContent() {
-        db.collection("GPA")
+        db.collection("Users").document(Objects.requireNonNull(mAuth.getUid())).collection("GPA")
                 //.orderBy("year_name")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -228,7 +179,7 @@ public class GPA_setter_Controller extends ActivityController {
             int high = holder.getHigh();
             double point = holder.getGpa_point();
             String grade = holder.getGpa_grade();
-           gpa_setting.update(i,new GPA(low,high,point,grade));
+           //gpa_setting.update(i,new GPA(low,high,point,grade));
         }
 
         //add
@@ -245,36 +196,14 @@ public class GPA_setter_Controller extends ActivityController {
     }
 
 
-    public void loadFromFile(String fileName) {
-        try {
-            InputStream inputStream = this.context.openFileInput(fileName);
-            if (inputStream != null) {
-                ObjectInputStream input = new ObjectInputStream(inputStream);
-                //this.user = (User) input.readObject();
-                try{
-                    user = (User) input.readObject();
-                }catch (ClassNotFoundException e){
-                    System.out.println("user class not fonund");
-                }
 
-                inputStream.close();
-            }
-        } catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
-        } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
-        }
+
+    GPA_setter_Controller getInstance() {
+        return this;
     }
 
-    public void saveToFile(String fileName) {
-        try {
-            ObjectOutputStream outputStream = new ObjectOutputStream(
-                    context.openFileOutput(fileName, MODE_PRIVATE));
-            outputStream.writeObject(this.user);
-            outputStream.close();
-        } catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
+    public void setContext(Context context) {
+        this.context = context;
     }
 }
 

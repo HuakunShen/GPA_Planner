@@ -52,7 +52,6 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
     @Override
     protected void onResume() {
         super.onResume();
-        controller.loadFromFile(MainActivity.userFile);
     }
 
     @Override
@@ -66,7 +65,6 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
 
     private void setupController() {
         controller = new GPA_setter_Controller(this);
-//        controller.loadFromFile(MainActivity.userFile);
     }
 
     /**

@@ -65,7 +65,6 @@ public class YearActivityController extends ActivityController {
     YearActivityController(final Context context) {
         this.context = context;
         this.year_list = new ArrayList<>();
-        this.context = context;
     }
 
 

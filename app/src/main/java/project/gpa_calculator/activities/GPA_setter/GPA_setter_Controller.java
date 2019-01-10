@@ -14,12 +14,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.annotations.Nullable;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -54,12 +50,10 @@ public class GPA_setter_Controller extends ActivityController {
     private DocumentReference userRef = db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()));
 
 
-    GPA_setting gpa_setting;
-    private List<GPA> gpa_listItems;
+    GPA_setting gpa_setting = GPA_setting.getInstance();
 
     GPA_setter_Controller(final Context context) {
         this.context = context;
-        this.gpa_listItems = new ArrayList<>();
     }
 
     public String getGPAPath() {
@@ -77,15 +71,19 @@ public class GPA_setter_Controller extends ActivityController {
      * set up recycler view base on information in user
      */
     public void setupListItems() {
-        for(GPA g:gpa_listItems){
+
+        for(GPA g:gpa_setting){
             listItems.add(new GPAListItem(g.getLower(),g.getUpper(),g.getGrade_point(),g.getGrade()));
         }
+
+
     }
 
 
     @Override
     public void deleteItem(int position) {
-
+        gpa_setting.remove(position);
+        adapter.notifyItemRemoved(position);
     }
 
 
@@ -94,25 +92,11 @@ public class GPA_setter_Controller extends ActivityController {
     }
 
 
-    /**
-     * add a new GPA to recycler voew
-     * @param low
-     * @param high
-     * @param gpa
-     * @param mark
-     * @return return true if success, in this case, alway true
-     */
     public boolean addGPA(int low, int high,double gpa,String mark) {
-        final GPA year = new GPA(low,high,gpa,mark);
-//        userRef.collection("GPA").add(year).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//            @Override
-//            public void onSuccess(DocumentReference documentReference) {
-//                year.setDocID(documentReference.getId());
-//            }
-//        });
+        final GPA create_gpa = new GPA(low,high,gpa,mark);
         this.listItems.add(new GPAListItem(low,high,gpa,mark));
-        this.gpa_listItems.add(year);
-        adapter.notifyItemInserted(gpa_listItems.size() - 1);
+        gpa_setting.add(create_gpa);
+        adapter.notifyItemInserted(listItems.size() - 1);
         return true;
     }
 
@@ -128,7 +112,12 @@ public class GPA_setter_Controller extends ActivityController {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 GPA gpa = document.toObject(GPA.class);
                                 gpa.setDocID(document.getId());
-                                gpa_listItems.add(gpa);
+                                gpa_setting = document.toObject(GPA_setting.class);
+                                gpa_setting.setDocID(document.getId());
+                                if(gpa_setting == null){
+                                    Log.d(TAG, "first time log in");
+                                    gpa_setting = GPA_setting.getInstance();
+                                }
                             }
                             setupListItems();
                             adapter = new RecyclerViewAdapter(context, listItems, getInstance());
@@ -136,7 +125,6 @@ public class GPA_setter_Controller extends ActivityController {
                             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
                             itemTouchHelper.attachToRecyclerView(recyclerView);
 
-//                            adapter = new RecyclerViewAdapter(context, listItems, );
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
@@ -155,24 +143,7 @@ public class GPA_setter_Controller extends ActivityController {
      * save the update on gpa_setting to user
      */
     public boolean save_update(){
-//        for(GPA g: gpa_listItems){
-//            GPAref.collection("GPA").document(g.getDocID())
-//                    .delete()
-//                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                        @Override
-//                        public void onSuccess(Void aVoid) {
-//                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
-//                        }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            Log.w(TAG, "Error deleting document", e);
-//                            Toast.makeText(context, "Failed To Delete", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//        }
-        //check
+
         for (int x = recyclerView.getChildCount(), i = 0; i < x; i++) {
             RecyclerViewAdapter.GPAViewHolder holder = ( RecyclerViewAdapter.GPAViewHolder)recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
             int low = holder.getLow();
@@ -182,16 +153,29 @@ public class GPA_setter_Controller extends ActivityController {
            //gpa_setting.update(i,new GPA(low,high,point,grade));
         }
 
-        //add
-        for(final GPA g: gpa_listItems) {
-            userRef.collection("GPA").add(g).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    g.setDocID(documentReference.getId());
+        db.collection("GPA").document(gpa_setting.getDocID())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                        Toast.makeText(context, "Failed To Delete", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-                }
-            });
-        }
+//        userRef.collection("GPA").add(gpa_setting).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//            @Override
+//            public void onSuccess(DocumentReference documentReference) {
+//                gpa_setting.setDocID(documentReference.getId());
+//
+//            }
+//        });
         return true;
     }
 

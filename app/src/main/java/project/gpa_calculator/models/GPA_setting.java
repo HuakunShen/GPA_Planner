@@ -7,7 +7,7 @@ import java.util.Iterator;
 public class GPA_setting implements Iterable<GPA>, Serializable {
 
     private static GPA_setting instance;
-
+    private String docID;
     private ArrayList<GPA> GPAs = new ArrayList<>();
 
 
@@ -79,5 +79,12 @@ public class GPA_setting implements Iterable<GPA>, Serializable {
     }
     public void update(int pos,GPA new_gpa){
         GPAs.set(pos,new_gpa);
+    }
+    public void setDocID(String docID) {
+        this.docID = docID;
+    }
+
+    public String getDocID() {
+        return docID;
     }
 }

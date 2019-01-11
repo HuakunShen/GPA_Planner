@@ -71,7 +71,7 @@ public class GPA_setter_Controller extends ActivityController {
      * set up recycler view base on information in user
      */
     public void setupListItems() {
-
+        listItems.clear();
         for(GPA g:gpa_setting){
             listItems.add(new GPAListItem(g.getLower(),g.getUpper(),g.getGrade_point(),g.getGrade()));
         }
@@ -114,10 +114,6 @@ public class GPA_setter_Controller extends ActivityController {
                                 gpa.setDocID(document.getId());
                                 gpa_setting = document.toObject(GPA_setting.class);
                                 gpa_setting.setDocID(document.getId());
-                                if(gpa_setting == null){
-                                    Log.d(TAG, "first time log in");
-                                    gpa_setting = GPA_setting.getInstance();
-                                }
                             }
                             setupListItems();
                             adapter = new RecyclerViewAdapter(context, listItems, getInstance());
@@ -152,30 +148,35 @@ public class GPA_setter_Controller extends ActivityController {
             String grade = holder.getGpa_grade();
            //gpa_setting.update(i,new GPA(low,high,point,grade));
         }
+        try{
+            db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()))
+                    .collection("GPA").document(gpa_setting.getDocID())
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                            Toast.makeText(context, "old gpa setting deleted", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.w(TAG, "Error deleting document", e);
+                            Toast.makeText(context, "Failed To Delete", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }catch (NullPointerException e){
 
-        db.collection("GPA").document(gpa_setting.getDocID())
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error deleting document", e);
-                        Toast.makeText(context, "Failed To Delete", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        }
 
-//        userRef.collection("GPA").add(gpa_setting).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//            @Override
-//            public void onSuccess(DocumentReference documentReference) {
-//                gpa_setting.setDocID(documentReference.getId());
-//
-//            }
-//        });
+        userRef.collection("GPA").add(gpa_setting).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                gpa_setting.setDocID(documentReference.getId());
+            }
+        });
+
         return true;
     }
 

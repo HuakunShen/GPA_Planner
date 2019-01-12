@@ -1,7 +1,10 @@
 package project.gpa_calculator.activities.GPA_setter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +29,8 @@ import java.util.Objects;
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.ActivityController;
+import project.gpa_calculator.Util.SwipeController;
+import project.gpa_calculator.Util.SwipeControllerActions;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
 
 import project.gpa_calculator.models.GPA;
@@ -36,18 +41,20 @@ import project.gpa_calculator.models.User;
 
 
 public class GPA_setter_Controller extends ActivityController {
-    private List<ListItem> listItems = new ArrayList<>();
+    private List<GPA> listItems = new ArrayList<>();
 
     private static final String TAG = "GPA_setter_Controller";
 
     private RecyclerView recyclerView;
 
-    private RecyclerView.Adapter adapter;
+    private GPA_setter_Adapter adapter;
     private Context context;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private DocumentReference userRef = db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()));
+
+    private SwipeController swipeController;
 
 
     GPA_setting gpa_setting = GPA_setting.getInstance();
@@ -73,7 +80,7 @@ public class GPA_setter_Controller extends ActivityController {
     public void setupListItems() {
         listItems.clear();
         for(GPA g:gpa_setting){
-            listItems.add(new GPAListItem(g.getLower(),g.getUpper(),g.getGrade_point(),g.getGrade()));
+            listItems.add(new GPA(g.getLower(),g.getUpper(),g.getGrade_point(),g.getGrade()));
         }
 
 
@@ -83,18 +90,19 @@ public class GPA_setter_Controller extends ActivityController {
     @Override
     public void deleteItem(int position) {
         gpa_setting.remove(position);
+        listItems.remove(position);
         adapter.notifyItemRemoved(position);
     }
 
 
-    public List<ListItem> getListItems() {
+    public List<GPA> getListItems() {
         return listItems;
     }
 
 
     public boolean addGPA(int low, int high,double gpa,String mark) {
         final GPA create_gpa = new GPA(low,high,gpa,mark);
-        this.listItems.add(new GPAListItem(low,high,gpa,mark));
+        this.listItems.add(create_gpa);
         gpa_setting.add(create_gpa);
         adapter.notifyItemInserted(listItems.size() - 1);
         return true;
@@ -116,10 +124,19 @@ public class GPA_setter_Controller extends ActivityController {
                                 gpa_setting.setDocID(document.getId());
                             }
                             setupListItems();
-                            adapter = new RecyclerViewAdapter(context, listItems, getInstance());
+
+                            adapter = new GPA_setter_Adapter(context, listItems, getInstance());
                             recyclerView.setAdapter(adapter);
-                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback((RecyclerViewAdapter) adapter));
-                            itemTouchHelper.attachToRecyclerView(recyclerView);
+
+
+                            ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+                            itemTouchhelper.attachToRecyclerView(recyclerView);
+                            recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+                                @Override
+                                public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                                    swipeController.onDraw(c);
+                                }
+                            });
 
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());

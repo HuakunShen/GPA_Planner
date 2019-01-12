@@ -1,10 +1,7 @@
 package project.gpa_calculator.activities.GPA_setter;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,8 +26,6 @@ import java.util.Objects;
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.ActivityController;
-import project.gpa_calculator.Util.SwipeController;
-import project.gpa_calculator.Util.SwipeControllerActions;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
 
 import project.gpa_calculator.models.GPA;
@@ -53,8 +48,6 @@ public class GPA_setter_Controller extends ActivityController {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private DocumentReference userRef = db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()));
-
-    private SwipeController swipeController;
 
 
     GPA_setting gpa_setting = GPA_setting.getInstance();
@@ -124,19 +117,10 @@ public class GPA_setter_Controller extends ActivityController {
                                 gpa_setting.setDocID(document.getId());
                             }
                             setupListItems();
-
                             adapter = new GPA_setter_Adapter(context, listItems, getInstance());
                             recyclerView.setAdapter(adapter);
-
-
-                            ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
-                            itemTouchhelper.attachToRecyclerView(recyclerView);
-                            recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-                                @Override
-                                public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                                    swipeController.onDraw(c);
-                                }
-                            });
+                            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(adapter));
+                            itemTouchHelper.attachToRecyclerView(recyclerView);
 
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
@@ -157,14 +141,14 @@ public class GPA_setter_Controller extends ActivityController {
      */
     public boolean save_update(){
 
-        for (int x = recyclerView.getChildCount(), i = 0; i < x; i++) {
-            RecyclerViewAdapter.GPAViewHolder holder = ( RecyclerViewAdapter.GPAViewHolder)recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
-            int low = holder.getLow();
-            int high = holder.getHigh();
-            double point = holder.getGpa_point();
-            String grade = holder.getGpa_grade();
-           //gpa_setting.update(i,new GPA(low,high,point,grade));
-        }
+//        for (int x = recyclerView.getChildCount(), i = 0; i < x; i++) {
+//            GPA_setter_Adapter.ViewHolder holder = ( GPA_setter_Adapter.ViewHolder)recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
+//            int low = holder.getLow();
+//            int high = holder.getHigh();
+//            double point = holder.getGpa_point();
+//            String grade = holder.getGpa_grade();
+//           //gpa_setting.update(i,new GPA(low,high,point,grade));
+//        }
         try{
             db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()))
                     .collection("GPA").document(gpa_setting.getDocID())

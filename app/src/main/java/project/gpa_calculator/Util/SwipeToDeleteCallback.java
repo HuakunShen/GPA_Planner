@@ -12,15 +12,16 @@ import android.view.View;
 
 import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
+import project.gpa_calculator.activities.GPA_setter.GPA_setter_Adapter;
 
 public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
-    private RecyclerViewAdapter mAdapter;
+    private GPA_setter_Adapter mAdapter;
 
     private Drawable icon;
     private final ColorDrawable background;
 
 
-    public SwipeToDeleteCallback(RecyclerViewAdapter adapter) {
+    public SwipeToDeleteCallback(GPA_setter_Adapter adapter) {
         super(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
         mAdapter = adapter;
         icon = ContextCompat.getDrawable(mAdapter.getContext(),

@@ -141,14 +141,15 @@ public class GPA_setter_Controller extends ActivityController {
      */
     public boolean save_update(){
 
-//        for (int x = recyclerView.getChildCount(), i = 0; i < x; i++) {
-//            GPA_setter_Adapter.ViewHolder holder = ( GPA_setter_Adapter.ViewHolder)recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
-//            int low = holder.getLow();
-//            int high = holder.getHigh();
-//            double point = holder.getGpa_point();
-//            String grade = holder.getGpa_grade();
-//           //gpa_setting.update(i,new GPA(low,high,point,grade));
-//        }
+        for (int x = recyclerView.getChildCount(), i = 0; i < x; i++) {
+            GPA_setter_Adapter.ViewHolder holder = ( GPA_setter_Adapter.ViewHolder)recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
+
+            int low = holder.getLow().equals("") ? holder.get_low_hint():Integer.valueOf(holder.getLow());
+            int high = holder.getHigh().equals("") ? holder.get_high_hint():Integer.valueOf(holder.getHigh());
+            double point = holder.getGpa_point().equals("") ?holder.get_gpapoint_hint():Integer.valueOf(holder.getGpa_point());
+            String grade = holder.getGpa_grade().equals("") ? holder.get_gpagrade_hint():holder.getGpa_grade();
+            gpa_setting.update(i,new GPA(low,high,point,grade));
+        }
         try{
             db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()))
                     .collection("GPA").document(gpa_setting.getDocID())

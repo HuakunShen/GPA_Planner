@@ -47,6 +47,7 @@ public class GPA_setter_Adapter extends RecyclerView.Adapter<GPA_setter_Adapter.
         viewHolder.gpa_grade.setHint(cur_item.getGrade());
     }
 
+
     @Override
     public int getItemCount() {
         return this.list_items.size();
@@ -66,6 +67,38 @@ public class GPA_setter_Adapter extends RecyclerView.Adapter<GPA_setter_Adapter.
             low.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             high.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             itemView.setOnLongClickListener(this);
+        }
+        public int get_low_hint(){
+            return Integer.valueOf(low.getHint().toString());
+        }
+
+        public int get_high_hint(){
+            return Integer.valueOf(high.getHint().toString());
+        }
+
+        public double get_gpapoint_hint(){
+            return Double.valueOf(gpa_point.getHint().toString());
+        }
+
+        public String get_gpagrade_hint(){
+            return gpa_grade.getHint().toString();
+        }
+
+
+        public String getGpa_grade() {
+            return gpa_grade.getText().toString();
+        }
+
+        public String getHigh() {
+            return high.getText().toString();
+        }
+
+        public String getLow() {
+            return low.getText().toString();
+        }
+
+        public String getGpa_point() {
+            return gpa_point.getText().toString();
         }
 
         @Override

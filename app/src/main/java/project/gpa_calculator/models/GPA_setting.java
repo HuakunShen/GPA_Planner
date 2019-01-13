@@ -40,19 +40,19 @@ public class GPA_setting implements Iterable<GPA>, Serializable {
      * basic setting that match University of Toronto GPA
      */
     private GPA_setting(){
-        GPAs.add(new GPA(100,90,4.0,"A+"));
-        GPAs.add(new GPA(89,85,4.0,"A"));
-        GPAs.add(new GPA(84,80,3.7,"A-"));
-        GPAs.add(new GPA(79,77,3.3,"B+"));
-        GPAs.add(new GPA(76,73,3.0,"B"));
-        GPAs.add(new GPA(72,70,2.7,"B-"));
-        GPAs.add(new GPA(69,67,2.3,"C+"));
-        GPAs.add(new GPA(66,63,2.0,"C"));
-        GPAs.add(new GPA(62,60,1.7,"C-"));
-        GPAs.add(new GPA(59,57,1.3,"D+"));
-        GPAs.add(new GPA(56,53,1.0,"D"));
-        GPAs.add(new GPA(52,50,0.7,"D-"));
-        GPAs.add(new GPA(49,0,0.0,"F"));
+        GPAs.add(new GPA(90,100,4.0,"A+"));
+        GPAs.add(new GPA(85,89,4.0,"A"));
+        GPAs.add(new GPA(80,84,3.7,"A-"));
+        GPAs.add(new GPA(77,79,3.3,"B+"));
+        GPAs.add(new GPA(73,76,3.0,"B"));
+        GPAs.add(new GPA(70,72,2.7,"B-"));
+        GPAs.add(new GPA(67,69,2.3,"C+"));
+        GPAs.add(new GPA(63,66,2.0,"C"));
+        GPAs.add(new GPA(60,62,1.7,"C-"));
+        GPAs.add(new GPA(57,59,1.3,"D+"));
+        GPAs.add(new GPA(53,56,1.0,"D"));
+        GPAs.add(new GPA(50,52,0.7,"D-"));
+        GPAs.add(new GPA(0,49,0.0,"F"));
 
     }
 

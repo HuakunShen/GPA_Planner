@@ -1,8 +1,13 @@
 package project.gpa_calculator.models;
 
+import android.util.SparseIntArray;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public class GPA_setting implements Iterable<GPA>, Serializable {
 
@@ -10,7 +15,7 @@ public class GPA_setting implements Iterable<GPA>, Serializable {
     private String docID;
     private ArrayList<GPA> GPAs = new ArrayList<>();
 
-
+    private List<Integer> sort_num;
     @Override
     public Iterator<GPA> iterator() {
         return new Iterator<GPA>() {
@@ -82,6 +87,38 @@ public class GPA_setting implements Iterable<GPA>, Serializable {
     }
     public void setDocID(String docID) {
         this.docID = docID;
+    }
+    public boolean check(){
+        heap();
+        ArrayList<GPA> sorted = new ArrayList<>();
+        while(!GPAs.isEmpty()){
+            sorted.add(GPAs.get(0));
+            GPAs.set(0,GPAs.get(GPAs.size()-1));
+            GPAs.remove(GPAs.size()-1);
+            heap();
+        }
+
+        for (int i = 1; i < sorted.size()-1; i++) {
+            if(sorted.get(i).lower<sorted.get(i+1).upper||sorted.get(i).lower>sorted.get(i).upper){
+                return false;
+            }
+        }
+        GPAs = sorted;
+        return true;
+    }
+
+    public void heap() {
+        for (int i = 0; i < GPAs.size(); i++) {
+            if (i != 0) {
+                int j = i;
+                while (GPAs.get(j).upper > GPAs.get((int) Math.floor(j / 2)).upper) {
+                    GPA temp = GPAs.get(j);
+                    GPAs.set(j, GPAs.get((int) Math.floor(j / 2)));
+                    GPAs.set((int) Math.floor(j / 2), temp);
+                    j = (int) Math.floor(j / 2);
+                }
+            }
+        }
     }
 
     public String getDocID() {

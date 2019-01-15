@@ -162,7 +162,7 @@ public class GPA_setter_Controller extends ActivityController {
                            @Override
                            public void onSuccess(Void aVoid) {
                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                               Toast.makeText(context, "old gpa setting deleted", Toast.LENGTH_SHORT).show();
+                               Toast.makeText(context, "new GPA setting saved", Toast.LENGTH_SHORT).show();
                            }
                        })
                        .addOnFailureListener(new OnFailureListener() {
@@ -200,5 +200,10 @@ public class GPA_setter_Controller extends ActivityController {
     public void setContext(Context context) {
         this.context = context;
     }
+
+    public Context getContext() {
+        return context;
+    }
+
 }
 

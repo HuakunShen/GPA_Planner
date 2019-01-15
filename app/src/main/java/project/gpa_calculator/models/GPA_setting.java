@@ -97,13 +97,13 @@ public class GPA_setting implements Iterable<GPA>, Serializable {
             GPAs.remove(GPAs.size()-1);
             heap();
         }
-
+        GPAs = sorted;
         for (int i = 1; i < sorted.size()-1; i++) {
-            if(sorted.get(i).lower<sorted.get(i+1).upper||sorted.get(i).lower>sorted.get(i).upper){
+            if(sorted.get(i).lower<sorted.get(i+1).upper||sorted.get(i).lower>sorted.get(i).upper||sorted.get(i).lower<sorted.get(i+1).upper){
                 return false;
             }
         }
-        GPAs = sorted;
+
         return true;
     }
 

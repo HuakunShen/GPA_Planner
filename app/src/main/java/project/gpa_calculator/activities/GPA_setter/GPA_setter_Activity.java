@@ -57,9 +57,10 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
     @Override
     public void onBackPressed() {
         //should put in controller but idk how
-       controller.save_update();
-
-        super.onBackPressed();
+        boolean back = controller.save_update();
+        if(back){
+            super.onBackPressed();
+        }
 
     }
 

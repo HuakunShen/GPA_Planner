@@ -1,7 +1,9 @@
 package project.gpa_calculator.activities.GPA_setter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -181,7 +183,9 @@ public class GPA_setter_Controller extends ActivityController {
                }
            });
        }else {
-           Toast.makeText(context, "new GPA setting does not satisfy condition!", Toast.LENGTH_SHORT).show();
+            //TODO make a button exit anyway
+            Toast.makeText(context, "please make sure there is no overlapping GPAs", Toast.LENGTH_SHORT).show();
+           return false;
        }
         return true;
     }

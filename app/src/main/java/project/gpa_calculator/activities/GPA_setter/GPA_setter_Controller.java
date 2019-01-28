@@ -183,7 +183,6 @@ public class GPA_setter_Controller extends ActivityController {
                }
            });
        }else {
-            //TODO make a button exit anyway
             Toast.makeText(context, "please make sure there is no overlapping GPAs", Toast.LENGTH_SHORT).show();
            return false;
        }

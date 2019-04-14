@@ -143,7 +143,7 @@ public class AddDialog extends AppCompatDialogFragment {
             third_ET.setHint("Target Score (Percentage)");
             third_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             dialog_linearLayout.addView(third_ET);
-            fourth_ET.setHint("Credit Hint");
+            fourth_ET.setHint("Credit");
             fourth_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             dialog_linearLayout.addView(fourth_ET);
             second_ET.setHint("Course Code");

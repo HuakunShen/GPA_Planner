@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.daimajia.swipe.SwipeLayout;
 
 import java.util.List;
+
 import project.gpa_calculator.R;
 import project.gpa_calculator.models.Event;
 
@@ -86,7 +87,6 @@ public class EventActivityRecyclerViewAdapter extends RecyclerView.Adapter<Event
 //        });
 
 
-
         viewHolder.swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,10 +150,10 @@ public class EventActivityRecyclerViewAdapter extends RecyclerView.Adapter<Event
         ViewHolder(@NonNull View itemView) {
             super(itemView);
             swipeLayout = itemView.findViewById(R.id.list_row);
-            btnLocation = (ImageButton) itemView.findViewById(R.id.btnLocation);
-            Delete = (TextView) itemView.findViewById(R.id.Delete);
-            Edit = (TextView) itemView.findViewById(R.id.Edit);
-            Share = (TextView) itemView.findViewById(R.id.Share);
+            btnLocation = itemView.findViewById(R.id.btnLocation);
+            Delete = itemView.findViewById(R.id.Delete);
+            Edit = itemView.findViewById(R.id.Edit);
+            Share = itemView.findViewById(R.id.Share);
 
 
             name = itemView.findViewById(R.id.title);

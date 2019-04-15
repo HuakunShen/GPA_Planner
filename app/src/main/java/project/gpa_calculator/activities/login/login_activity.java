@@ -14,7 +14,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -97,7 +99,6 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-
     private void createEmailPasswordAccount() {
         String email = email_ET.getText().toString();
         String password = password_ET.getText().toString();
@@ -116,8 +117,9 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(login_activity.this, "Authentication failed.\n Account May Exists Already",
-                                        Toast.LENGTH_SHORT).show();
+                                Toast.makeText(login_activity.this,
+                                        "\t\tFailed to Create Account\nAccount May Exists Already\n                      or\n\t\tNo Internet Connection",
+                                        Toast.LENGTH_LONG).show();
                                 updateUI(null);
                             }
 
@@ -192,6 +194,8 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                 updateUI(null);
                 // [END_EXCLUDE]
             }
+        } else {
+            Toast.makeText(login_activity.this, "google sign in: error", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -199,6 +203,18 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(login_activity.this, "Google Authentication Failed", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnCanceledListener(this, new OnCanceledListener() {
+                    @Override
+                    public void onCanceled() {
+                        Toast.makeText(login_activity.this, "cancel google login", Toast.LENGTH_SHORT).show();
+                    }
+                })
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -211,7 +227,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                             finish();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Log.w(TAG, "google signInWithCredential:failure", task.getException());
                             updateUI(null);
 
                         }

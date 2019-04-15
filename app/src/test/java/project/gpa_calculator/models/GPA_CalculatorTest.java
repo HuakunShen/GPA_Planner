@@ -70,7 +70,7 @@ public class GPA_CalculatorTest {
     }
 
     private void setupAnotherCourse() {
-        Course course2 = new Course("CSC343", "Intro To Database", 80d, 0.5d);
+        Course course2 = new Course("CSC343", "Intro To SQLiteDB", 80d, 0.5d);
         fall.addCourse(course2);
         assertFalse(fall.isDone());
         Event event3 = new Event("final", 100d);

@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,14 +26,16 @@ import project.gpa_calculator.activities.GPA_setter.GPA_setter_Activity;
 import project.gpa_calculator.activities.login.login_activity;
 import project.gpa_calculator.activities.year.YearActivity;
 
+import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
     private Button details_btn;
     private MainActivityController controller;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseUser user = mAuth.getCurrentUser();
     public static final String userFile = "userFile";
-
 
 
     @Override
@@ -61,12 +64,23 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        FirebaseUser user = mAuth.getCurrentUser();
+        user = mAuth.getCurrentUser();
         View headerView = navigationView.getHeaderView(0);
         TextView username_tv = headerView.findViewById(R.id.username);
         TextView email_tv = headerView.findViewById(R.id.email_tv);
-        username_tv.setText(user.getDisplayName());
-        email_tv.setText(user.getEmail());
+        if (user != null) {
+            username_tv.setText(user.getDisplayName());
+            email_tv.setText(user.getEmail());
+        } else {
+            // Connection is slow, user could be null if just signed in, then we cannot load user's
+            // name and email
+            for (; user == null; ) {
+                user = mAuth.getCurrentUser();
+            }
+            username_tv.setText(user.getDisplayName());
+            email_tv.setText(user.getEmail());
+        }
+
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -90,6 +104,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        user = mAuth.getCurrentUser();
     }
 
     @Override

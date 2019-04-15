@@ -33,4 +33,6 @@
     <string name="description4">description4</string>
     <string name="description1">description1</string>
     <string name="title">Title</string>
+    <string name="facebook_app_id">324192591574369</string>
+    <string name="fb_login_protocol_scheme">fb324192591574369</string>
 </resources>

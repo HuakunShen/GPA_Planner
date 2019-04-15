@@ -22,6 +22,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GithubAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -78,6 +79,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.login_btn).setOnClickListener(this);
         findViewById(R.id.signup_btn).setOnClickListener(this);
         findViewById(R.id.signout_btn).setOnClickListener(this);
+        findViewById(R.id.github_btn).setOnClickListener(this);
     }
 
     @Override
@@ -95,7 +97,36 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
             case R.id.signup_btn:
                 createEmailPasswordAccount();
                 break;
+            case R.id.github_btn:
+                githubSignIn();
+                break;
+            default:
+                break;
         }
+    }
+
+    private void githubSignIn() {
+        String token = "<GITHUB-ACCESS-TOKEN>";
+        AuthCredential credential = GithubAuthProvider.getCredential(token);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "signInWithCredential", task.getException());
+                            Toast.makeText(login_activity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
+                    }
+                });
+
     }
 
 

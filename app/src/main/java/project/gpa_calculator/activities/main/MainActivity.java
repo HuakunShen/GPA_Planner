@@ -17,6 +17,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -142,11 +144,17 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_settings:
-                Intent intent = new Intent(getApplication(), GPA_setter_Activity.class);
-                startActivity(intent);
+//                startActivity(new Intent(getApplication(), GPA_setter_Activity.class));
                 return true;
             case R.id.signout_btn:
                 mAuth.signOut();
+                // Check if is logged in with facebook, if so, then log out facebook
+                AccessToken accessToken = AccessToken.getCurrentAccessToken();
+                boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+                if (isLoggedIn) {
+//                    Toast.makeText(this, "is logged in", Toast.LENGTH_LONG).show();
+                    LoginManager.getInstance().logOut();
+                }
                 startActivity(new Intent(this, login_activity.class));
                 finish();
                 return true;
@@ -172,6 +180,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.gpa_setting_btn) {
+            startActivity(new Intent(getApplication(), GPA_setter_Activity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

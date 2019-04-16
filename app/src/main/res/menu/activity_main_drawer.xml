@@ -35,4 +35,17 @@
         </menu>
     </item>
 
+    <item android:title="Title">
+        <menu>
+            <item
+                android:id="@+id/setting_btn"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="Setting" />
+            <item
+                android:id="@+id/gpa_setting_btn"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="GPA Setting" />
+        </menu>
+    </item>
+
 </menu>

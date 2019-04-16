@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -14,6 +13,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -30,7 +30,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GithubAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -38,10 +37,11 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
 
+import java.util.Arrays;
+
 import project.gpa_calculator.models.UserF;
 import project.gpa_calculator.R;
 import project.gpa_calculator.activities.main.MainActivity;
-import project.gpa_calculator.models.GPA_setting;
 
 
 public class login_activity extends AppCompatActivity implements View.OnClickListener {
@@ -53,7 +53,6 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
     private static final String TAG = "login_activity";
     private EditText email_ET, password_ET;
     private CallbackManager mCallbackManager;
-    private Button loginButton;
     private static final String EMAIL = "email";
 
     @Override
@@ -73,6 +72,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
         initializeFacebookLoginBtn();
+
     }
 
     @Override
@@ -92,16 +92,18 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
     private void initializeFacebookLoginBtn() {
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = findViewById(R.id.login_button);
-        loginButton.setReadPermissions("email", "public_profile");
+        LoginButton loginButton = findViewById(R.id.facebook_login_button);
+//        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.setReadPermissions(Arrays.asList(EMAIL));
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
+
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
                 Log.d(TAG, "facebook login success");
                 createDocIfNotExists();
                 startActivity(new Intent(login_activity.this, MainActivity.class));
+                finish();
             }
 
             @Override
@@ -142,6 +144,16 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                     }
                 });
     }
+
+//    public void check(View view) {
+//        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+//        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+//        if (isLoggedIn)
+//            Toast.makeText(this, "is logged in", Toast.LENGTH_LONG).show();
+//        else
+//            Toast.makeText(this, "is not logged in", Toast.LENGTH_LONG).show();
+//        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+//    }
 
 
     private void updateUI(FirebaseUser currentUser) {
@@ -272,11 +284,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                 updateUI(null);
                 // [END_EXCLUDE]
             }
-        } else {
-            Toast.makeText(login_activity.this, "google sign in: error", Toast.LENGTH_SHORT).show();
-        }
-
-        if (requestCode == FACEBOOK_LOGIN_REQ_CODE) {
+        } else if (requestCode == FACEBOOK_LOGIN_REQ_CODE) {
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -343,6 +351,12 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
 
         // Google sign out
         googleSignOut();
+
+        // Check if facebook is logged in, if so, sign out facebook
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+        if (isLoggedIn)
+            LoginManager.getInstance().logOut();
 
         // quit app
         finishAndRemoveTask();

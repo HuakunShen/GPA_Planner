@@ -41,7 +41,7 @@ public class EventActivityRecyclerViewAdapter extends RecyclerView.Adapter<Event
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int position) {
         final Event event = this.list_items.get(position);
         viewHolder.name.setText(event.getEvent_name());
         viewHolder.weight.setText(("Weight: " + String.valueOf(event.getEvent_weight())));
@@ -97,6 +97,14 @@ public class EventActivityRecyclerViewAdapter extends RecyclerView.Adapter<Event
             }
         });
 
+        viewHolder.swipeLayout.getSurfaceView().setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(context, "long clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
         viewHolder.btnLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,7 +155,7 @@ public class EventActivityRecyclerViewAdapter extends RecyclerView.Adapter<Event
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name, score, weight, status, target;
         private SwipeLayout swipeLayout;
         private ImageButton btnLocation;
@@ -170,20 +178,21 @@ public class EventActivityRecyclerViewAdapter extends RecyclerView.Adapter<Event
             score = itemView.findViewById(R.id.description2);
             status = itemView.findViewById(R.id.description3);
             target = itemView.findViewById(R.id.description4);
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
+//            itemView.setOnClickListener(this);
+//            itemView.setOnLongClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-            Toast.makeText(context, name.getText().toString(), Toast.LENGTH_SHORT).show();
-        }
+//        @Override
+//        public void onClick(View v) {
+//            Toast.makeText(context, name.getText().toString(), Toast.LENGTH_SHORT).show();
+//        }
 
 
-        @Override
-        public boolean onLongClick(View v) {
-            name.setText("LongClicked");
-            return true;
-        }
+//        @Override
+//        public boolean onLongClick(View v) {
+//            name.setText("LongClicked");
+//            Toast.makeText(context, "long clicked", Toast.LENGTH_SHORT).show();
+//            return true;
+//        }
     }
 }

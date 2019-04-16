@@ -59,12 +59,23 @@ public class CourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<Cour
         //dari kanan
         viewHolder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, viewHolder.swipeLayout.findViewById(R.id.bottom_wraper));
 
-//        viewHolder.swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(context, " Click : " + course.getCourse_code(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        viewHolder.swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, EventActivity.class);
+                Course course = list_items.get(position);
+                intent.putExtra("course_doc_path", controller.getCoursePath() + course.getDocID());
+                context.startActivity(intent);
+            }
+        });
+
+        viewHolder.swipeLayout.getSurfaceView().setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(context, "Long clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
 
         viewHolder.btnLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +114,7 @@ public class CourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<Cour
         return this.list_items.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name, course_code, status, score_target, credit;
         private SwipeLayout swipeLayout;
         private ImageButton btnLocation;
@@ -125,23 +136,23 @@ public class CourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<Cour
             score_target = itemView.findViewById(R.id.description2);
             status = itemView.findViewById(R.id.description3);
             credit = itemView.findViewById(R.id.description4);
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
+//            itemView.setOnClickListener(this);
+//            itemView.setOnLongClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-            int position = getAdapterPosition();
-            Intent intent = new Intent(context, EventActivity.class);
-            Course course = list_items.get(position);
-            intent.putExtra("course_doc_path", controller.getCoursePath() + course.getDocID());
-            context.startActivity(intent);
-        }
+//        @Override
+//        public void onClick(View v) {
+//            int position = getAdapterPosition();
+//            Intent intent = new Intent(context, EventActivity.class);
+//            Course course = list_items.get(position);
+//            intent.putExtra("course_doc_path", controller.getCoursePath() + course.getDocID());
+//            context.startActivity(intent);
+//        }
 
-        @Override
-        public boolean onLongClick(View v) {
-            name.setText("LongClicked");
-            return true;
-        }
+//        @Override
+//        public boolean onLongClick(View v) {
+//            name.setText("LongClicked");
+//            return true;
+//        }
     }
 }

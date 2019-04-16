@@ -7,7 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.daimajia.swipe.SwipeLayout;
 
 import java.util.List;
 
@@ -41,7 +45,7 @@ public class SemesterActivityRecyclerViewAdapter extends RecyclerView.Adapter<Se
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
         Semester semester = this.list_items.get(position);
         viewHolder.name.setText(semester.getSemester_name());
         // TODO: status isDone method is not complete since we use firestore instead of pure object
@@ -51,6 +55,63 @@ public class SemesterActivityRecyclerViewAdapter extends RecyclerView.Adapter<Se
         viewHolder.target.setText(("Target: " + 0.0d));
 //        viewHolder.score_target.setText((course.isDone() ? "Score: " : "Target: " + String.valueOf(course.getTarget())));
         viewHolder.credit.setText(("Credit: " + 0d));
+
+        viewHolder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+        //dari kiri
+        viewHolder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, viewHolder.swipeLayout.findViewById(R.id.bottom_wrapper1));
+
+        //dari kanan
+        viewHolder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, viewHolder.swipeLayout.findViewById(R.id.bottom_wraper));
+
+        viewHolder.swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, CourseActivity.class);
+                Semester semester = list_items.get(position);
+                intent.putExtra("semester_doc_path", controller.getSemesterPath() + semester.getDocID());
+                context.startActivity(intent);
+            }
+        });
+
+        viewHolder.swipeLayout.getSurfaceView().setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(context, "long clicked", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+
+
+        viewHolder.btnLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Clicked on Information ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        viewHolder.Share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(view.getContext(), "Clicked on Share ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        viewHolder.Edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(view.getContext(), "Clicked on Edit  ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        viewHolder.Delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "Delete Clicked", Toast.LENGTH_SHORT).show();
+                controller.deleteItem(position);
+            }
+        });
     }
 
     @Override
@@ -58,33 +119,45 @@ public class SemesterActivityRecyclerViewAdapter extends RecyclerView.Adapter<Se
         return this.list_items.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name, status, gpa, target, credit;
+        private SwipeLayout swipeLayout;
+        private ImageButton btnLocation;
+        private TextView Delete;
+        private TextView Edit;
+        private TextView Share;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            swipeLayout = itemView.findViewById(R.id.list_row);
+            btnLocation = itemView.findViewById(R.id.btnLocation);
+            Delete = itemView.findViewById(R.id.Delete);
+            Edit = itemView.findViewById(R.id.Edit);
+            Share = itemView.findViewById(R.id.Share);
+
+
             name = itemView.findViewById(R.id.title);
             status = itemView.findViewById(R.id.description1);
             gpa = itemView.findViewById(R.id.description2);
             target = itemView.findViewById(R.id.description3);
             credit = itemView.findViewById(R.id.description4);
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
+//            itemView.setOnClickListener(this);
+//            itemView.setOnLongClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-            int position = getAdapterPosition();
-            Intent intent = new Intent(context, CourseActivity.class);
-            Semester semester = list_items.get(position);
-            intent.putExtra("semester_doc_path", controller.getSemesterPath() + semester.getDocID());
-            context.startActivity(intent);
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            name.setText("LongClicked");
-            return true;
-        }
+//        @Override
+//        public void onClick(View v) {
+//            int position = getAdapterPosition();
+//            Intent intent = new Intent(context, CourseActivity.class);
+//            Semester semester = list_items.get(position);
+//            intent.putExtra("semester_doc_path", controller.getSemesterPath() + semester.getDocID());
+//            context.startActivity(intent);
+//        }
+//
+//        @Override
+//        public boolean onLongClick(View v) {
+//            name.setText("LongClicked");
+//            return true;
+//        }
     }
 }

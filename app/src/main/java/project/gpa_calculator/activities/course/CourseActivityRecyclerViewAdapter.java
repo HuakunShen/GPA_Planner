@@ -7,7 +7,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.daimajia.swipe.SwipeLayout;
 
 import java.util.List;
 
@@ -36,8 +40,8 @@ public class CourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<Cour
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        Course course = this.list_items.get(position);
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
+        final Course course = this.list_items.get(position);
         viewHolder.name.setText(course.getCourse_name());
         viewHolder.course_code.setText((String.valueOf(course.getCourse_code())));
         // TODO: status isDone method is not complete since we use firestore instead of pure object
@@ -47,6 +51,51 @@ public class CourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<Cour
         viewHolder.score_target.setText("Score: 0");
 //        viewHolder.score_target.setText((course.isDone() ? "Score: " : "Target: " + String.valueOf(course.getTarget())));
         viewHolder.credit.setText(("Credit: " + String.valueOf(course.getCredit())));
+
+        viewHolder.swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
+        //dari kiri
+        viewHolder.swipeLayout.addDrag(SwipeLayout.DragEdge.Left, viewHolder.swipeLayout.findViewById(R.id.bottom_wrapper1));
+
+        //dari kanan
+        viewHolder.swipeLayout.addDrag(SwipeLayout.DragEdge.Right, viewHolder.swipeLayout.findViewById(R.id.bottom_wraper));
+
+//        viewHolder.swipeLayout.getSurfaceView().setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(context, " Click : " + course.getCourse_code(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
+        viewHolder.btnLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), "Clicked on Information ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        viewHolder.Share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(view.getContext(), "Clicked on Share ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        viewHolder.Edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(view.getContext(), "Clicked on Edit  ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        viewHolder.Delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "Delete Clicked", Toast.LENGTH_SHORT).show();
+                controller.deleteItem(position);
+            }
+        });
     }
 
     @Override
@@ -54,12 +103,25 @@ public class CourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<Cour
         return this.list_items.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private TextView name, course_code, status, score_target, credit;
+        private SwipeLayout swipeLayout;
+        private ImageButton btnLocation;
+        private TextView Delete;
+        private TextView Edit;
+        private TextView Share;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            swipeLayout = itemView.findViewById(R.id.list_row);
+            btnLocation = itemView.findViewById(R.id.btnLocation);
+            Delete = itemView.findViewById(R.id.Delete);
+            Edit = itemView.findViewById(R.id.Edit);
+            Share = itemView.findViewById(R.id.Share);
+
+
             course_code = itemView.findViewById(R.id.title);
-            name= itemView.findViewById(R.id.description1);
+            name = itemView.findViewById(R.id.description1);
             score_target = itemView.findViewById(R.id.description2);
             status = itemView.findViewById(R.id.description3);
             credit = itemView.findViewById(R.id.description4);

@@ -95,6 +95,9 @@ public class EventActivityController extends ActivityController {
                 });
     }
 
+    EventActivityController getInstance() {
+        return this;
+    }
 
     void setupRecyclerViewContent() {
         courseRef.collection(EVENT_COLLECTION)
@@ -110,7 +113,7 @@ public class EventActivityController extends ActivityController {
                                 event.setDocID(document.getId());
                                 event_list.add(event);
                             }
-                            adapter = new EventActivityRecyclerViewAdapter(context, event_list);
+                            adapter = new EventActivityRecyclerViewAdapter(context, event_list, getInstance());
                             recyclerView.setAdapter(adapter);
 
 

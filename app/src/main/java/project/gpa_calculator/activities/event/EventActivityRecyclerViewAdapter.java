@@ -21,10 +21,13 @@ public class EventActivityRecyclerViewAdapter extends RecyclerView.Adapter<Event
 
     private List<Event> list_items;
     private Context context;
+    private EventActivityController controller;
 
-    EventActivityRecyclerViewAdapter(Context context, List<Event> list_items) {
+    EventActivityRecyclerViewAdapter(Context context, List<Event> list_items, EventActivityController controller) {
         this.list_items = list_items;
         this.context = context;
+        this.controller = controller;
+
     }
 
 
@@ -38,7 +41,7 @@ public class EventActivityRecyclerViewAdapter extends RecyclerView.Adapter<Event
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
         final Event event = this.list_items.get(position);
         viewHolder.name.setText(event.getEvent_name());
         viewHolder.weight.setText(("Weight: " + String.valueOf(event.getEvent_weight())));
@@ -104,7 +107,6 @@ public class EventActivityRecyclerViewAdapter extends RecyclerView.Adapter<Event
         viewHolder.Share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Toast.makeText(view.getContext(), "Clicked on Share ", Toast.LENGTH_SHORT).show();
             }
         });
@@ -112,8 +114,16 @@ public class EventActivityRecyclerViewAdapter extends RecyclerView.Adapter<Event
         viewHolder.Edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Toast.makeText(view.getContext(), "Clicked on Edit  ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        viewHolder.Delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Toast.makeText(view.getContext(), "Delete Clicked", Toast.LENGTH_SHORT).show();
+                controller.deleteItem(position);
             }
         });
 
@@ -128,7 +138,6 @@ public class EventActivityRecyclerViewAdapter extends RecyclerView.Adapter<Event
 //                Toast.makeText(v.getContext(), "Deleted " + viewHolder.Name.getText().toString(), Toast.LENGTH_SHORT).show();
 //            }
 //        });
-//
 //        mItemManger.bindView(viewHolder.itemView, position);
     }
 

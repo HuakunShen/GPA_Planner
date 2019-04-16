@@ -100,6 +100,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
                 Log.d(TAG, "facebook login success");
+                createDocIfNotExists();
                 startActivity(new Intent(login_activity.this, MainActivity.class));
             }
 
@@ -112,17 +113,13 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
-                // ...
             }
         });
-// ...
-
     }
 
 
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
-
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -157,8 +154,6 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.login_btn).setOnClickListener(this);
         findViewById(R.id.signup_btn).setOnClickListener(this);
         findViewById(R.id.signout_btn).setOnClickListener(this);
-//        findViewById(R.id.facebook_btn).setOnClickListener(this);
-//        findViewById(R.id.github_btn).setOnClickListener(this);
     }
 
     @Override
@@ -201,7 +196,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                 Toast.makeText(login_activity.this,
-                                        "\t\tFailed to Create Account\nAccount May Exists Already\n                      or\n\t\tNo Internet Connection",
+                                        "\t\tFailed to Create Account\n    Account May Exists Already",
                                         Toast.LENGTH_LONG).show();
                                 updateUI(null);
                             }
@@ -319,27 +314,26 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
 
                         }
                     }
-
-                    private void createDocIfNotExists() {
-                        db.document("Users/" + mAuth.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-                                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                                    } else {
-                                        Log.d(TAG, "No such document, and create the user document");
-                                        createUserDoc();
-                                    }
-                                } else {
-                                    Log.d(TAG, "get failed with ", task.getException());
-                                }
-                            }
-                        });
-                    }
                 });
+    }
 
+    private void createDocIfNotExists() {
+        db.document("Users/" + mAuth.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d(TAG, "No such document, and create the user document");
+                        createUserDoc();
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
     }
 
 

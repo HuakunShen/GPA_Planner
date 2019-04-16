@@ -177,7 +177,7 @@ public class GPA_Setter_Controller extends ActivityController {
                }
            });
        }else {
-            Toast.makeText(context, "please make sure there is no overlapping GPAs", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "ranges overlap or incomplete", Toast.LENGTH_SHORT).show();
            return false;
        }
         return true;

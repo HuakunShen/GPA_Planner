@@ -1,9 +1,7 @@
 package project.gpa_calculator.activities.GPA_setter;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,16 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.ActivityController;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
 
 import project.gpa_calculator.models.GPA;
-import project.gpa_calculator.models.GPAListItem;
-import project.gpa_calculator.models.GPA_setting;
-import project.gpa_calculator.models.ListItem;
-import project.gpa_calculator.models.User;
+import project.gpa_calculator.models.GPA_Setting;
 
 
 public class GPA_setter_Controller extends ActivityController {
@@ -52,7 +46,7 @@ public class GPA_setter_Controller extends ActivityController {
     private DocumentReference userRef = db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()));
 
 
-    GPA_setting gpa_setting = GPA_setting.getInstance();
+    GPA_Setting gpa_setting = GPA_Setting.getInstance();
 
     GPA_setter_Controller(final Context context) {
         this.context = context;
@@ -115,7 +109,7 @@ public class GPA_setter_Controller extends ActivityController {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 GPA gpa = document.toObject(GPA.class);
                                 gpa.setDocID(document.getId());
-                                gpa_setting = document.toObject(GPA_setting.class);
+                                gpa_setting = document.toObject(GPA_Setting.class);
                                 gpa_setting.setDocID(document.getId());
                             }
                             setupListItems();

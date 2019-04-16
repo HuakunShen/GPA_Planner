@@ -196,9 +196,6 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.action_settings:
-//                startActivity(new Intent(getApplication(), GPA_setter_Activity.class));
-                return true;
             case R.id.signout_btn:
                 mAuth.signOut();
                 // Check if is logged in with facebook, if so, then log out facebook

@@ -228,7 +228,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
         db.document("Users/" + mAuth.getUid())
                 .set(new UserF(mAuth.getCurrentUser().getDisplayName(), mAuth.getUid(), mAuth.getCurrentUser().getEmail()));
 //        db.document("GPA/" + mAuth.getUid())
-//                .set(GPA_setting.getInstance());
+//                .set(GPA_Setting.getInstance());
     }
 
 

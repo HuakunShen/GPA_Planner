@@ -1,17 +1,13 @@
 package project.gpa_calculator.models;
 
-import android.util.SparseIntArray;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-public class GPA_setting implements Iterable<GPA>, Serializable {
+public class GPA_Setting implements Iterable<GPA>, Serializable {
 
-    private static GPA_setting instance;
+    private static GPA_Setting instance;
     private String docID;
     private ArrayList<GPA> GPAs = new ArrayList<>();
 
@@ -44,7 +40,7 @@ public class GPA_setting implements Iterable<GPA>, Serializable {
     /**
      * basic setting that match University of Toronto GPA
      */
-    private GPA_setting(){
+    private GPA_Setting(){
         GPAs.add(new GPA(90,100,4.0,"A+"));
         GPAs.add(new GPA(85,89,4.0,"A"));
         GPAs.add(new GPA(80,84,3.7,"A-"));
@@ -61,9 +57,9 @@ public class GPA_setting implements Iterable<GPA>, Serializable {
 
     }
 
-    public static GPA_setting getInstance() {
+    public static GPA_Setting getInstance() {
         if(instance == null){
-            instance = new GPA_setting();
+            instance = new GPA_Setting();
         }
         return instance;
     }

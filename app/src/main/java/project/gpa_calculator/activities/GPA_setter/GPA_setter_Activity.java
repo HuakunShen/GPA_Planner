@@ -156,10 +156,10 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Toast.makeText(GPA_setter_Activity.this, "Action clicked", Toast.LENGTH_LONG).show();
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            Toast.makeText(GPA_setter_Activity.this, "Action clicked", Toast.LENGTH_LONG).show();
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

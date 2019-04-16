@@ -171,7 +171,7 @@ public class SQLiteDB extends SQLiteOpenHelper {
 
     /**
      * return highest score of a user in a game.
-     * call dataExists() first to check if data exists.
+     * call dataExists() first to checkValidity if data exists.
      *
      * @param user the name of the current user.
      * @param game the type of the game.

@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import project.gpa_calculator.R;
-import project.gpa_calculator.activities.GPA_setter.GPA_setter_Activity;
+import project.gpa_calculator.activities.GPA_setter.GPA_Setter_Activity;
 import project.gpa_calculator.activities.course.CourseActivity;
 import project.gpa_calculator.activities.event.EventActivity;
 import project.gpa_calculator.activities.semester.SemesterActivity;
@@ -29,7 +29,7 @@ public class AddDialog extends AppCompatDialogFragment {
     private DialogListener listener;
 
     /**
-     * check which Activity is Attach to
+     * checkValidity which Activity is Attach to
      * @param context
      */
     @Override
@@ -56,7 +56,7 @@ public class AddDialog extends AppCompatDialogFragment {
                 listener = (CourseDialogListener) context;
             } else if (context instanceof EventActivity) {
                 listener = (EventDialogListener) context;
-            } else if (context instanceof GPA_setter_Activity) {
+            } else if (context instanceof GPA_Setter_Activity) {
                 listener = (GPADialogListener) context;
             }
         } catch (ClassCastException e) {

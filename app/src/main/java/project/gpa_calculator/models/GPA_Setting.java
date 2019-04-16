@@ -84,7 +84,7 @@ public class GPA_Setting implements Iterable<GPA>, Serializable {
     public void setDocID(String docID) {
         this.docID = docID;
     }
-    public boolean check(){
+    public boolean checkValidity(){
         heap();
         ArrayList<GPA> sorted = new ArrayList<>();
         while(!GPAs.isEmpty()){

@@ -1,9 +1,7 @@
 package project.gpa_calculator.activities.main;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -21,24 +19,16 @@ import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
-import java.io.File;
 
 import project.gpa_calculator.R;
-import project.gpa_calculator.activities.GPA_setter.GPA_setter_Activity;
-import project.gpa_calculator.activities.login.login_activity;
+import project.gpa_calculator.activities.GPA_setter.GPA_Setter_Activity;
+import project.gpa_calculator.activities.login.Login_Activity;
 import project.gpa_calculator.activities.year.YearActivity;
-
-import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -205,7 +195,7 @@ public class MainActivity extends AppCompatActivity
 //                    Toast.makeText(this, "is logged in", Toast.LENGTH_LONG).show();
                     LoginManager.getInstance().logOut();
                 }
-                startActivity(new Intent(this, login_activity.class));
+                startActivity(new Intent(this, Login_Activity.class));
                 finish();
                 return true;
         }
@@ -231,7 +221,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         } else if (id == R.id.gpa_setting_btn) {
-            startActivity(new Intent(getApplication(), GPA_setter_Activity.class));
+            startActivity(new Intent(getApplication(), GPA_Setter_Activity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

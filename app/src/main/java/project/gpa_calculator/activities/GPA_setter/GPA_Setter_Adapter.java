@@ -3,7 +3,6 @@ package project.gpa_calculator.activities.GPA_setter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
@@ -17,13 +16,12 @@ import java.util.List;
 
 import project.gpa_calculator.R;
 import project.gpa_calculator.models.GPA;
-import project.gpa_calculator.models.Year;
 
-public class GPA_setter_Adapter extends RecyclerView.Adapter<GPA_setter_Adapter.ViewHolder> {
+public class GPA_Setter_Adapter extends RecyclerView.Adapter<GPA_Setter_Adapter.ViewHolder> {
     private List<GPA> list_items;
     private Context context;
-    private GPA_setter_Controller controller;
-    public GPA_setter_Adapter(Context context, List<GPA> list_items, GPA_setter_Controller controller) {
+    private GPA_Setter_Controller controller;
+    public GPA_Setter_Adapter(Context context, List<GPA> list_items, GPA_Setter_Controller controller) {
         this.list_items = list_items;
         this.context = context;
         this.controller = controller;
@@ -31,7 +29,7 @@ public class GPA_setter_Adapter extends RecyclerView.Adapter<GPA_setter_Adapter.
 
     @NonNull
     @Override
-    public GPA_setter_Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public GPA_Setter_Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.gpa_row, viewGroup, false);
 

@@ -44,13 +44,13 @@ import project.gpa_calculator.R;
 import project.gpa_calculator.activities.main.MainActivity;
 
 
-public class login_activity extends AppCompatActivity implements View.OnClickListener {
+public class Login_Activity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
     private static final int FACEBOOK_LOGIN_REQ_CODE = 64206;
-    private static final String TAG = "login_activity";
+    private static final String TAG = "Login_Activity";
     private EditText email_ET, password_ET;
     private CallbackManager mCallbackManager;
     private static final String EMAIL = "email";
@@ -102,7 +102,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                 handleFacebookAccessToken(loginResult.getAccessToken());
                 Log.d(TAG, "facebook login success");
                 createDocIfNotExists();
-                startActivity(new Intent(login_activity.this, MainActivity.class));
+                startActivity(new Intent(Login_Activity.this, MainActivity.class));
                 finish();
             }
 
@@ -135,7 +135,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(login_activity.this, "Authentication failed.",
+                            Toast.makeText(Login_Activity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
@@ -145,7 +145,7 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                 });
     }
 
-//    public void check(View view) {
+//    public void checkValidity(View view) {
 //        AccessToken accessToken = AccessToken.getCurrentAccessToken();
 //        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
 //        if (isLoggedIn)
@@ -200,14 +200,14 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "createUserWithEmail:success");
-                                Toast.makeText(login_activity.this, "Account Created", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Login_Activity.this, "Account Created", Toast.LENGTH_SHORT).show();
 
                                 createUserDoc();
                                 emailSignIn();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(login_activity.this,
+                                Toast.makeText(Login_Activity.this,
                                         "\t\tFailed to Create Account\n    Account May Exists Already",
                                         Toast.LENGTH_LONG).show();
                                 updateUI(null);
@@ -243,15 +243,15 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 Log.d(TAG, "signInWithEmail:success");
-                                Toast.makeText(login_activity.this, "Login Succeed", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Login_Activity.this, "Login Succeed", Toast.LENGTH_SHORT).show();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 updateUI(user);
-                                startActivity(new Intent(login_activity.this, MainActivity.class));
+                                startActivity(new Intent(Login_Activity.this, MainActivity.class));
                                 finish();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                Toast.makeText(login_activity.this, "Authentication failed.",
+                                Toast.makeText(Login_Activity.this, "Authentication failed.",
                                         Toast.LENGTH_SHORT).show();
                                 updateUI(null);
                             }
@@ -296,13 +296,13 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                 .addOnFailureListener(this, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(login_activity.this, "Google Authentication Failed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login_Activity.this, "Google Authentication Failed", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnCanceledListener(this, new OnCanceledListener() {
                     @Override
                     public void onCanceled() {
-                        Toast.makeText(login_activity.this, "cancel google login", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Login_Activity.this, "cancel google login", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -311,9 +311,9 @@ public class login_activity extends AppCompatActivity implements View.OnClickLis
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            Toast.makeText(login_activity.this, "Successfully Login", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login_Activity.this, "Successfully Login", Toast.LENGTH_SHORT).show();
                             createDocIfNotExists();
-                            startActivity(new Intent(login_activity.this, MainActivity.class));
+                            startActivity(new Intent(Login_Activity.this, MainActivity.class));
                             finish();
                         } else {
                             // If sign in fails, display a message to the user.

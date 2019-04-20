@@ -17,8 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.login.LoginManager;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -188,14 +187,9 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.signout_btn:
                 mAuth.signOut();
-                // Check if is logged in with facebook, if so, then log out facebook
-                AccessToken accessToken = AccessToken.getCurrentAccessToken();
-                boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-                if (isLoggedIn) {
-//                    Toast.makeText(this, "is logged in", Toast.LENGTH_LONG).show();
-                    LoginManager.getInstance().logOut();
-                }
-                startActivity(new Intent(this, Login_Activity.class));
+                Intent intent = new Intent(this, Login_Activity.class);
+                intent.putExtra("signout_mode", 1);
+                startActivity(intent);
                 finish();
                 return true;
         }

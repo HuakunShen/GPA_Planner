@@ -1,9 +1,7 @@
 package project.gpa_calculator.activities.GPA_setter;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,26 +23,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.ActivityController;
 import project.gpa_calculator.Util.SwipeToDeleteCallback;
 
 import project.gpa_calculator.models.GPA;
-import project.gpa_calculator.models.GPAListItem;
-import project.gpa_calculator.models.GPA_setting;
-import project.gpa_calculator.models.ListItem;
-import project.gpa_calculator.models.User;
+import project.gpa_calculator.models.GPA_Setting;
 
 
-public class GPA_setter_Controller extends ActivityController {
+public class GPA_Setter_Controller extends ActivityController {
     private List<GPA> listItems = new ArrayList<>();
 
-    private static final String TAG = "GPA_setter_Controller";
+    private static final String TAG = "GPA_Setter_Controller";
 
     private RecyclerView recyclerView;
 
-    private GPA_setter_Adapter adapter;
+    private GPA_Setter_Adapter adapter;
     private Context context;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -52,9 +46,9 @@ public class GPA_setter_Controller extends ActivityController {
     private DocumentReference userRef = db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()));
 
 
-    GPA_setting gpa_setting = GPA_setting.getInstance();
+    GPA_Setting gpa_setting = GPA_Setting.getInstance();
 
-    GPA_setter_Controller(final Context context) {
+    GPA_Setter_Controller(final Context context) {
         this.context = context;
     }
 
@@ -115,11 +109,11 @@ public class GPA_setter_Controller extends ActivityController {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 GPA gpa = document.toObject(GPA.class);
                                 gpa.setDocID(document.getId());
-                                gpa_setting = document.toObject(GPA_setting.class);
+                                gpa_setting = document.toObject(GPA_Setting.class);
                                 gpa_setting.setDocID(document.getId());
                             }
                             setupListItems();
-                            adapter = new GPA_setter_Adapter(context, listItems, getInstance());
+                            adapter = new GPA_Setter_Adapter(context, listItems, getInstance());
                             recyclerView.setAdapter(adapter);
                             ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(adapter));
                             itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -144,7 +138,7 @@ public class GPA_setter_Controller extends ActivityController {
     public boolean save_update(){
 
         for (int x = recyclerView.getChildCount(), i = 0; i < x; i++) {
-            GPA_setter_Adapter.ViewHolder holder = ( GPA_setter_Adapter.ViewHolder)recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
+            GPA_Setter_Adapter.ViewHolder holder = ( GPA_Setter_Adapter.ViewHolder)recyclerView.getChildViewHolder(recyclerView.getChildAt(i));
 
             int low = holder.getLow().equals("") ? holder.get_low_hint():Integer.valueOf(holder.getLow());
             int high = holder.getHigh().equals("") ? holder.get_high_hint():Integer.valueOf(holder.getHigh());
@@ -153,7 +147,7 @@ public class GPA_setter_Controller extends ActivityController {
             gpa_setting.update(i,new GPA(low,high,point,grade));
         }
 
-       if(gpa_setting.check()){
+       if(gpa_setting.checkValidity()){
            try{
                db.collection("Users").document(Objects.requireNonNull(mAuth.getUid()))
                        .collection("GPA").document(gpa_setting.getDocID())
@@ -183,7 +177,7 @@ public class GPA_setter_Controller extends ActivityController {
                }
            });
        }else {
-            Toast.makeText(context, "please make sure there is no overlapping GPAs", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "ranges overlap or incomplete", Toast.LENGTH_SHORT).show();
            return false;
        }
         return true;
@@ -192,7 +186,7 @@ public class GPA_setter_Controller extends ActivityController {
 
 
 
-    GPA_setter_Controller getInstance() {
+    GPA_Setter_Controller getInstance() {
         return this;
     }
 

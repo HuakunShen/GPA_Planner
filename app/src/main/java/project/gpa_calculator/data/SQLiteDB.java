@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class Database extends SQLiteOpenHelper {
+public class SQLiteDB extends SQLiteOpenHelper {
 
     /**
      * the name of the database.
@@ -44,7 +44,7 @@ public class Database extends SQLiteOpenHelper {
      *
      * @param context the context of the activity.
      */
-    public Database(Context context) {
+    public SQLiteDB(Context context) {
         super(context, DB_NAME, null, 1);
     }
 
@@ -171,7 +171,7 @@ public class Database extends SQLiteOpenHelper {
 
     /**
      * return highest score of a user in a game.
-     * call dataExists() first to check if data exists.
+     * call dataExists() first to checkValidity if data exists.
      *
      * @param user the name of the current user.
      * @param game the type of the game.

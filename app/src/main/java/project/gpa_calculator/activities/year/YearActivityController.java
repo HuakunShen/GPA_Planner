@@ -140,40 +140,52 @@ public class YearActivityController extends ActivityController {
                             }
                             adapter = new YearActivityRecyclerViewAdapter(context, year_list, getInstance());
                             recyclerView.setAdapter(adapter);
-                            swipeController = new SwipeController(new SwipeControllerActions() {
-                                @Override
-                                public void onRightClicked(final int position) {
-                                    new AlertDialog.Builder(context)
-                                            .setTitle("Deletion Warning!")
-                                            .setMessage("Do You Want To Delete?\nIt Is Unrecoverable!")
-                                            .setIcon(android.R.drawable.ic_dialog_alert)
-                                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    Toast.makeText(context, "Deletion Cancelled", Toast.LENGTH_SHORT).show();
-                                                }
-                                            })
-                                            .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    deleteItem(position);
-                                                }
-                                            }).show();
-                                }
 
+                            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                                 @Override
-                                public void onLeftClicked(int position) {
-                                    Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show();
+                                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                                    super.onScrollStateChanged(recyclerView, newState);
+                                    Log.e("RecyclerView", "onScrollStateChanged");
+                                }
+                                @Override
+                                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                                    super.onScrolled(recyclerView, dx, dy);
                                 }
                             });
-                            ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
-                            itemTouchhelper.attachToRecyclerView(recyclerView);
-                            recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-                                @Override
-                                public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                                    swipeController.onDraw(c);
-                                }
-                            });
+//                            swipeController = new SwipeController(new SwipeControllerActions() {
+//                                @Override
+//                                public void onRightClicked(final int position) {
+//                                    new AlertDialog.Builder(context)
+//                                            .setTitle("Deletion Warning!")
+//                                            .setMessage("Do You Want To Delete?\nIt Is Unrecoverable!")
+//                                            .setIcon(android.R.drawable.ic_dialog_alert)
+//                                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                                                @Override
+//                                                public void onClick(DialogInterface dialog, int which) {
+//                                                    Toast.makeText(context, "Deletion Cancelled", Toast.LENGTH_SHORT).show();
+//                                                }
+//                                            })
+//                                            .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+//                                                @Override
+//                                                public void onClick(DialogInterface dialog, int which) {
+//                                                    deleteItem(position);
+//                                                }
+//                                            }).show();
+//                                }
+//
+//                                @Override
+//                                public void onLeftClicked(int position) {
+//                                    Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show();
+//                                }
+//                            });
+//                            ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+//                            itemTouchhelper.attachToRecyclerView(recyclerView);
+//                            recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+//                                @Override
+//                                public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+//                                    swipeController.onDraw(c);
+//                                }
+//                            });
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }

@@ -11,7 +11,7 @@ public class User implements Serializable {
     private String student_number;
     private String school;
     private String student_type;
-    private GPA_setting gpa_setting;
+    private GPA_Setting gpa_setting;
     private List<Year> year_list;
 
     public User(String username, String nickname, String password) {
@@ -19,7 +19,7 @@ public class User implements Serializable {
         this.nickname = nickname.equals("") ? username : nickname;
         this.password = password;
         year_list = new ArrayList<>();
-        gpa_setting = GPA_setting.getInstance();
+        gpa_setting = GPA_Setting.getInstance();
     }
 
     public Year getYear(String year_name) {
@@ -102,7 +102,7 @@ public class User implements Serializable {
         }
     }
 
-    public GPA_setting getGpa_setting() {
+    public GPA_Setting getGpa_setting() {
         return gpa_setting;
     }
 
@@ -134,7 +134,7 @@ public class User implements Serializable {
         this.student_type = student_type;
     }
 
-    public void setGpa_setting(GPA_setting gpa_setting) {
+    public void setGpa_setting(GPA_Setting gpa_setting) {
         this.gpa_setting = gpa_setting;
     }
 }

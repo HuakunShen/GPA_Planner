@@ -15,14 +15,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import project.gpa_calculator.R;
-import project.gpa_calculator.activities.GPA_setter.GPA_setter_Activity;
-import project.gpa_calculator.activities.login.login_activity;
+import project.gpa_calculator.activities.GPA_setter.GPA_Setter_Activity;
+import project.gpa_calculator.activities.login.Login_Activity;
 import project.gpa_calculator.activities.year.YearActivity;
 
 public class MainActivity extends AppCompatActivity
@@ -31,8 +35,9 @@ public class MainActivity extends AppCompatActivity
     private MainActivityController controller;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseUser user = mAuth.getCurrentUser();
+    private StorageReference mStorageRef;
     public static final String userFile = "userFile";
-
 
 
     @Override
@@ -40,6 +45,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setupController();
+        mStorageRef = FirebaseStorage.getInstance().getReference();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setupFAB();
@@ -47,6 +53,44 @@ public class MainActivity extends AppCompatActivity
         setupButton();
     }
 
+//    private void upload() {
+//        Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
+//        StorageReference riversRef = mStorageRef.child("images/rivers.jpg");
+//
+//        riversRef.putFile(file)
+//                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                    @Override
+//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                        // Get a URL to the uploaded content
+//                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception exception) {
+//                        // Handle unsuccessful uploads
+//                        // ...
+//                    }
+//                });
+//    }
+//
+//    private void download() {
+//        File localFile = File.createTempFile("images", "jpg");
+//        riversRef.getFile(localFile)
+//                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+//                    @Override
+//                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+//                        // Successfully downloaded data to local file
+//                        // ...
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle failed download
+//                // ...
+//            }
+//        });
+//    }
 
     private void setupController() {
         controller = new MainActivityController();
@@ -61,12 +105,23 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        FirebaseUser user = mAuth.getCurrentUser();
+        user = mAuth.getCurrentUser();
         View headerView = navigationView.getHeaderView(0);
         TextView username_tv = headerView.findViewById(R.id.username);
         TextView email_tv = headerView.findViewById(R.id.email_tv);
-        username_tv.setText(user.getDisplayName());
-        email_tv.setText(user.getEmail());
+        if (user != null) {
+            username_tv.setText(user.getDisplayName());
+            email_tv.setText(user.getEmail());
+        } else {
+            // Connection is slow, user could be null if just signed in, then we cannot load user's
+            // name and email
+            for (; user == null; ) {
+                user = mAuth.getCurrentUser();
+            }
+            username_tv.setText(user.getDisplayName());
+            email_tv.setText(user.getEmail());
+        }
+
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -90,6 +145,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        user = mAuth.getCurrentUser();
     }
 
     @Override
@@ -99,6 +155,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.details_Btn:
                 intent = new Intent(getApplication(), YearActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.avatar:
+                Toast.makeText(this, "Avatar Clicked", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -126,13 +185,11 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent intent = new Intent(getApplication(), GPA_setter_Activity.class);
-                startActivity(intent);
-                return true;
             case R.id.signout_btn:
                 mAuth.signOut();
-                startActivity(new Intent(this, login_activity.class));
+                Intent intent = new Intent(this, Login_Activity.class);
+                intent.putExtra("signout_mode", 1);
+                startActivity(intent);
                 finish();
                 return true;
         }
@@ -157,6 +214,8 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.gpa_setting_btn) {
+            startActivity(new Intent(getApplication(), GPA_Setter_Activity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

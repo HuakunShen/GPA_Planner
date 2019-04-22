@@ -6,25 +6,17 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import project.gpa_calculator.Adapter.RecyclerViewAdapter;
 import project.gpa_calculator.R;
-import project.gpa_calculator.Util.SwipeToDeleteCallback;
 import project.gpa_calculator.Util.AddDialog;
-import project.gpa_calculator.activities.main.MainActivity;
-import project.gpa_calculator.models.GPA;
 
-public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.GPADialogListener {
-    private GPA_setter_Controller controller;
+public class GPA_Setter_Activity extends AppCompatActivity implements AddDialog.GPADialogListener {
+    private GPA_Setter_Controller controller;
     private Boolean save = false;
 
 
@@ -105,7 +97,7 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
     }
 
     private void setupController() {
-        controller = new GPA_setter_Controller(this);
+        controller = new GPA_Setter_Controller(this);
     }
 
     /**
@@ -156,10 +148,10 @@ public class GPA_setter_Activity extends AppCompatActivity implements AddDialog.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Toast.makeText(GPA_setter_Activity.this, "Action clicked", Toast.LENGTH_LONG).show();
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            Toast.makeText(GPA_Setter_Activity.this, "Action clicked", Toast.LENGTH_LONG).show();
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }

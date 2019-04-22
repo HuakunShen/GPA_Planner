@@ -17,7 +17,7 @@ import java.util.List;
 
 import project.gpa_calculator.R;
 import project.gpa_calculator.Util.ActivityController;
-import project.gpa_calculator.activities.GPA_setter.GPA_setter_Controller;
+import project.gpa_calculator.activities.GPA_setter.GPA_Setter_Controller;
 import project.gpa_calculator.activities.course.CourseActivity;
 import project.gpa_calculator.activities.course.CourseActivityController;
 import project.gpa_calculator.activities.event.EventActivity;
@@ -50,7 +50,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public RecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
-        if (controller instanceof GPA_setter_Controller) {
+        if (controller instanceof GPA_Setter_Controller) {
             view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.gpa_row, parent, false);
             return new GPAViewHolder(view);
@@ -72,7 +72,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.ViewHolder viewHolder, int position) {
         ListItem item = list_items.get(position);
-        if (controller instanceof GPA_setter_Controller) {
+        if (controller instanceof GPA_Setter_Controller) {
             GPAListItem cur_item = (GPAListItem) item;
             GPAViewHolder cur_view = (GPAViewHolder) viewHolder;
             cur_view.low.setHint(Integer.toString(cur_item.getLow()));

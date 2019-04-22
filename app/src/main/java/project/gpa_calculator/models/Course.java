@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-//TODO should check if all event add up to 100, warn user otherwise, also handle bonus
+//TODO should checkValidity if all event add up to 100, warn user otherwise, also handle bonus
 public class Course implements Serializable, Iterable<Event> {
 
 

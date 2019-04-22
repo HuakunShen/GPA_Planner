@@ -63,7 +63,7 @@ public class MainActivityController {
         Event event1 = new Event("final", 50d);
         course1.addEvent(event);
         course1.addEvent(event1);
-        Course course2 = new Course("CSC343", "Intro To Database", 80d, 0.5d);
+        Course course2 = new Course("CSC343", "Intro To SQLiteDB", 80d, 0.5d);
         fall.addCourse(course2);
         Event event3 = new Event("final", 100d);
         course2.addEvent(event3);

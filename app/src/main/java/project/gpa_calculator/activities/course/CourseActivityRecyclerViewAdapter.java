@@ -38,15 +38,18 @@ public class CourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<Cour
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         Course course = this.list_items.get(position);
-        viewHolder.name.setText(course.getCourse_name());
+        viewHolder.name.setText(course.getCourse_code());
         viewHolder.course_code.setText((String.valueOf(course.getCourse_code())));
+        String current_finished = Integer.toString(course.finishSize()) + "/" + Integer.toString(course.size());
         // TODO: status isDone method is not complete since we use firestore instead of pure object
-        viewHolder.status.setText("Status: Not Done");
+        viewHolder.status.setText(current_finished);
 //        viewHolder.status.setText(("Status: " + (course.isDone() ? "Done" : "Not Done")));
         // TODO: score_target should display either Score or Target depends on whether it's done, target is given but score is not Calculated
-        viewHolder.score_target.setText("Score: 0");
+        String target = Double.toString(course.getTarget());
+        viewHolder.score_target.setText(target);
 //        viewHolder.score_target.setText((course.isDone() ? "Score: " : "Target: " + String.valueOf(course.getTarget())));
         viewHolder.credit.setText(("Credit: " + String.valueOf(course.getCredit())));
+        viewHolder.neededscore.setText("0");
     }
 
     @Override
@@ -55,7 +58,7 @@ public class CourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<Cour
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
-        private TextView name, course_code, status, score_target, credit;
+        private TextView name, course_code, status, score_target, credit,neededscore;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             course_code = itemView.findViewById(R.id.title);
@@ -63,6 +66,7 @@ public class CourseActivityRecyclerViewAdapter extends RecyclerView.Adapter<Cour
             score_target = itemView.findViewById(R.id.description2);
             status = itemView.findViewById(R.id.description3);
             credit = itemView.findViewById(R.id.description4);
+            neededscore = itemView.findViewById(R.id.bigBox);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }

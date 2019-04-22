@@ -16,6 +16,8 @@ public class Course implements Serializable, Iterable<Event> {
     private String course_name;
 
     private String docID;
+    private List<Event> event_list;
+    private double credit;
 
     public Course(String course_code, String name, double target, double credit) {
         this.course_code = course_code;
@@ -44,9 +46,6 @@ public class Course implements Serializable, Iterable<Event> {
         this.course_name = course_name;
     }
 
-    private List<Event> event_list;
-    private double credit;
-
 
 
     public double getCredit() {
@@ -65,7 +64,21 @@ public class Course implements Serializable, Iterable<Event> {
         this.credit = credit;
     }
 
+    public int size(){
+        return event_list.size();
+    }
 
+    public int finishSize() {
+        int i = 0;
+        if(event_list == null){
+            return 0;
+        }
+        for (Event event: this.event_list) {
+            if (!event.isDone())
+                i++;
+        }
+        return i;
+    }
 
     @Override
     public String toString() {

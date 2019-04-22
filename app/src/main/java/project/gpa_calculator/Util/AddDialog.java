@@ -140,13 +140,14 @@ public class AddDialog extends AppCompatDialogFragment {
         first_ET.setHint(this.type + " Name");
         second_ET = view.findViewById(R.id.dialog_description_ET);
         if (this.type.equalsIgnoreCase("Course")) {
+            first_ET.setHint("Course Code");
             third_ET.setHint("Target Score (Percentage)");
             third_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             dialog_linearLayout.addView(third_ET);
             fourth_ET.setHint("Credit Hint");
             fourth_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             dialog_linearLayout.addView(fourth_ET);
-            second_ET.setHint("Course Code");
+            second_ET.setHint(this.type + " Name(Optional)");
         } else if (this.type.equalsIgnoreCase("Event")) {
             second_ET.setHint("Weight (Percentage)");
             second_ET.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);

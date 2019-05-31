@@ -1,4 +1,4 @@
-package com.example.gpa_planner;
+package app.gpa_planner;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.gpa_planner", appContext.getPackageName());
+        assertEquals("app.gpa_planner", appContext.getPackageName());
     }
 }

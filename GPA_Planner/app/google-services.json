@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:979190891753:android:3df0ad7c229e50b7",
+        "mobilesdk_app_id": "1:979190891753:android:bb02f625c2c2903b",
         "android_client_info": {
-          "package_name": "com.example.gpa_planner"
+          "package_name": "app.gpa_planner"
         }
       },
       "oauth_client": [
         {
-          "client_id": "979190891753-ljsvvc6qvl14pcdig8c4d13r1bjovoa6.apps.googleusercontent.com",
+          "client_id": "979190891753-4ast1smkel8upcckccbnijp9jf8ihpt6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.gpa_planner",
+            "package_name": "app.gpa_planner",
             "certificate_hash": "0a57acef21211b1b5f4a94ea9dfc0f30d3898598"
           }
         },

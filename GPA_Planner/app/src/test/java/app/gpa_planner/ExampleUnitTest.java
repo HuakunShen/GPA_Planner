@@ -1,4 +1,4 @@
-package com.example.gpa_planner;
+package app.gpa_planner;
 
 import org.junit.Test;
 

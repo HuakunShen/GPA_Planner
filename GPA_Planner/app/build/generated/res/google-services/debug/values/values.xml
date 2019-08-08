@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">979190891753-v4mpve2bgtav7hmkluk2us7r2utv7ira.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://gpaplanner-965e7.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">979190891753</string>
+    <string name="google_api_key" translatable="false">AIzaSyAZWxLHf5t5lQh4efoVpyaJnKSp-uV_ibA</string>
+    <string name="google_app_id" translatable="false">1:979190891753:android:bb02f625c2c2903b</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAZWxLHf5t5lQh4efoVpyaJnKSp-uV_ibA</string>
+    <string name="google_storage_bucket" translatable="false">gpaplanner-965e7.appspot.com</string>
+    <string name="project_id" translatable="false">gpaplanner-965e7</string>
+</resources>

@@ -2,8 +2,24 @@
 
 ## Still in Progress
 
+### Progress so far
+
+* Login and sign up with email or Google
+* Add Year, Semester, Course, Event Objects to views (recycler view), display of these items work perfectly
+* GPA Setter (can set customize GPA Schema for students from any school)
+
+### Todo
+
+* Add Slide Bar for every event in courses as Simulator
+* Add GPA Calculating Functionalities
+* Make a Web App Version of this Android App, share the same Database (reference `todoist`)
+
+### Bugs
+
+* Google Sign In Fail to work due to updates
+
 ## Description
-* Designed to keep track of students' score in every couse and provide the plan for them
+* Designed to keep track of students' score in every course and provide the plan for them
 * For a single course:
   * The app asks for a target GPA, and based on what the student got so far, the app provides information of how good he/she has to be (at least) in order to eventually reach the target score.
 * For A semester:
